@@ -1,0 +1,2326 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Banco de Dinámica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Spectral:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#E8ECE7; --panel:#FBFCFA; --panel-2:#F1F4EF; --sunk:#DFE5DE;
+  --ink:#151E19; --ink-2:#4B5A52; --ink-3:#7C8B83;
+  --line:#C9D3CB; --line-2:#DDE4DD;
+  --paper:#F5F7F3; --grid:#D7DFD6; --grid-2:#E7EDE6;
+  --accent:#1E6B4E; --accent-soft:#DCE9E1; --accent-ink:#0E3A2A;
+  --v-peso:#A8325C; --v-normal:#2C6DB5; --v-roz:#C2610F;
+  --v-fuerza:#5B3FA8; --v-tension:#0E6E86; --v-neta:#151E19;
+  --ok:#2E7D57; --no:#B03A2E; --warn:#B4700F;
+  --shadow:0 1px 2px rgba(21,30,25,.06), 0 10px 26px -14px rgba(21,30,25,.28);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121915; --panel:#1A231E; --panel-2:#202B24; --sunk:#0E140F;
+    --ink:#E6EDE7; --ink-2:#A3B1A8; --ink-3:#6E7C73;
+    --line:#2A352E; --line-2:#222C26;
+    --paper:#141C17; --grid:#243029; --grid-2:#1C2620;
+    --accent:#43B992; --accent-soft:#17332A; --accent-ink:#BDEBD8;
+    --v-peso:#E8759F; --v-normal:#6BA8E8; --v-roz:#EC9445;
+    --v-fuerza:#A38BEE; --v-tension:#4FB8D0; --v-neta:#E6EDE7;
+    --ok:#54BE8C; --no:#E8705F; --warn:#E0A63C;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -16px rgba(0,0,0,.75);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121915; --panel:#1A231E; --panel-2:#202B24; --sunk:#0E140F;
+  --ink:#E6EDE7; --ink-2:#A3B1A8; --ink-3:#6E7C73;
+  --line:#2A352E; --line-2:#222C26;
+  --paper:#141C17; --grid:#243029; --grid-2:#1C2620;
+  --accent:#43B992; --accent-soft:#17332A; --accent-ink:#BDEBD8;
+  --v-peso:#E8759F; --v-normal:#6BA8E8; --v-roz:#EC9445;
+  --v-fuerza:#A38BEE; --v-tension:#4FB8D0; --v-neta:#E6EDE7;
+  --ok:#54BE8C; --no:#E8705F; --warn:#E0A63C;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -16px rgba(0,0,0,.75);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:Spectral,Georgia,"Times New Roman",serif;font-weight:600;text-wrap:balance;margin:0}
+.mono,.num{font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace;font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel-2))}
+.hd{max-width:1240px;margin:0 auto;padding:30px 22px 24px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;justify-content:space-between}
+h1{font-size:clamp(28px,4.2vw,44px);line-height:1.02;letter-spacing:-.015em}
+h1 em{font-style:normal;color:var(--ink-3);font-weight:500}
+.sub{margin:10px 0 0;max-width:60ch;color:var(--ink-2);font-size:15px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;max-width:430px}
+.leg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);font-weight:500;letter-spacing:.02em}
+.leg i{width:22px;height:0;border-top:3px solid currentColor;flex:none}
+.leg b{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:11.5px}
+
+nav.tabs{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;cursor:pointer;
+  padding:11px 14px 9px;text-align:left;white-space:nowrap;color:var(--ink-3);
+  font-family:"IBM Plex Sans",sans-serif;font-size:14px;font-weight:600;letter-spacing:.01em}
+.tab b{display:block;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.18em;opacity:.7}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:-3px;border-radius:4px}
+
+.wrap{max-width:1240px;margin:0 auto;padding:24px 22px 90px;display:flex;flex-direction:column;gap:22px}
+.mod[hidden]{display:none}
+.mod{display:flex;flex-direction:column;gap:22px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}
+.card-hd{padding:15px 18px;border-bottom:1px solid var(--line-2);display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;justify-content:space-between}
+.card-hd h2{font-size:20px;letter-spacing:-.01em}
+.card-hd h3{font-size:17px}
+.card-hd p{margin:5px 0 0;font-size:13.5px;color:var(--ink-2);max-width:66ch}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase}
+.pad{padding:16px 18px}
+
+.bench{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:980px){
+  .bench{grid-template-columns:minmax(0,1.72fr) minmax(280px,1fr)}
+  .bench .side{border-left:1px solid var(--line-2);border-top:0}
+}
+.stage{background:var(--paper);overflow-x:auto}
+.stage svg{display:block;width:100%;height:auto;min-width:540px}
+.side{border-top:1px solid var(--line-2);padding:14px 16px;display:flex;flex-direction:column;gap:12px;background:var(--panel)}
+
+.ctl{padding:13px 18px;display:flex;flex-wrap:wrap;gap:14px 22px;align-items:flex-end;border-top:1px solid var(--line-2);background:var(--panel-2)}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:170px;flex:1 1 170px;max-width:290px}
+.fld label{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.fld label span{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;letter-spacing:0;color:var(--ink);text-transform:none}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:none;cursor:pointer;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:4px;background:var(--sunk);border-radius:3px}
+input[type=range]::-moz-range-track{height:4px;background:var(--sunk);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:var(--accent);border:2px solid var(--panel);margin-top:-7px;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);border:2px solid var(--panel)}
+input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+select,input[type=number]{font-family:"IBM Plex Mono",monospace;font-size:13.5px;padding:7px 9px;border-radius:6px;
+  border:1px solid var(--line);background:var(--panel);color:var(--ink);width:100%}
+select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+.btn{appearance:none;cursor:pointer;background:var(--panel);color:var(--ink);border:1px solid var(--line);
+  border-radius:6px;padding:8px 13px;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;font-weight:600;
+  display:inline-flex;gap:8px;align-items:center;white-space:nowrap}
+.btn:hover{border-color:var(--ink-3)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#F7FBF8}
+:root[data-theme="dark"] .btn.pri{color:#08201A}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#08201A}}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;flex-wrap:wrap}
+.seg button{appearance:none;background:var(--panel);border:0;cursor:pointer;padding:8px 13px;
+  font-family:"IBM Plex Sans",sans-serif;font-size:13px;font-weight:600;color:var(--ink-3);white-space:nowrap}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#F7FBF8}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#08201A}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#08201A}}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.chk{display:inline-flex;gap:8px;align-items:center;font-size:13.5px;font-weight:500;cursor:pointer;color:var(--ink-2)}
+.chk input{accent-color:var(--accent);width:16px;height:16px}
+
+.read{display:flex;flex-direction:column;gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:6px;overflow:hidden}
+.read div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;background:var(--panel);padding:7px 11px}
+.read .k{font-size:12.5px;color:var(--ink-2);font-weight:500;display:flex;align-items:center;gap:7px}
+.read .k i{width:12px;height:0;border-top:3px solid currentColor;flex:none;border-radius:2px}
+.read .v{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.read div.hi{background:var(--accent-soft)}
+.read div.hi .v{color:var(--accent-ink)}
+.read .u{color:var(--ink-3);font-weight:400;font-size:12px}
+
+.verdict{border-radius:6px;padding:9px 12px;font-size:13.5px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-2)}
+.verdict b{color:var(--ink)}
+.verdict.go{border-color:color-mix(in oklab,var(--ok) 40%,var(--line));background:color-mix(in oklab,var(--ok) 10%,var(--panel))}
+.verdict.stop{border-color:color-mix(in oklab,var(--warn) 45%,var(--line));background:color-mix(in oklab,var(--warn) 12%,var(--panel))}
+
+.note{font-size:13.5px;color:var(--ink-2);border-left:2px solid var(--accent);padding:2px 0 2px 12px;margin:0}
+.note b{color:var(--ink)}
+.eq{font-family:"IBM Plex Mono",monospace;font-size:13.5px;background:var(--sunk);border-radius:5px;padding:8px 11px;
+  color:var(--ink);overflow-x:auto;white-space:nowrap}
+.eqs{display:flex;flex-direction:column;gap:6px}
+
+/* formulario de cabecera de cada módulo */
+.sheet{background:var(--panel-2);box-shadow:none}
+.sheet .card-hd{background:var(--panel);border-bottom:1px solid var(--line)}
+.fxgrid{display:grid;gap:1px;background:var(--panel-2);overflow:hidden;
+  grid-template-columns:repeat(auto-fit,minmax(244px,1fr))}
+.fx{background:var(--panel-2);padding:12px 16px;display:flex;flex-direction:column;gap:6px;
+  box-shadow:-1px 0 0 var(--line-2), 0 -1px 0 var(--line-2)}
+.fx-eq{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;color:var(--ink);
+  background:var(--panel);border:1px solid var(--line-2);border-radius:5px;padding:7px 10px;
+  line-height:1.45;text-wrap:balance}
+.fx-eq.key{background:var(--accent-soft);color:var(--accent-ink);
+  border-color:color-mix(in oklab,var(--accent) 30%,transparent)}
+.fx-note{font-size:12.8px;line-height:1.45;color:var(--ink-2)}
+.fx-note b{color:var(--ink)}
+.fx-alt{font-family:"IBM Plex Mono",monospace;font-size:11.6px;color:var(--ink-3);
+  line-height:1.5;padding-top:1px}
+
+.laws{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));padding:16px 18px}
+.law{display:flex;flex-direction:column;gap:7px}
+.law h3{font-size:16.5px}
+.law .n{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;color:var(--accent);font-weight:600}
+.law p{margin:0;font-size:13.8px;color:var(--ink-2)}
+.law q{font-family:Spectral,serif;font-size:14.5px;color:var(--ink);display:block}
+
+.vf{display:flex;flex-direction:column}
+.q{border-bottom:1px solid var(--line-2)}
+.q:last-child{border-bottom:0}
+.q-head{padding:12px 18px;display:flex;gap:10px 14px;align-items:flex-start;flex-wrap:wrap;font-size:14px}
+.q .lbl{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-3);flex:none;width:1.3em;margin-top:3px}
+.q-txt{flex:1 1 320px;min-width:200px}
+.q-pick{display:inline-flex;gap:7px;flex:none;margin-left:auto;padding-left:30px}
+.vfb{appearance:none;cursor:pointer;background:var(--panel);color:var(--ink-2);
+  border:1px solid var(--line);border-radius:5px;padding:5px 14px;
+  font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.03em;white-space:nowrap}
+.vfb:hover:not(:disabled){border-color:var(--ink-3);color:var(--ink);background:var(--panel-2)}
+.vfb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.vfb:disabled{cursor:default}
+.vfb.right{background:color-mix(in oklab,var(--ok) 15%,var(--panel));border-color:var(--ok);color:var(--ok)}
+.vfb.wrong{background:color-mix(in oklab,var(--no) 13%,var(--panel));border-color:var(--no);color:var(--no);text-decoration:line-through}
+.vfb.dim{opacity:.4}
+.q-body{padding:0 18px 15px 44px;font-size:13.8px;color:var(--ink-2);display:flex;flex-direction:column;gap:7px}
+.q-body[hidden]{display:none}
+.q-body b{color:var(--ink)}
+.q-body p{margin:0}
+.q-mark{font-size:12.5px;font-weight:600;letter-spacing:.02em;display:flex;gap:8px;align-items:baseline}
+.q.done{background:var(--panel-2)}
+.vfbar{justify-content:flex-start}
+.vfbar .score{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink-2);
+  margin-right:auto;font-variant-numeric:tabular-nums}
+@media(max-width:620px){
+  .q-pick{margin-left:0;padding-left:30px;flex:1 1 100%}
+  .q-body{padding-left:18px}
+}
+
+.ex{border-bottom:1px solid var(--line-2)}
+.ex summary{cursor:pointer;padding:12px 18px;display:flex;gap:13px;align-items:flex-start;list-style:none;font-size:14px}
+.ex summary::-webkit-details-marker{display:none}
+.ex summary:hover{background:var(--panel-2)}
+.ex summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.ex .no{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;color:var(--accent-ink);
+  background:var(--accent-soft);border-radius:4px;padding:2px 7px;flex:none;margin-top:2px;min-width:3.6em;text-align:center}
+.ex .sol{padding:0 18px 16px 18px;display:flex;flex-direction:column;gap:9px;font-size:13.8px;color:var(--ink-2)}
+.ex .sol b{color:var(--ink)}
+.ex .res{align-self:flex-start;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;color:var(--accent-ink);
+  background:var(--accent-soft);border:1px solid color-mix(in oklab,var(--accent) 30%,transparent);
+  border-radius:5px;padding:7px 12px;max-width:100%;overflow-x:auto}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
+.filterbar{display:flex;flex-wrap:wrap;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line-2);background:var(--panel-2);align-items:center}
+
+.g2{display:grid;gap:22px;grid-template-columns:1fr}
+@media(min-width:900px){.g2{grid-template-columns:1fr 1fr}}
+.worlds{display:grid;gap:1px;background:var(--line-2);border-top:1px solid var(--line-2)}
+.world{background:var(--panel);padding:9px 18px;display:grid;grid-template-columns:minmax(92px,1fr) 66px minmax(0,2.4fr) 96px;
+  gap:12px;align-items:center;font-size:13.5px}
+.world .nm{font-weight:600;color:var(--ink)}
+.world .g{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-3);text-align:right}
+.world .bar{height:11px;background:var(--sunk);border-radius:2px;overflow:hidden}
+.world .bar i{display:block;height:100%;background:var(--accent);border-radius:0 2px 2px 0}
+.world .p{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:13.5px;text-align:right;white-space:nowrap}
+.world.me{background:var(--accent-soft)}
+@media(max-width:640px){
+  .world{grid-template-columns:1fr 60px}
+  .world .bar,.world .p{grid-column:1/-1;text-align:left}
+}
+
+footer{border-top:1px solid var(--line);background:var(--panel);padding:22px;color:var(--ink-3);font-size:13px}
+.foot{max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
+
+.gridline{stroke:var(--grid-2);stroke-width:1}
+.gridline.maj{stroke:var(--grid)}
+.floor{stroke:var(--ink-2);stroke-width:2.5;fill:none;stroke-linecap:round}
+.hatch{stroke:var(--ink-3);stroke-width:1.4}
+.blk{fill:var(--panel-2);stroke:var(--ink);stroke-width:2}
+.blk-2{fill:var(--sunk);stroke:var(--ink-2);stroke-width:2}
+.blabel{font-family:"IBM Plex Sans",sans-serif;font-size:14px;font-weight:600;fill:var(--ink)}
+.slabel{font-family:"IBM Plex Mono",monospace;font-size:12px;fill:var(--ink-3)}
+.vlabel{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600}
+.axis{stroke:var(--ink-3);stroke-width:1.2;stroke-dasharray:6 4;fill:none}
+.tickt{font-family:"IBM Plex Mono",monospace;font-size:11px;fill:var(--ink-3)}
+.plot{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.plotax{stroke:var(--ink-3);stroke-width:1.2}
+.plotgrid{stroke:var(--grid);stroke-width:1}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+<header>
+  <div class="hd">
+    <div>
+      <h1>Banco de Dinámica <em>· Unidad&nbsp;5</em></h1>
+      <p class="sub">Las fuerzas de la guía, pero movibles. Cambiá la masa, el rozamiento o el ángulo
+      y mirá qué le pasa al diagrama de cuerpo libre, a la aceleración y al cuerpo. Cada módulo
+      termina en los ejercicios de la guía, resueltos paso a paso.</p>
+    </div>
+    <div class="legend" aria-label="Código de colores de las fuerzas">
+      <span class="leg" style="color:var(--v-peso)"><i></i><b>P</b>&nbsp;peso</span>
+      <span class="leg" style="color:var(--v-normal)"><i></i><b>N</b>&nbsp;normal</span>
+      <span class="leg" style="color:var(--v-roz)"><i></i><b>Fr</b>&nbsp;rozamiento</span>
+      <span class="leg" style="color:var(--v-fuerza)"><i></i><b>F</b>&nbsp;aplicada</span>
+      <span class="leg" style="color:var(--v-tension)"><i></i><b>T</b>&nbsp;tensión</span>
+      <span class="leg" style="color:var(--ink)"><i style="border-top-style:dashed"></i><b>ΣF</b>&nbsp;neta</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Módulos">
+  <div class="tabs-in" id="tabs" role="tablist">
+    <button class="tab" role="tab" data-mod="leyes" aria-selected="true"><b>01</b>Fuerza neta</button>
+    <button class="tab" role="tab" data-mod="roce" aria-selected="false"><b>02</b>Rozamiento</button>
+    <button class="tab" role="tab" data-mod="pares" aria-selected="false"><b>03</b>Pares de interacción</button>
+    <button class="tab" role="tab" data-mod="peso" aria-selected="false"><b>04</b>Peso y masa</button>
+    <button class="tab" role="tab" data-mod="grav" aria-selected="false"><b>05</b>Gravitación</button>
+    <button class="tab" role="tab" data-mod="plano" aria-selected="false"><b>06</b>Plano inclinado</button>
+    <button class="tab" role="tab" data-mod="sistemas" aria-selected="false"><b>07</b>Sogas y sistemas</button>
+    <button class="tab" role="tab" data-mod="ejercicios" aria-selected="false"><b>08</b>Ejercicios resueltos</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ═════════ 01 · FUERZA NETA ═════════ -->
+<section class="mod" id="mod-leyes">
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Laboratorio 1</span>
+        <h2>Empujar una caja sobre el piso</h2>
+        <p>La fuerza no produce velocidad: produce <b>cambio</b> de velocidad. Poné una fuerza
+        aplicada y soltá el reloj. Mientras <span class="mono">ΣF ≠ 0</span> la velocidad no para de cambiar.</p>
+      </div>
+    </div>
+    <div class="bench">
+      <div class="stage" id="lab1-stage"></div>
+      <div class="side">
+        <div class="read" id="lab1-read"></div>
+        <div class="verdict" id="lab1-verdict"></div>
+        <div class="eqs">
+          <div class="eq">ΣF = F − Fr</div>
+          <div class="eq">a = ΣF / m</div>
+        </div>
+      </div>
+    </div>
+    <div class="ctl">
+      <div class="fld">
+        <label for="l1-m">Masa <span id="l1-m-v">18 kg</span></label>
+        <input type="range" id="l1-m" min="1" max="60" step="1" value="18">
+      </div>
+      <div class="fld">
+        <label for="l1-f">Fuerza aplicada <span id="l1-f-v">60 N</span></label>
+        <input type="range" id="l1-f" min="0" max="240" step="1" value="60">
+      </div>
+      <div class="fld">
+        <label for="l1-fr">Rozamiento máximo <span id="l1-fr-v">0 N</span></label>
+        <input type="range" id="l1-fr" min="0" max="240" step="1" value="0">
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+        <button class="btn pri" id="l1-play">▶ Correr</button>
+        <button class="btn" id="l1-reset">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="ctl" style="border-top:0;padding-top:0;background:var(--panel-2)">
+      <label class="chk"><input type="checkbox" id="l1-cut"> Cortar la fuerza a los 3&nbsp;s (¿qué pasa después?)</label>
+      <label class="chk"><input type="checkbox" id="l1-vec" checked> Mostrar vectores</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div><span class="kicker">Teoría · Newton, 1687</span><h2>Las tres leyes, en el orden en que se usan</h2></div>
+    </div>
+    <div class="laws">
+      <div class="law">
+        <span class="n">PRIMERA · INERCIA</span>
+        <h3>Sin fuerza neta, nada cambia</h3>
+        <q>Todo objeto continúa en su estado de reposo o de rapidez uniforme en línea recta, a menos
+        que sea obligado a cambiar ese estado porque actúa sobre él una fuerza neta diferente de cero.</q>
+        <p>Traducido: <b>ΣF = 0 ⇔ a = 0</b>. Reposo y velocidad constante son el <em>mismo</em> caso.
+        Un cuerpo que se mueve no necesita que nadie lo empuje.</p>
+      </div>
+      <div class="law">
+        <span class="n">SEGUNDA · MASA</span>
+        <h3>La fuerza neta fija la aceleración</h3>
+        <q>La aceleración de un objeto es directamente proporcional a la fuerza neta que actúa sobre
+        él, tiene la misma dirección que dicha fuerza y es inversamente proporcional a su masa.</q>
+        <div class="eq" style="font-size:15px">ΣF = m · a</div>
+        <p>Es una igualdad <b>vectorial</b>: se plantea por separado en el eje x y en el eje y.
+        La masa es la resistencia a cambiar de velocidad.</p>
+      </div>
+      <div class="law">
+        <span class="n">TERCERA · INTERACCIÓN</span>
+        <h3>Las fuerzas vienen de a pares</h3>
+        <q>Siempre que un objeto ejerce una fuerza sobre un segundo objeto, el segundo objeto ejerce
+        una fuerza de igual magnitud y dirección opuesta sobre el primero.</q>
+        <p>El par actúa sobre <b>cuerpos distintos</b>: por eso nunca se cancelan entre sí y nunca
+        aparecen los dos en el mismo diagrama de cuerpo libre.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div><span class="kicker">Ejercicio 1 de la guía</span><h2>Verdadero o falso, con la justificación</h2>
+      <p>Contestá primero y después mirá la justificación. Todas salen con las dos frases de arriba:
+      <span class="mono">ΣF = 0 ⇒ a = 0</span> y <span class="mono">a = ΣF/m</span>.</p></div>
+    </div>
+    <div class="vf" id="vf-leyes"></div>
+  </div>
+</section>
+
+<!-- ═════════ 02 · ROZAMIENTO ═════════ -->
+<section class="mod" id="mod-roce" hidden>
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Laboratorio 2 · Ejercicio 2 de la guía</span>
+        <h2>La pista A → G</h2>
+        <p>Se empuja la caja con fuerza constante <b>sólo</b> desde A hasta B y ahí se la suelta.
+        Hay rozamiento <b>únicamente</b> en las zonas rayadas CD y EF. Corré la simulación y mirá
+        dónde termina.</p>
+      </div>
+    </div>
+    <div class="bench">
+      <div class="stage" id="lab2-stage"></div>
+      <div class="side">
+        <div class="read" id="lab2-read"></div>
+        <div class="verdict" id="lab2-verdict"></div>
+        <p class="note">En los tramos lisos (AB, BC, DE, FG) no hay ninguna fuerza horizontal:
+        <b>ΣF = 0</b>, así que la velocidad se mantiene clavada. En las zonas rayadas el rozamiento
+        es la única fuerza: frena con <b>a = −Fr/m</b>.</p>
+      </div>
+    </div>
+    <div class="ctl">
+      <div class="fld">
+        <label for="l2-m">Masa <span id="l2-m-v">10 kg</span></label>
+        <input type="range" id="l2-m" min="2" max="40" step="1" value="10">
+      </div>
+      <div class="fld">
+        <label for="l2-f">Fuerza del empuje (A→B) <span id="l2-f-v">40 N</span></label>
+        <input type="range" id="l2-f" min="5" max="150" step="1" value="40">
+      </div>
+      <div class="fld">
+        <label for="l2-fr">Rozamiento en zonas rayadas <span id="l2-fr-v">18 N</span></label>
+        <input type="range" id="l2-fr" min="2" max="120" step="1" value="18">
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+        <button class="btn pri" id="l2-play">▶ Soltar la caja</button>
+        <button class="btn" id="l2-reset">↺ Volver a A</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div><span class="kicker">Ejercicio 2 de la guía</span><h2>¿Dónde se detiene?</h2>
+      <p>Jugá primero con la simulación de arriba y después contestá. La justificación aparece
+      recién cuando elegís.</p></div>
+    </div>
+    <div class="vf" id="vf-roce"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div><span class="kicker">Definición</span><h2>Qué es la fuerza de rozamiento</h2></div>
+    </div>
+    <div class="pad" style="display:flex;flex-direction:column;gap:11px">
+      <p style="margin:0;color:var(--ink-2)">Es la fuerza de resistencia que se opone al movimiento
+      —o a los <em>intentos</em> de movimiento— de un objeto en relación con otro con el que está en
+      contacto. Su valor depende del tipo de material y de cuánto se opriman entre sí las superficies
+      (es decir, de la normal).</p>
+      <p class="note"><b>Ojo con el sentido:</b> el rozamiento no apunta siempre “hacia atrás”, apunta
+      siempre <b>en contra del movimiento relativo</b>. Si la caja va hacia la derecha, el rozamiento va
+      hacia la izquierda; si la caja baja por un plano, el rozamiento sube por el plano.</p>
+      <p class="note"><b>Rozamiento estático:</b> mientras el cuerpo no arranca, el rozamiento vale
+      exactamente lo mismo que la fuerza que intenta moverlo (por eso ΣF sigue siendo cero) y crece
+      hasta un tope. Recién cuando la fuerza supera ese tope, el cuerpo empieza a moverse.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 03 · PARES ═════════ -->
+<section class="mod" id="mod-pares" hidden>
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Laboratorio 3 · Ejercicios 3 y 4 de la guía</span>
+        <h2>Diagrama de cuerpo libre y pares de acción–reacción</h2>
+        <p>Elegí una escena, elegí <b>sobre qué cuerpo</b> querés dibujar el diagrama y tocá una fuerza
+        para ver dónde está su par. Regla de oro: el par <b>nunca</b> está en el mismo diagrama.</p>
+      </div>
+    </div>
+    <div class="ctl" style="border-top:0">
+      <div class="seg" id="p3-scene" role="group" aria-label="Escena">
+        <button data-v="nino" aria-pressed="true">Un niño empuja un bloque</button>
+        <button data-v="hamaca" aria-pressed="false">Pelota sobre la hamaca</button>
+      </div>
+      <div class="seg" id="p3-body" role="group" aria-label="Cuerpo del diagrama"></div>
+    </div>
+    <div class="bench">
+      <div class="stage" id="lab3-stage"></div>
+      <div class="side">
+        <div class="kicker">Fuerzas sobre el cuerpo elegido</div>
+        <div class="read" id="lab3-read"></div>
+        <div class="verdict" id="lab3-pair"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div><span class="kicker">Los dos errores clásicos</span><h2>Peso y normal <em>no</em> son un par</h2></div>
+    </div>
+    <div class="pad g2" style="gap:16px 22px">
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <h3 style="font-size:16px">Cómo se reconoce un par de interacción</h3>
+        <ul class="steps" style="color:var(--ink-2);font-size:13.8px">
+          <li>Actúan sobre <b>dos cuerpos distintos</b>: una sobre A, la otra sobre B.</li>
+          <li>Son de la <b>misma naturaleza</b>: si una es de contacto, la otra también.</li>
+          <li>Se nombran cruzado: “la que <b>A</b> hace sobre <b>B</b>” y “la que <b>B</b> hace sobre <b>A</b>”.</li>
+          <li>Tienen igual módulo y dirección, sentido opuesto, y <b>jamás se cancelan</b>, porque
+          se aplican a cuerpos diferentes.</li>
+        </ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <h3 style="font-size:16px">Por qué el peso y la normal no lo son</h3>
+        <p style="margin:0;color:var(--ink-2);font-size:13.8px">Las dos actúan sobre <b>el mismo</b>
+        cuerpo (la caja), así que ya por eso quedan descartadas. Además:</p>
+        <ul class="steps" style="color:var(--ink-2);font-size:13.8px">
+          <li>El par del <b>peso</b> es la atracción que la caja ejerce sobre <b>la Tierra</b>.</li>
+          <li>El par de la <b>normal</b> es la fuerza que la caja ejerce sobre <b>la mesa</b>.</li>
+        </ul>
+        <p class="note">Que <span class="mono">N = P</span> en una mesa horizontal es una
+        <em>consecuencia</em> de que la caja no acelere verticalmente, no una ley. Apenas hay un plano
+        inclinado o una fuerza vertical extra, dejan de ser iguales.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 04 · PESO Y MASA ═════════ -->
+<section class="mod" id="mod-peso" hidden>
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Laboratorio 4 · Ejercicio 13 de la guía</span>
+        <h2>La misma masa, distintos pesos</h2>
+        <p>La <b>masa</b> es cuánta materia hay y se mide en kilogramos: no cambia nunca.
+        El <b>peso</b> es la fuerza con que un astro te atrae, se mide en newtons y cambia con el lugar.
+        Movés la masa y se recalculan todos los pesos.</p>
+      </div>
+    </div>
+    <div class="ctl" style="border-top:0">
+      <div class="fld" style="max-width:340px">
+        <label for="l4-m">Masa del cuerpo <span id="l4-m-v">62 kg</span></label>
+        <input type="range" id="l4-m" min="1" max="150" step="1" value="62">
+      </div>
+      <div class="eq" style="align-self:center">P = m · g</div>
+    </div>
+    <div class="worlds" id="l4-worlds"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Ejercicio 6 de la guía</span>
+        <h2>¿Por qué en el vacío caen igual?</h2>
+        <p>Soltá las dos esferas. La de la izquierda pesa mucho más que la de la derecha.</p>
+      </div>
+    </div>
+    <div class="bench">
+      <div class="stage" id="lab4-stage"></div>
+      <div class="side">
+        <div class="read" id="lab4-read"></div>
+        <div class="eqs">
+          <div class="eq">ΣF = P = m · g</div>
+          <div class="eq">a = ΣF/m = (m·g)/m = g</div>
+        </div>
+        <p class="note">La masa aparece <b>dos veces</b> y se cancela: cuanto más pesado es el cuerpo,
+        más cuesta acelerarlo, y las dos cosas se compensan exactamente. Por eso todos caen con
+        <b>a = g</b>, sin importar la masa, y llegan al piso con la misma velocidad.</p>
+      </div>
+    </div>
+    <div class="ctl">
+      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+        <button class="btn pri" id="l4-play">▶ Soltar</button>
+        <button class="btn" id="l4-reset">↺ Reiniciar</button>
+      </div>
+      <div class="seg" id="l4-medio" role="group" aria-label="Medio">
+        <button data-v="vacio" aria-pressed="true">En el vacío</button>
+        <button data-v="aire" aria-pressed="false">Con resistencia del aire</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 05 · GRAVITACIÓN ═════════ -->
+<section class="mod" id="mod-grav" hidden>
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Laboratorio 5 · Ley de gravitación universal</span>
+        <h2>Todo atrae a todo</h2>
+        <p>Elegí un par de cuerpos, o movés vos las masas y la distancia. Las dos flechas son
+        siempre <b>iguales</b>: Marte atrae al bebé con la misma fuerza con que el bebé atrae a Marte.</p>
+      </div>
+    </div>
+    <div class="bench">
+      <div class="stage" id="lab5-stage"></div>
+      <div class="side">
+        <div class="read" id="lab5-read"></div>
+        <div class="eqs">
+          <div class="eq">Fg = G · m₁ · m₂ / r²</div>
+          <div class="eq">G = 6,67 × 10⁻¹¹ N·m²/kg²</div>
+        </div>
+        <p class="note">La distancia está <b>al cuadrado</b>: al doble de distancia, la fuerza cae a
+        la cuarta parte. Probá el preset Tierra–Luna y después duplicá <span class="mono">r</span>.</p>
+      </div>
+    </div>
+    <div class="ctl">
+      <div class="fld" style="max-width:250px">
+        <label for="l5-preset">Par de cuerpos</label>
+        <select id="l5-preset"></select>
+      </div>
+      <div class="fld">
+        <label for="l5-m1">Masa 1 <span id="l5-m1-v"></span></label>
+        <input type="range" id="l5-m1" min="0" max="280" step="1" value="140">
+      </div>
+      <div class="fld">
+        <label for="l5-m2">Masa 2 <span id="l5-m2-v"></span></label>
+        <input type="range" id="l5-m2" min="0" max="280" step="1" value="140">
+      </div>
+      <div class="fld">
+        <label for="l5-r">Distancia entre centros <span id="l5-r-v"></span></label>
+        <input type="range" id="l5-r" min="0" max="280" step="1" value="140">
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-hd">
+        <div><span class="kicker">Ejercicios 15 a 17</span><h2>De dónde sale el 9,8</h2>
+        <p>La gravedad en la superficie no es un dato mágico: sale de la misma fórmula.</p></div>
+      </div>
+      <div class="stage" id="lab6-stage"></div>
+      <div class="ctl">
+        <div class="fld" style="max-width:100%">
+          <label for="l6-h">Altura sobre la superficie <span id="l6-h-v">0 km</span></label>
+          <input type="range" id="l6-h" min="0" max="300" step="1" value="0">
+        </div>
+      </div>
+      <div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:10px">
+        <div class="read" id="lab6-read"></div>
+        <div class="eq">g = G · MT / (RT + h)²</div>
+        <p class="note">A 8&nbsp;500&nbsp;m —la cima del Everest— la gravedad baja apenas de 9,77 a
+        9,75&nbsp;m/s². Hace falta alejarse <b>un radio terrestre entero</b> para que la gravedad caiga
+        a la cuarta parte.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">
+        <div><span class="kicker">Ejercicio 18 · Desafío</span><h2>El punto donde el campo se anula</h2>
+        <p>Entre la Tierra y la Luna hay un punto en el que las dos atracciones se cancelan.</p></div>
+      </div>
+      <div class="stage" id="lab7-stage"></div>
+      <div class="ctl">
+        <div class="fld" style="max-width:100%">
+          <label for="l7-x">Posición de la sonda <span id="l7-x-v">50 %</span></label>
+          <input type="range" id="l7-x" min="2" max="98" step="0.2" value="50">
+        </div>
+        <button class="btn" id="l7-snap">Llevar al punto nulo</button>
+      </div>
+      <div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:10px">
+        <div class="read" id="lab7-read"></div>
+        <p class="note">Como la Tierra tiene unas <b>81 veces</b> la masa de la Luna, el punto de
+        empate no está en el medio: está a <span class="mono">√81 = 9</span> veces más distancia de
+        la Tierra que de la Luna, o sea a un 90&nbsp;% del camino.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 06 · PLANO INCLINADO ═════════ -->
+<section class="mod" id="mod-plano" hidden>
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Laboratorio 6 · Plano inclinado</span>
+        <h2>Inclinar los ejes y descomponer el peso</h2>
+        <p>El eje <b>x</b> se acuesta sobre el plano y el eje <b>y</b> queda perpendicular a él.
+        Así la normal y el movimiento caen justo sobre los ejes, y la única fuerza que hay que
+        descomponer es el peso.</p>
+      </div>
+    </div>
+    <div class="bench">
+      <div class="stage" id="lab8-stage"></div>
+      <div class="side">
+        <div class="read" id="lab8-read"></div>
+        <div class="verdict" id="lab8-verdict"></div>
+        <div class="eqs">
+          <div class="eq">Px = P · sen α&nbsp;&nbsp;(baja el plano)</div>
+          <div class="eq">Py = P · cos α&nbsp;&nbsp;(aprieta el plano)</div>
+          <div class="eq">N = P · cos α</div>
+          <div class="eq">ΣFx = F − P·sen α − Fr</div>
+        </div>
+      </div>
+    </div>
+    <div class="ctl">
+      <div class="fld">
+        <label for="l8-a">Inclinación <span id="l8-a-v">30°</span></label>
+        <input type="range" id="l8-a" min="0" max="60" step="1" value="30">
+      </div>
+      <div class="fld">
+        <label for="l8-m">Masa <span id="l8-m-v">15 kg</span></label>
+        <input type="range" id="l8-m" min="1" max="60" step="1" value="15">
+      </div>
+      <div class="fld">
+        <label for="l8-f">Fuerza aplicada (↗ positiva) <span id="l8-f-v">0 N</span></label>
+        <input type="range" id="l8-f" min="-200" max="300" step="1" value="0">
+      </div>
+      <div class="fld">
+        <label for="l8-fr">Rozamiento máximo <span id="l8-fr-v">0 N</span></label>
+        <input type="range" id="l8-fr" min="0" max="200" step="1" value="0">
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+        <button class="btn pri" id="l8-play">▶ Correr</button>
+        <button class="btn" id="l8-reset">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="ctl" style="border-top:0;padding-top:0">
+      <label class="chk"><input type="checkbox" id="l8-desc" checked> Mostrar la descomposición del peso</label>
+      <label class="chk"><input type="checkbox" id="l8-ejes" checked> Mostrar los ejes inclinados</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div><span class="kicker">La geometría de la guía</span>
+      <h2>Por qué el ángulo del peso es el mismo que el del plano</h2></div>
+    </div>
+    <div class="bench">
+      <div class="stage" id="lab9-stage"></div>
+      <div class="side">
+        <div class="eqs">
+          <div class="eq">α̂ + D̂ + γ̂ = 180°</div>
+          <div class="eq">α̂ + 90° + γ̂ = 180°&nbsp;&nbsp;→&nbsp;&nbsp;α̂ + γ̂ = 90°&nbsp;&nbsp;(1)</div>
+          <div class="eq">δ̂ + γ̂ = 90°&nbsp;&nbsp;(ejes perpendiculares)&nbsp;&nbsp;(2)</div>
+          <div class="eq" style="background:var(--accent-soft);color:var(--accent-ink)">de (1) y (2):&nbsp;&nbsp;α̂ = δ̂</div>
+        </div>
+        <p class="note">Por eso el ángulo entre el peso y el eje <b>y</b> inclinado vale exactamente
+        lo mismo que la inclinación del plano, y podemos escribir directamente
+        <span class="mono">Py = P·cos α</span> y <span class="mono">Px = P·sen α</span>.</p>
+        <p class="note"><b>Truco para no equivocarse:</b> con α = 0° el plano es horizontal y todo el
+        peso debe apretar contra el piso → la componente que acompaña al <span class="mono">cos</span>
+        es la perpendicular. Movés el ángulo a 0 en el laboratorio de arriba y lo comprobás.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 07 · SISTEMAS ═════════ -->
+<section class="mod" id="mod-sistemas" hidden>
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Laboratorio 7 · Ejercicios 11, 14 y Repaso 5</span>
+        <h2>Sogas, ascensores y cuerpos pegados</h2>
+        <p>La receta es siempre la misma: <b>primero</b> el sistema entero para sacar la aceleración,
+        <b>después</b> un solo cuerpo para sacar la tensión o la fuerza de contacto.</p>
+      </div>
+    </div>
+    <div class="ctl" style="border-top:0">
+      <div class="seg" id="l10-scene" role="group" aria-label="Escena">
+        <button data-v="ascensor" aria-pressed="true">Ascensor</button>
+        <button data-v="baldes" aria-pressed="false">Dos baldes colgados</button>
+        <button data-v="bloques" aria-pressed="false">Dos bloques en contacto</button>
+      </div>
+    </div>
+    <div class="bench">
+      <div class="stage" id="lab10-stage"></div>
+      <div class="side">
+        <div class="read" id="lab10-read"></div>
+        <div class="verdict" id="lab10-verdict"></div>
+        <div class="eqs" id="lab10-eqs"></div>
+      </div>
+    </div>
+    <div class="ctl" id="l10-ctl"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div><span class="kicker">Método</span><h2>Cómo se resuelve cualquiera de estos problemas</h2></div>
+    </div>
+    <div class="pad">
+      <ol class="steps" style="color:var(--ink-2)">
+        <li><b>Dibujar el DCL de cada cuerpo</b> por separado. Sólo las fuerzas que actúan
+        <em>sobre</em> ese cuerpo; nunca las que ese cuerpo hace sobre otros.</li>
+        <li><b>Elegir el sentido positivo</b> y usarlo igual en todo el problema. Conviene tomar
+        positivo el sentido en que el sistema se mueve.</li>
+        <li><b>Tratar el sistema como un solo cuerpo</b> de masa <span class="mono">m₁+m₂</span>: las
+        tensiones internas se cancelan de a pares y queda <span class="mono">a = ΣFext/(m₁+m₂)</span>.</li>
+        <li><b>Volver a un cuerpo solo</b>, con la <span class="mono">a</span> ya conocida, y despejar
+        la tensión o la fuerza de contacto.</li>
+        <li><b>Chequear el signo</b>: si la aceleración da negativa, el sistema se mueve al revés de
+        lo que supusiste, no está mal el planteo.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 08 · EJERCICIOS ═════════ -->
+<section class="mod" id="mod-ejercicios" hidden>
+  <div class="card">
+    <div class="card-hd">
+      <div>
+        <span class="kicker">Guía de dinámica · Unidad 5</span>
+        <h2>Todos los ejercicios numéricos, resueltos</h2>
+        <p>Cada uno abre con los datos, el planteo y el resultado. Tomamos
+        <span class="mono">g = 9,8 m/s²</span> salvo que el enunciado diga otra cosa.</p>
+      </div>
+    </div>
+    <div class="filterbar">
+      <span class="kicker">Filtrar</span>
+      <div class="seg" id="ex-filter" role="group" aria-label="Filtro de ejercicios">
+        <button data-v="all" aria-pressed="true">Todos</button>
+        <button data-v="guia" aria-pressed="false">Guía</button>
+        <button data-v="repaso" aria-pressed="false">Repaso de evaluación</button>
+        <button data-v="newton" aria-pressed="false">2ª ley</button>
+        <button data-v="plano" aria-pressed="false">Plano inclinado</button>
+        <button data-v="grav" aria-pressed="false">Gravitación</button>
+      </div>
+      <button class="btn" id="ex-open">Abrir todos</button>
+      <button class="btn" id="ex-close">Cerrar todos</button>
+    </div>
+    <div id="ex-list"></div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<footer>
+  <div class="foot">
+    <span>Banco de Dinámica · armado sobre la <em>Guía dinámica unidad 5</em> y las tres leyes de Newton.</span>
+    <span class="mono">g = 9,8 m/s² · G = 6,67×10⁻¹¹ N·m²/kg²</span>
+  </div>
+</footer>
+<script>
+(function(){
+"use strict";
+var G_ACC = 9.8, BIG_G = 6.67e-11;
+var $  = function(s,r){return (r||document).querySelector(s);};
+var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+/* ───────── formato ───────── */
+function n(v,d){
+  if(!isFinite(v)) return "—";
+  d = (d===undefined)?1:d;
+  var s = Math.abs(v)<5e-13 ? (0).toFixed(d) : v.toFixed(d);
+  return s.replace(".",",");
+}
+function sci(v,d){
+  if(v===0) return "0";
+  if(!isFinite(v)) return "—";
+  d = (d===undefined)?2:d;
+  var e = Math.floor(Math.log10(Math.abs(v)));
+  var m = v/Math.pow(10,e);
+  if(Math.abs(m)>=9.995){ m/=10; e++; }
+  if(e>=-2 && e<=4) return n(v, e>=3?0:(e>=1?1:3));
+  return n(m,d)+" × 10"+sup(e);
+}
+var SUPS={"-":"⁻","0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+function sup(e){return String(e).split("").map(function(c){return SUPS[c]||c;}).join("");}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+/* ───────── SVG ───────── */
+function svg(w,h,inner){
+  return '<svg viewBox="0 0 '+w+' '+h+'" role="img" preserveAspectRatio="xMidYMid meet">'+inner+'</svg>';
+}
+function paper(w,h,step){
+  var s="",i;
+  for(i=step;i<w;i+=step) s+='<line class="gridline'+(i%(step*5)===0?" maj":"")+'" x1="'+i+'" y1="0" x2="'+i+'" y2="'+h+'"/>';
+  for(i=step;i<h;i+=step) s+='<line class="gridline'+(i%(step*5)===0?" maj":"")+'" x1="0" y1="'+i+'" x2="'+w+'" y2="'+i+'"/>';
+  return s;
+}
+/* flecha con cabeza sólida + etiqueta opcional desplazada del extremo */
+function arrow(x1,y1,x2,y2,color,label,lox,loy,dash){
+  var dx=x2-x1, dy=y2-y1, L=Math.sqrt(dx*dx+dy*dy);
+  if(L<2) return "";
+  var ux=dx/L, uy=dy/L, hl=Math.min(12,L*0.45), hw=5;
+  var bx=x2-ux*hl, by=y2-uy*hl, px=-uy, py=ux;
+  var s='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+
+        '" stroke="'+color+'" stroke-width="3" stroke-linecap="round"'+(dash?' stroke-dasharray="7 5"':'')+'/>';
+  s+='<polygon fill="'+color+'" points="'+x2.toFixed(1)+','+y2.toFixed(1)+' '+
+     (bx+px*hw).toFixed(1)+','+(by+py*hw).toFixed(1)+' '+(bx-px*hw).toFixed(1)+','+(by-py*hw).toFixed(1)+'"/>';
+  if(label){
+    s+='<text class="vlabel" fill="'+color+'" x="'+(x2+(lox||0)).toFixed(1)+'" y="'+(y2+(loy||0)).toFixed(1)+
+       '" text-anchor="middle">'+label+'</text>';
+  }
+  return s;
+}
+function txt(x,y,t,cls,anchor){
+  return '<text class="'+(cls||"slabel")+'" x="'+x+'" y="'+y+'" text-anchor="'+(anchor||"middle")+'">'+t+'</text>';
+}
+function readRow(key,val,unit,color,hi){
+  return '<div'+(hi?' class="hi"':'')+'><span class="k"'+(color?' style="color:'+color+'"':'')+'>'+
+         (color?'<i></i>':'')+key+'</span><span class="v">'+val+(unit?' <span class="u">'+unit+'</span>':'')+'</span></div>';
+}
+
+/* ───────── pestañas ───────── */
+$$(".tab").forEach(function(t){
+  t.addEventListener("click",function(){
+    $$(".tab").forEach(function(o){o.setAttribute("aria-selected", o===t ? "true":"false");});
+    $$(".mod").forEach(function(m){m.hidden = (m.id !== "mod-"+t.dataset.mod);});
+    window.scrollTo({top:0,behavior:"auto"});
+  });
+});
+function segment(root,onPick){
+  var btns = $$("button",root);
+  btns.forEach(function(b){
+    b.addEventListener("click",function(){
+      btns.forEach(function(o){o.setAttribute("aria-pressed", o===b ? "true":"false");});
+      onPick(b.dataset.v);
+    });
+  });
+}
+function bind(id,fn){var e=$(id); if(e) e.addEventListener("input",fn); return e;}
+
+/* ══════════════════════════════════════════
+   formulario al tope de cada módulo
+   [ fórmula, para qué sirve, despejes, destacada ]
+   ══════════════════════════════════════════ */
+var FORMULAS = {
+ leyes:{t:"Fuerza neta y segunda ley", p:"Todo lo que se usa en este módulo. En gris, los despejes que suelen pedir los ejercicios.", f:[
+  ["ΣF = m · a","<b>Segunda ley.</b> Es vectorial: se plantea por separado en el eje x y en el eje y.","a = ΣF / m   ·   m = ΣF / a",1],
+  ["ΣF = 0  ⇔  a = 0","<b>Primera ley.</b> Reposo y velocidad constante son el mismo caso: ninguno necesita fuerza.","",1],
+  ["ΣF = F − Fr","Fuerza neta sobre una recta: se suman con signo, según el sentido que hayas elegido como positivo.",""],
+  ["P = m · g","Peso: la fuerza con que la Tierra te atrae. Siempre vertical y hacia abajo.","g = 9,8 m/s²   ·   m = P / g"],
+  ["N = P","La normal iguala al peso <b>sólo</b> en piso horizontal y sin otras fuerzas verticales.",""],
+  ["F(A sobre B) = − F(B sobre A)","<b>Tercera ley.</b> Actúan sobre cuerpos distintos, por eso nunca se cancelan entre sí.",""],
+  ["1 N = 1 kg · m/s²","Unidad de fuerza. Sirve para chequear que las cuentas cierran.",""],
+  ["v = v₀ + a · t","Enganche con cinemática: una vez que tenés <b>a</b>, seguís con las fórmulas de MRUV.","x = x₀ + v₀·t + ½·a·t²   ·   v² = v₀² + 2·a·Δx"]
+ ]},
+ roce:{t:"Fuerza de rozamiento", p:"El rozamiento no tiene fórmula propia en los ejercicios de la guía: casi siempre te dan su valor en newtons.", f:[
+  ["sentido de Fr = − sentido de v","<b>La regla que más se usa.</b> El rozamiento se opone al movimiento, no apunta siempre «hacia atrás».","",1],
+  ["Fr = μ · N","Cuando el problema da el coeficiente en vez del valor. Depende de la normal: cuanto más se aprietan, más roza.","N = m · g en piso horizontal"],
+  ["ΣF = F − Fr = m · a","Con la caja moviéndose. Si F &gt; Fr acelera, si F = Fr va a velocidad constante.",""],
+  ["a = − Fr / m","Frenado puro: soltaste el empuje y el rozamiento es la única fuerza que queda.",""],
+  ["Fr estático = F aplicada","Mientras <b>no arranca</b>, el rozamiento devuelve exactamente lo que empujás, hasta un tope. Por eso ΣF = 0.",""],
+  ["v² = v₀² + 2 · a · Δx","Para saber si llega, hasta dónde llega o con qué velocidad sale de una zona rugosa.","distancia de frenado = m · v₀² / (2 · Fr)"]
+ ]},
+ pares:{t:"Tercera ley y diagramas de cuerpo libre", p:"Acá casi no hay cuentas: hay reglas para no meter fuerzas de más ni de menos en un DCL.", f:[
+  ["F(A sobre B) = − F(B sobre A)","<b>Tercera ley.</b> Igual módulo, igual dirección, sentido opuesto — y sobre <b>cuerpos distintos</b>.","",1],
+  ["N y P actúan sobre el mismo cuerpo","Por eso <b>no</b> son un par de interacción, por más que a veces valgan lo mismo.","",1],
+  ["par del peso → sobre la Tierra","El cuerpo atrae a la Tierra con la misma fuerza con que la Tierra lo atrae a él.",""],
+  ["par de la normal → sobre la mesa","La mesa empuja al cuerpo hacia arriba; el cuerpo aprieta la mesa hacia abajo.",""],
+  ["ΣFy = N − P = m · a&#7522;","Ecuación del eje vertical. Si el cuerpo no sube ni baja, a&#7522; = 0 y recién ahí N = P.",""],
+  ["N = P − F","Si además tirás hacia arriba con una fuerza F, la normal <b>baja</b>. Con F = P queda N = 0.",""]
+ ]},
+ peso:{t:"Peso, masa y caída libre", p:"La masa se mide en kilogramos y no cambia nunca. El peso es una fuerza, se mide en newtons y cambia con el lugar.", f:[
+  ["P = m · g","<b>Peso.</b> Misma masa, distinto g, distinto peso.","m = P / g   ·   g = P / m",1],
+  ["a de caída = g","En el vacío: a = P/m = m·g/m = g. <b>La masa se cancela</b>, por eso todos caen igual.","",1],
+  ["v = g · t","Velocidad de un cuerpo soltado desde el reposo.",""],
+  ["h = ½ · g · t²","Altura recorrida desde el reposo.","t = √(2 · h / g)"],
+  ["v = √(2 · g · h)","Velocidad de llegada al piso, sin depender del tiempo.",""],
+  ["g en cada lugar","Ecuador 9,78 · Sur 9,83 · Luna 1,67 · Marte 3,72 · Júpiter 24,8 (todos en m/s²).",""]
+ ]},
+ grav:{t:"Ley de gravitación universal", p:"Una sola fórmula y sus despejes. Ojo con la notación científica: conviene separar numerador y denominador.", f:[
+  ["Fg = G · m₁ · m₂ / r²","<b>Todo atrae a todo.</b> r es la distancia entre los <b>centros</b>, y va al cuadrado.","",1],
+  ["G = 6,67 × 10⁻¹¹ N·m²/kg²","Constante de gravitación universal. La misma en todo el universo.",""],
+  ["g = G · M / r²","Campo gravitatorio: la aceleración que produce una masa M a distancia r. No depende del cuerpo atraído.","",1],
+  ["g superficie = G · M / R²","De acá salen los 9,8 m/s²: R es el radio del astro (Tierra: 6,4 × 10⁶ m).",""],
+  ["M = Fg · r² / (G · m)","Despeje para calcular la <b>masa</b> de un astro a partir de la fuerza medida.",""],
+  ["r = √( G · m₁ · m₂ / Fg )","Despeje para calcular la <b>distancia</b> entre dos cuerpos.",""],
+  ["P = G · MT · m / r²","El peso <b>es</b> la fuerza gravitatoria de la Tierra: por eso P = m·g.",""],
+  ["r al doble  ⇒  Fg a la cuarta parte","Inversa del cuadrado. Para que g caiga a 1/4 hay que duplicar la distancia al centro.",""],
+  ["x = d / (1 + √(m₂/m₁))","Punto donde los dos campos se cancelan, medido desde m₁.",""]
+ ]},
+ plano:{t:"Plano inclinado", p:"El eje x se acuesta sobre el plano. La única fuerza que hay que descomponer es el peso.", f:[
+  ["Px = P · sen α","Componente <b>paralela</b> al plano: es la que lo hace bajar. Con α = 0 vale cero.","Px = m · g · sen α",1],
+  ["Py = P · cos α","Componente <b>perpendicular</b> al plano: es la que lo aprieta contra la superficie.","Py = m · g · cos α",1],
+  ["N = P · cos α","La normal ya no vale P. Con α = 0 vuelve a ser N = P.",""],
+  ["ΣFx = F − P·sen α − Fr = m · a","Ecuación sobre el plano. Signos: positivo hacia arriba del plano.",""],
+  ["a = g · sen α","Caso libre: sin rozamiento y sin fuerza aplicada. No depende de la masa.",""],
+  ["F = P·sen α + Fr","Fuerza para <b>subir a velocidad constante</b>. Bajando, el rozamiento cambia de sentido y hay que cambiarle el signo.",""],
+  ["sen α = altura / hipotenusa","Cuando el enunciado da el triángulo en vez del ángulo (ejercicio 20).","cos α = base / hipotenusa"],
+  ["α del plano = α del peso","Por eso se puede usar directamente la inclinación para descomponer.",""]
+ ]},
+ sistemas:{t:"Sogas, ascensores y cuerpos unidos", p:"Siempre dos pasos: primero el sistema entero para sacar la aceleración, después un solo cuerpo para la tensión.", f:[
+  ["a = ΣF ext / (m₁ + m₂)","<b>Paso 1.</b> Todo el sistema como un solo cuerpo: las fuerzas internas se cancelan de a pares.","",1],
+  ["T = m · (g + a)","<b>Paso 2.</b> Ascensor o cuerpo colgado. Con a = 0 queda T = P.","m = T / (g + a)",1],
+  ["T &gt; P sube acelerando","T &lt; P baja acelerando · T = P velocidad constante · T = 0 caída libre.",""],
+  ["a = F/(m₁+m₂) − g","Dos baldes colgados y tirados hacia arriba con una fuerza F.",""],
+  ["TA = m₂ · (a + g)","Tensión de la soga que sostiene <b>sólo</b> al balde de abajo.","TA = m₂ · F / (m₁+m₂)"],
+  ["a = F / (m₁ + m₂)","Dos bloques en contacto sobre piso sin rozamiento.",""],
+  ["Fc = m₂ · a","Fuerza de contacto entre los bloques. <b>Nunca</b> vale F: sólo la parte que le toca a m₂.","Fc = m₂ · F / (m₁+m₂)"],
+  ["soga ideal: misma T en los dos extremos","Sin masa y sin estirarse: transmite la tensión entera.",""]
+ ]},
+ ejercicios:{t:"Todo el formulario de la unidad", p:"El resumen completo, para tener a la vista mientras resolvés.", f:[
+  ["ΣF = m · a","Segunda ley. Por separado en cada eje.","a = ΣF / m   ·   m = ΣF / a",1],
+  ["ΣF = 0  ⇔  a = 0","Primera ley: reposo o velocidad constante.",""],
+  ["P = m · g","g = 9,8 m/s² salvo que el enunciado diga otra cosa.",""],
+  ["N = P  ·  N = P · cos α","Horizontal e inclinado.",""],
+  ["Px = P · sen α","Componente del peso que baja el plano.","Py = P · cos α",1],
+  ["Fr se opone al movimiento","Fr = μ · N si dan el coeficiente.",""],
+  ["Fg = G · m₁ · m₂ / r²","G = 6,67 × 10⁻¹¹ N·m²/kg²","M = Fg·r²/(G·m)   ·   r = √(G·m₁·m₂/Fg)",1],
+  ["g = G · M / r²","Campo gravitatorio a distancia r del centro.",""],
+  ["T = m · (g + a)","Cuerpo colgado o ascensor.",""],
+  ["a = ΣF ext / (m₁+m₂)","Sistemas: primero el conjunto, después un cuerpo.","Fc = m₂ · a"],
+  ["v = v₀ + a · t","MRUV, para cerrar con cinemática.","x = x₀ + v₀·t + ½·a·t²"],
+  ["v² = v₀² + 2 · a · Δx","Cuando no aparece el tiempo.",""]
+ ]}
+};
+Object.keys(FORMULAS).forEach(function(k){
+  var mod = $("#mod-"+k); if(!mod) return;
+  var d = FORMULAS[k];
+  var sec = document.createElement("section");
+  sec.className = "card sheet";
+  sec.innerHTML =
+    '<div class="card-hd"><div><span class="kicker">Formulario</span><h2>'+d.t+'</h2>'+
+    (d.p ? '<p>'+d.p+'</p>' : '')+'</div></div>'+
+    '<div class="fxgrid">'+ d.f.map(function(x){
+      return '<div class="fx"><div class="fx-eq'+(x[3]?" key":"")+'">'+x[0]+'</div>'+
+        (x[1] ? '<div class="fx-note">'+x[1]+'</div>' : '')+
+        (x[2] ? '<div class="fx-alt">'+x[2]+'</div>' : '')+'</div>';
+    }).join("") +'</div>';
+  mod.insertBefore(sec, mod.firstElementChild);
+});
+
+/* ══════════════════════════════════════════
+   LAB 1 · fuerza neta sobre el piso
+   ══════════════════════════════════════════ */
+var L1 = {m:18,F:60,Fr:0,v:0,x:0,t:0,run:false,cut:false,vec:true,trace:[]};
+var L1W=720, L1H=452, L1_FLOOR=252, L1_BX=206, L1_BW=78, L1_BH=56;
+
+function l1Forces(){
+  var P = L1.m*G_ACC, N = P;
+  var Fapp = (L1.cut && L1.t>=3) ? 0 : L1.F;
+  var moving = Math.abs(L1.v) > 0.02;
+  var Fr, net;
+  if(!moving && Math.abs(Fapp) <= L1.Fr){ Fr = Fapp; net = 0; }
+  else { var dir = moving ? (L1.v>0?1:-1) : (Fapp>=0?1:-1); Fr = L1.Fr*dir; net = Fapp - Fr; }
+  return {P:P,N:N,F:Fapp,Fr:Fr,net:net,a:net/L1.m,moving:moving};
+}
+function l1Scene(){
+  var f = l1Forces();
+  var scale = 62/Math.max(f.P, Math.abs(f.F), Math.abs(f.Fr), 25);
+  var len = function(v){ v=Math.abs(v)*scale; return v<1?0:Math.max(v,15); };
+  var cx = L1_BX+L1_BW/2, cy = L1_FLOOR-L1_BH/2, top=L1_FLOOR-L1_BH;
+  var s = paper(L1W,L1H,14);
+
+  /* piso con marcas que se desplazan: la caja queda fija y el mundo corre */
+  var PPM = 22, off = ((L1.x % 1)+1)%1 * PPM;
+  s += '<line class="floor" x1="24" y1="'+L1_FLOOR+'" x2="'+(L1W-24)+'" y2="'+L1_FLOOR+'"/>';
+  for(var k=0;k<32;k++){
+    var px = 26 + k*PPM - off;
+    if(px<26 || px>L1W-26) continue;
+    var meters = Math.round(L1.x + (px-cx)/PPM);
+    var maj = meters % 5 === 0;
+    s += '<line x1="'+px.toFixed(1)+'" y1="'+L1_FLOOR+'" x2="'+px.toFixed(1)+'" y2="'+(L1_FLOOR+(maj?11:6))+'" stroke="'+
+         (maj?"var(--ink-3)":"var(--grid)")+'" stroke-width="'+(maj?1.6:1.2)+'"/>';
+    if(maj) s += txt(px.toFixed(1), L1_FLOOR+25, meters+" m");
+  }
+
+  /* caja */
+  s += '<rect class="blk" x="'+L1_BX+'" y="'+top+'" width="'+L1_BW+'" height="'+L1_BH+'" rx="4"/>';
+  s += txt(cx, cy+5, n(L1.m,0)+" kg", "blabel");
+
+  if(L1.vec){
+    s += arrow(cx, cy, cx, cy+len(f.P), css("--v-peso"), "P "+n(f.P,0)+" N", 0, 17);
+    s += arrow(cx, L1_FLOOR, cx, L1_FLOOR-len(f.N), css("--v-normal"), "N "+n(f.N,0)+" N", 0, -9);
+    if(len(f.F)) s += arrow(L1_BX+L1_BW, cy, L1_BX+L1_BW+len(f.F), cy, css("--v-fuerza"), "F "+n(f.F,0)+" N", 0, -12);
+    if(len(f.Fr)) s += arrow(L1_BX, cy, L1_BX-len(f.Fr)*(f.Fr>=0?1:-1), cy, css("--v-roz"), "Fr "+n(Math.abs(f.Fr),0)+" N", 0, -12);
+    var nl = len(f.net);
+    if(nl) s += arrow(cx, top-52, cx + nl*(f.net>0?1:-1), top-52, css("--v-neta"), "ΣF "+n(f.net,0)+" N", 0, -12, true);
+    else s += txt(cx, top-48, "ΣF = 0", "vlabel");
+  }
+  /* indicador de velocidad */
+  if(Math.abs(L1.v)>0.02){
+    var vl = Math.min(70, 5+Math.abs(L1.v)*5);
+    s += arrow(cx, top-92, cx+vl*(L1.v>0?1:-1), top-92, css("--accent"), "v "+n(L1.v,1)+" m/s", 0, -11);
+  }
+  s += txt(30, 26, "vectores dibujados a escala", "slabel", "start");
+  s += l1Chart();
+  return svg(L1W,L1H,s);
+}
+function l1Chart(){
+  var x0=58, x1=688, y0=338, y1=420, TMAX=12;
+  var vmax = 10; L1.trace.forEach(function(p){ if(Math.abs(p[1])>vmax) vmax=Math.abs(p[1]); });
+  var vtop = Math.ceil(vmax/5)*5;
+  var sx = function(t){ return x0 + (t/TMAX)*(x1-x0); };
+  var sy = function(v){ return y0 + (1 - v/vtop)*(y1-y0); };
+  var s = txt(x0, y0-14, "velocidad (m/s) en función del tiempo (s)", "slabel", "start");
+  var i;
+  for(i=0;i<=TMAX;i+=2){
+    s += '<line class="plotgrid" x1="'+sx(i)+'" y1="'+y0+'" x2="'+sx(i)+'" y2="'+y1+'"/>';
+    s += txt(sx(i), y1+16, i, "tickt");
+  }
+  [0, vtop/2, vtop].forEach(function(v){
+    s += '<line class="plotgrid" x1="'+x0+'" y1="'+sy(v).toFixed(1)+'" x2="'+x1+'" y2="'+sy(v).toFixed(1)+'"/>';
+    s += txt(x0-9, sy(v)+4, n(v,0), "tickt", "end");
+  });
+  s += '<line class="plotax" x1="'+x0+'" y1="'+y0+'" x2="'+x0+'" y2="'+y1+'"/>';
+  s += '<line class="plotax" x1="'+x0+'" y1="'+y1+'" x2="'+x1+'" y2="'+y1+'"/>';
+  if(L1.trace.length>1){
+    var d = L1.trace.map(function(p,ix){ return (ix?"L":"M")+sx(Math.min(p[0],TMAX)).toFixed(1)+" "+sy(p[1]).toFixed(1); }).join(" ");
+    s += '<path class="plot" d="'+d+'"/>';
+    var last = L1.trace[L1.trace.length-1];
+    s += '<circle cx="'+sx(Math.min(last[0],TMAX)).toFixed(1)+'" cy="'+sy(last[1]).toFixed(1)+
+         '" r="4.5" fill="'+css("--accent")+'" stroke="'+css("--paper")+'" stroke-width="2"/>';
+  } else {
+    s += txt((x0+x1)/2, (y0+y1)/2+4, "tocá «Correr» para trazar la curva", "slabel");
+  }
+  return s;
+}
+function l1Render(){
+  var f = l1Forces();
+  $("#lab1-stage").innerHTML = l1Scene();
+  $("#lab1-read").innerHTML =
+      readRow("Peso","P = "+n(f.P,0),"N",css("--v-peso"))
+    + readRow("Normal","N = "+n(f.N,0),"N",css("--v-normal"))
+    + readRow("Aplicada","F = "+n(f.F,0),"N",css("--v-fuerza"))
+    + readRow("Rozamiento","Fr = "+n(Math.abs(f.Fr),0),"N",css("--v-roz"))
+    + readRow("Fuerza neta","ΣF = "+n(f.net,1),"N","",true)
+    + readRow("Aceleración","a = "+n(f.a,2),"m/s²","",true)
+    + readRow("Velocidad","v = "+n(L1.v,2),"m/s")
+    + readRow("Posición","x = "+n(L1.x,1),"m")
+    + readRow("Tiempo","t = "+n(L1.t,1),"s");
+  var v = $("#lab1-verdict"), c="verdict", txtv;
+  if(Math.abs(f.net)<0.05 && !f.moving){
+    txtv = "<b>En reposo.</b> El rozamiento estático devuelve exactamente lo que empujás: ΣF = 0, así que a = 0. Subí la fuerza por encima de "+n(L1.Fr,0)+" N para arrancarla.";
+  } else if(Math.abs(f.net)<0.05){
+    c="verdict go";
+    txtv = "<b>Velocidad constante.</b> ΣF = 0 y sin embargo se mueve: eso es la 1ª ley. No hace falta ninguna fuerza para <em>seguir</em> moviéndose.";
+  } else if(f.net*L1.v < 0 && f.moving){
+    c="verdict stop";
+    txtv = "<b>Frenando.</b> ΣF apunta en contra de la velocidad: a = "+n(f.a,2)+" m/s² en contra. La caja se va a detener.";
+  } else {
+    c="verdict go";
+    txtv = "<b>Acelerando.</b> ΣF = "+n(f.net,1)+" N sobre "+n(L1.m,0)+" kg da a = "+n(f.a,2)+" m/s². Mientras la fuerza siga, la velocidad no deja de crecer.";
+  }
+  v.className = c; v.innerHTML = txtv;
+}
+function l1Step(dt){
+  var f = l1Forces();
+  var vNew = L1.v + f.a*dt;
+  if(L1.v>0.02 && vNew<0 && Math.abs(f.F)<=L1.Fr) vNew = 0;
+  if(L1.v<-0.02 && vNew>0 && Math.abs(f.F)<=L1.Fr) vNew = 0;
+  L1.x += (L1.v+vNew)/2*dt;
+  L1.v = vNew; L1.t += dt;
+  L1.trace.push([L1.t, L1.v]);
+  if(L1.t>=12){ L1.run=false; $("#l1-play").textContent="▶ Correr"; }
+}
+function l1Reset(){
+  L1.v=0; L1.x=0; L1.t=0; L1.run=false; L1.trace=[];
+  $("#l1-play").textContent="▶ Correr"; l1Render();
+}
+(function l1Wire(){
+  var sync = function(){
+    L1.m  = +$("#l1-m").value;  $("#l1-m-v").textContent  = L1.m+" kg";
+    L1.F  = +$("#l1-f").value;  $("#l1-f-v").textContent  = L1.F+" N";
+    L1.Fr = +$("#l1-fr").value; $("#l1-fr-v").textContent = L1.Fr+" N";
+    l1Render();
+  };
+  ["#l1-m","#l1-f","#l1-fr"].forEach(function(id){ bind(id, sync); });
+  $("#l1-cut").addEventListener("change",function(){ L1.cut=this.checked; l1Render(); });
+  $("#l1-vec").addEventListener("change",function(){ L1.vec=this.checked; l1Render(); });
+  $("#l1-play").addEventListener("click",function(){
+    if(L1.t>=12) l1Reset();
+    L1.run=!L1.run; this.textContent = L1.run ? "❚❚ Pausar" : "▶ Correr";
+  });
+  $("#l1-reset").addEventListener("click", l1Reset);
+  sync();
+})();
+
+/* ══════════════════════════════════════════
+   LAB 2 · pista A → G (Ejercicio 2)
+   ══════════════════════════════════════════ */
+var PTS = {A:0, B:7, C:14, D:21.5, E:28, F:35.5, G:42.5};
+var L2 = {m:10, F:40, Fr:18, x:0, v:0, run:false, done:""};
+var L2W=720, L2H=290, L2_Y=196, L2_X0=52, L2_SC=14;
+function px2(mtr){ return L2_X0 + mtr*L2_SC; }
+function rough(mtr){ return (mtr>=PTS.C && mtr<PTS.D) || (mtr>=PTS.E && mtr<PTS.F); }
+
+function l2Predict(){
+  var Ek = L2.F*(PTS.B-PTS.A);
+  var cd = L2.Fr*(PTS.D-PTS.C), ef = L2.Fr*(PTS.F-PTS.E);
+  if(Ek <= cd) return {zone:"CD", at: PTS.C + Ek/L2.Fr};
+  if(Ek - cd <= ef) return {zone:"EF", at: PTS.E + (Ek-cd)/L2.Fr};
+  return {zone:"fuga", at: null, vG: Math.sqrt(2*(Ek-cd-ef)/L2.m)};
+}
+function l2Scene(){
+  var s = paper(L2W,L2H,14), k;
+  s += '<line class="floor" x1="'+px2(-2)+'" y1="'+L2_Y+'" x2="'+px2(45)+'" y2="'+L2_Y+'"/>';
+  [["C","D"],["E","F"]].forEach(function(z){
+    var a=px2(PTS[z[0]]), b=px2(PTS[z[1]]);
+    for(var i=a;i<=b;i+=6) s += '<line class="hatch" x1="'+i.toFixed(1)+'" y1="'+(L2_Y-13)+'" x2="'+i.toFixed(1)+'" y2="'+L2_Y+'"/>';
+    s += '<line x1="'+a+'" y1="'+(L2_Y-13)+'" x2="'+b+'" y2="'+(L2_Y-13)+'" stroke="var(--ink-3)" stroke-width="1.4"/>';
+  });
+  Object.keys(PTS).forEach(function(p){
+    var x = px2(PTS[p]);
+    s += '<line x1="'+x+'" y1="'+L2_Y+'" x2="'+x+'" y2="'+(L2_Y+14)+'" stroke="var(--ink-3)" stroke-width="1.6"/>';
+    s += txt(x, L2_Y+34, p, "blabel");
+  });
+  /* zona del empuje */
+  s += '<line x1="'+px2(PTS.A)+'" y1="'+(L2_Y+52)+'" x2="'+px2(PTS.B)+'" y2="'+(L2_Y+52)+
+       '" stroke="'+css("--v-fuerza")+'" stroke-width="2.4" stroke-linecap="round"/>';
+  s += txt((px2(PTS.A)+px2(PTS.B))/2, L2_Y+70, "fuerza constante", "slabel");
+  s += txt((px2(PTS.A)+px2(PTS.B))/2, L2_Y+84, "sólo de A hasta B", "slabel");
+  s += txt(px2((PTS.C+PTS.D)/2), L2_Y-22, "rozamiento", "slabel");
+  s += txt(px2((PTS.E+PTS.F)/2), L2_Y-22, "rozamiento", "slabel");
+
+  /* caja */
+  var bx = px2(L2.x), w=34, h=27;
+  s += '<rect class="blk" x="'+(bx-w/2).toFixed(1)+'" y="'+(L2_Y-h)+'" width="'+w+'" height="'+h+'" rx="3"/>';
+  var pushing = L2.x < PTS.B;
+  if(pushing && (L2.run || L2.v>0))
+    s += arrow(bx+w/2, L2_Y-h/2, bx+w/2+34, L2_Y-h/2, css("--v-fuerza"), "F", 0, -11);
+  if(rough(L2.x) && L2.v>0.01)
+    s += arrow(bx-w/2, L2_Y-h/2, bx-w/2-30, L2_Y-h/2, css("--v-roz"), "Fr", 0, -11);
+  if(L2.v>0.01)
+    s += arrow(bx, L2_Y-h-24, bx+Math.min(60,10+L2.v*5), L2_Y-h-24, css("--accent"), "v "+n(L2.v,1), 0, -11);
+  else if(L2.x>0)
+    s += txt(bx, L2_Y-h-20, "v = 0", "vlabel");
+  /* marca de predicción */
+  var p = l2Predict();
+  if(p.at!==null && L2.x>0 && L2.v<=0.01){
+    s += '<line x1="'+px2(p.at).toFixed(1)+'" y1="'+(L2_Y-58)+'" x2="'+px2(p.at).toFixed(1)+'" y2="'+(L2_Y+14)+
+         '" stroke="'+css("--accent")+'" stroke-width="1.4" stroke-dasharray="5 4"/>';
+  }
+  s += txt(26, 26, "las zonas rayadas son las únicas con rozamiento", "slabel", "start");
+  return svg(L2W,L2H,s);
+}
+function l2Render(){
+  $("#lab2-stage").innerHTML = l2Scene();
+  var p = l2Predict();
+  var vB = Math.sqrt(2*L2.F*(PTS.B-PTS.A)/L2.m);
+  $("#lab2-read").innerHTML =
+      readRow("Aceleración A→B","a = "+n(L2.F/L2.m,2),"m/s²")
+    + readRow("Velocidad al llegar a B","vB = "+n(vB,2),"m/s")
+    + readRow("Frenado en zona rayada","a = −"+n(L2.Fr/L2.m,2),"m/s²")
+    + readRow("Posición actual","x = "+n(L2.x,1),"m")
+    + readRow("Velocidad actual","v = "+n(L2.v,2),"m/s","",true);
+  var v = $("#lab2-verdict");
+  if(p.zone==="fuga"){
+    v.className="verdict go";
+    v.innerHTML = "<b>No se detiene.</b> Sale de EF con "+n(p.vG,2)+" m/s y de F en adelante no hay rozamiento: ΣF = 0, velocidad constante <em>para siempre</em>.";
+  } else {
+    v.className="verdict stop";
+    v.innerHTML = "<b>Se detiene dentro de "+p.zone+"</b>, a "+n(p.at-PTS[p.zone[0]],1)+" m de "+p.zone[0]+
+                  ". Sólo puede frenar donde hay rozamiento: nunca en un tramo liso.";
+  }
+}
+function l2Step(dt){
+  if(L2.v<=0 && L2.x>=PTS.B){ L2.run=false; $("#l2-play").textContent="▶ Soltar la caja"; return; }
+  var a = 0;
+  if(L2.x < PTS.B) a = L2.F/L2.m;
+  else if(rough(L2.x)) a = -L2.Fr/L2.m;
+  var vNew = Math.max(0, L2.v + a*dt);
+  L2.x += (L2.v+vNew)/2*dt;
+  L2.v = vNew;
+  if(L2.x > PTS.G+4){ L2.run=false; $("#l2-play").textContent="▶ Soltar la caja"; L2.x = PTS.G+4; }
+  if(L2.v<=0 && L2.x>=PTS.B){ L2.run=false; $("#l2-play").textContent="▶ Soltar la caja"; }
+}
+function l2Reset(){ L2.x=0; L2.v=0; L2.run=false; $("#l2-play").textContent="▶ Soltar la caja"; l2Render(); }
+(function l2Wire(){
+  var sync=function(){
+    L2.m=+$("#l2-m").value;  $("#l2-m-v").textContent  = L2.m+" kg";
+    L2.F=+$("#l2-f").value;  $("#l2-f-v").textContent  = L2.F+" N";
+    L2.Fr=+$("#l2-fr").value;$("#l2-fr-v").textContent = L2.Fr+" N";
+    l2Render();
+  };
+  ["#l2-m","#l2-f","#l2-fr"].forEach(function(id){ bind(id,sync); });
+  $("#l2-play").addEventListener("click",function(){
+    if(L2.v<=0 && L2.x>=PTS.B) l2Reset();
+    L2.run=!L2.run; this.textContent = L2.run ? "❚❚ Pausar" : "▶ Soltar la caja";
+  });
+  $("#l2-reset").addEventListener("click", l2Reset);
+  sync();
+})();
+
+/* ══════════════════════════════════════════
+   LAB 3 · pares de interacción
+   ══════════════════════════════════════════ */
+var P3DATA = {
+  nino: {
+    bodies:[{id:"bloque",nm:"El bloque"},{id:"nino",nm:"El niño"}],
+    forces:[
+      {b:"bloque",id:"Pb",lbl:"P",nm:"Peso del bloque",of:"la Tierra tira del bloque",c:"--v-peso",
+       x:466,y:180,dx:0,dy:60,lx:0,ly:17,
+       pair:"El bloque atrae a la Tierra con una fuerza igual y hacia arriba. Actúa <b>sobre la Tierra</b>, no sobre el bloque.",pa:null},
+      {b:"bloque",id:"Nb",lbl:"N",nm:"Normal de la mesa",of:"la mesa empuja al bloque",c:"--v-normal",
+       x:466,y:198,dx:0,dy:-60,lx:0,ly:-9,
+       pair:"El bloque aprieta la mesa hacia abajo con la misma fuerza. Actúa <b>sobre la mesa</b>.",pa:{x:466,y:206,dx:0,dy:54,lx:14,ly:16}},
+      {b:"bloque",id:"Fb",lbl:"F",nm:"Empuje del niño",of:"el niño empuja el bloque",c:"--v-fuerza",
+       x:432,y:180,dx:70,dy:0,lx:0,ly:-12,
+       pair:"El bloque empuja al niño hacia atrás con la misma fuerza. Actúa <b>sobre el niño</b>: por eso no se cancela con el empuje.",pa:{x:270,y:186,dx:-64,dy:0,lx:0,ly:-12}},
+      {b:"nino",id:"Pn",lbl:"P",nm:"Peso del niño",of:"la Tierra tira del niño",c:"--v-peso",
+       x:250,y:186,dx:0,dy:58,lx:0,ly:17,
+       pair:"El niño atrae a la Tierra hacia arriba con la misma fuerza. Actúa <b>sobre la Tierra</b>.",pa:null},
+      {b:"nino",id:"Nn",lbl:"N",nm:"Normal del piso",of:"el piso sostiene al niño",c:"--v-normal",
+       x:250,y:258,dx:0,dy:-62,lx:-16,ly:-8,
+       pair:"El niño aprieta el piso hacia abajo. Actúa <b>sobre el piso</b>.",pa:null},
+      {b:"nino",id:"Fn",lbl:"F′",nm:"Reacción del bloque",of:"el bloque empuja al niño",c:"--v-fuerza",
+       x:270,y:186,dx:-64,dy:0,lx:0,ly:-12,
+       pair:"Es el par del empuje: el niño empuja el bloque hacia la derecha. Actúa <b>sobre el bloque</b>.",pa:{x:432,y:180,dx:70,dy:0,lx:0,ly:-12}},
+      {b:"nino",id:"Frn",lbl:"Fr",nm:"Rozamiento del piso",of:"el piso agarra los pies del niño",c:"--v-roz",
+       x:250,y:252,dx:64,dy:0,lx:0,ly:17,
+       pair:"Los pies del niño empujan el piso hacia atrás. Actúa <b>sobre el piso</b>. Sin este rozamiento el niño patinaría y no podría empujar nada.",pa:null}
+    ]
+  },
+  hamaca: {
+    bodies:[{id:"pelota",nm:"La pelota"},{id:"hamaca",nm:"La hamaca"}],
+    forces:[
+      {b:"pelota",id:"Pp",lbl:"P",nm:"Peso de la pelota",of:"la Tierra tira de la pelota",c:"--v-peso",
+       x:360,y:198,dx:0,dy:62,lx:0,ly:17,
+       pair:"La pelota atrae a la Tierra hacia arriba. Actúa <b>sobre la Tierra</b>. <b>No</b> es la normal de la hamaca.",pa:null},
+      {b:"pelota",id:"Np",lbl:"N",nm:"La hamaca sostiene",of:"la hamaca empuja la pelota",c:"--v-normal",
+       x:360,y:198,dx:0,dy:-62,lx:0,ly:-9,
+       pair:"La pelota aprieta la hamaca hacia abajo con la misma fuerza. Actúa <b>sobre la hamaca</b>.",pa:{x:348,y:228,dx:0,dy:52,lx:-16,ly:16}},
+      {b:"hamaca",id:"Nh",lbl:"N′",nm:"La pelota aprieta",of:"la pelota empuja la hamaca",c:"--v-normal",
+       x:348,y:228,dx:0,dy:54,lx:-16,ly:16,
+       pair:"La hamaca sostiene a la pelota hacia arriba. Actúa <b>sobre la pelota</b>.",pa:{x:360,y:198,dx:0,dy:-62,lx:0,ly:-9}},
+      {b:"hamaca",id:"Ph",lbl:"Ph",nm:"Peso de la hamaca",of:"la Tierra tira de la tela",c:"--v-peso",
+       x:392,y:228,dx:0,dy:44,lx:20,ly:14,
+       pair:"La hamaca atrae a la Tierra. Actúa <b>sobre la Tierra</b>. Es una fuerza distinta del peso de la pelota: por eso hay <b>dos</b> flechas hacia abajo y ninguna sobra.",pa:null},
+      {b:"hamaca",id:"T1",lbl:"T₁",nm:"Tensión del árbol izquierdo",of:"el tronco tira de la tela",c:"--v-tension",
+       x:232,y:150,dx:-42,dy:-34,lx:-12,ly:-8,
+       pair:"La hamaca tira del tronco hacia adentro y hacia abajo. Actúa <b>sobre el árbol</b>.",pa:null},
+      {b:"hamaca",id:"T2",lbl:"T₂",nm:"Tensión del árbol derecho",of:"el tronco tira de la tela",c:"--v-tension",
+       x:488,y:150,dx:42,dy:-34,lx:12,ly:-8,
+       pair:"La hamaca tira del tronco hacia adentro y hacia abajo. Actúa <b>sobre el árbol</b>.",pa:null}
+    ]
+  }
+};
+var L3 = {scene:"nino", body:"bloque", sel:null};
+
+function l3Backdrop(){
+  var s="";
+  if(L3.scene==="nino"){
+    s += '<line class="floor" x1="40" y1="262" x2="684" y2="262"/>';
+    /* mesa */
+    s += '<rect class="blk-2" x="330" y="198" width="316" height="10" rx="2"/>';
+    s += '<rect class="blk-2" x="344" y="208" width="11" height="54"/>';
+    s += '<rect class="blk-2" x="620" y="208" width="11" height="54"/>';
+    s += txt(646, 240, "mesa sin rozamiento", "slabel", "end");
+    /* bloque */
+    s += '<rect class="blk" x="432" y="160" width="68" height="38" rx="3"/>';
+    s += txt(424, 184, "m", "blabel", "end");
+    /* niño */
+    s += '<circle class="blk" cx="250" cy="150" r="17"/>';
+    s += '<path class="blk" fill="none" d="M250 167 v52"/>';
+    s += '<path class="blk" fill="none" d="M250 219 l-17 43 M250 219 l19 43"/>';
+    s += '<path class="blk" fill="none" d="M250 182 l38 -2 l142 0"/>';
+    s += txt(250, 128, "niño", "slabel");
+  } else {
+    s += '<line class="floor" x1="40" y1="300" x2="684" y2="300"/>';
+    s += '<rect class="blk-2" x="196" y="96" width="17" height="204" rx="3"/>';
+    s += '<rect class="blk-2" x="507" y="96" width="17" height="204" rx="3"/>';
+    s += txt(180, 88, "árbol", "slabel", "end");
+    s += txt(540, 88, "árbol", "slabel", "start");
+    s += '<path d="M213 128 Q360 268 507 128" fill="none" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round"/>';
+    s += txt(276, 282, "hamaca", "slabel");
+    s += '<ellipse class="blk" cx="360" cy="198" rx="27" ry="20"/>';
+    s += txt(320, 204, "pelota", "slabel", "end");
+  }
+  return s;
+}
+function l3Scene(){
+  var sc = P3DATA[L3.scene];
+  var s = paper(720, 320, 14) + l3Backdrop();
+  sc.forces.forEach(function(f){
+    if(f.b !== L3.body) return;
+    var on = (L3.sel === f.id);
+    var col = css(f.c);
+    s += '<g opacity="'+(L3.sel && !on ? 0.32 : 1)+'">'+
+         arrow(f.x, f.y, f.x+f.dx, f.y+f.dy, col, f.lbl, f.lx, f.ly)+'</g>';
+    if(on && f.pa){
+      s += '<g opacity="0.95">'+arrow(f.pa.x, f.pa.y, f.pa.x+f.pa.dx, f.pa.y+f.pa.dy, col,
+            f.lbl+" (par)", f.pa.lx, f.pa.ly, true)+'</g>';
+    }
+  });
+  var nm = sc.bodies.filter(function(b){return b.id===L3.body;})[0].nm;
+  s += txt(26, 26, "Diagrama de cuerpo libre de: "+nm.toLowerCase(), "slabel", "start");
+  if(L3.sel){
+    var f0 = sc.forces.filter(function(f){return f.id===L3.sel;})[0];
+    if(f0 && !f0.pa) s += txt(26, 44, "el par de esta fuerza actúa fuera del dibujo", "slabel", "start");
+  }
+  return svg(720, 320, s);
+}
+function l3Render(){
+  var sc = P3DATA[L3.scene];
+  /* botones de cuerpo */
+  $("#p3-body").innerHTML = sc.bodies.map(function(b){
+    return '<button data-v="'+b.id+'" aria-pressed="'+(b.id===L3.body)+'">'+b.nm+'</button>';
+  }).join("");
+  segment($("#p3-body"), function(v){ L3.body=v; L3.sel=null; l3Render(); });
+
+  $("#lab3-stage").innerHTML = l3Scene();
+  var list = sc.forces.filter(function(f){return f.b===L3.body;});
+  $("#lab3-read").innerHTML = list.map(function(f){
+    return '<div role="button" tabindex="0" data-f="'+f.id+'" style="cursor:pointer'+
+      (L3.sel===f.id?';background:var(--accent-soft)':'')+'">'+
+      '<span class="k" style="color:'+css(f.c)+'"><i></i>'+f.nm+'</span>'+
+      '<span class="v" style="color:'+css(f.c)+'">'+f.lbl+'</span></div>';
+  }).join("");
+  $$("[data-f]", $("#lab3-read")).forEach(function(el){
+    var go = function(){ L3.sel = (L3.sel===el.dataset.f) ? null : el.dataset.f; l3Render(); };
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  var p = $("#lab3-pair");
+  if(L3.sel){
+    var f = list.filter(function(x){return x.id===L3.sel;})[0];
+    p.className = "verdict go";
+    p.innerHTML = "<b>"+f.nm+"</b> — "+f.of+".<br><span class='kicker'>Su par de interacción</span><br>"+f.pair;
+  } else {
+    p.className = "verdict";
+    p.innerHTML = "Tocá una fuerza de la lista para ver <b>dónde está su par</b>. Fijate que ningún par aparece dos veces en el mismo diagrama.";
+  }
+}
+segment($("#p3-scene"), function(v){
+  L3.scene=v; L3.body=P3DATA[v].bodies[0].id; L3.sel=null; l3Render();
+});
+l3Render();
+
+/* ══════════════════════════════════════════
+   LAB 4 · peso, masa y caída libre
+   ══════════════════════════════════════════ */
+var WORLDS = [
+  {nm:"Tierra · ecuador", g:9.78, me:true},
+  {nm:"Tierra · sur",     g:9.83, me:true},
+  {nm:"Luna",             g:1.67},
+  {nm:"Marte",            g:3.72},
+  {nm:"Júpiter",          g:24.79},
+  {nm:"Sol",              g:274},
+  {nm:"En órbita (caída libre)", g:0}
+];
+function l4Worlds(){
+  var m = +$("#l4-m").value;
+  $("#l4-m-v").textContent = m+" kg";
+  var max = m*274;
+  $("#l4-worlds").innerHTML = WORLDS.map(function(w){
+    var P = m*w.g, pct = max ? (P/max)*100 : 0;
+    return '<div class="world'+(w.me?" me":"")+'">'+
+      '<span class="nm">'+w.nm+'</span>'+
+      '<span class="g">g '+n(w.g,2)+'</span>'+
+      '<span class="bar"><i style="width:'+Math.max(pct,0).toFixed(2)+'%"></i></span>'+
+      '<span class="p">'+(P>=1000? n(P/1000,2)+" kN" : n(P,1)+" N")+'</span></div>';
+  }).join("") + '<div class="world" style="background:var(--panel-2)">'+
+      '<span class="nm" style="color:var(--ink-2);font-weight:500">Masa (no cambia nunca)</span>'+
+      '<span class="g">—</span><span class="bar" style="background:none"></span>'+
+      '<span class="p">'+m+' kg</span></div>';
+}
+bind("#l4-m", l4Worlds);
+
+var L4 = {t:0, run:false, medio:"vacio",
+  balls:[{m:8, r:24, x:230}, {m:1, r:13, x:470}]};
+var L4_TOP=64, L4_FLOOR=286, L4_H=(286-64);
+function l4Fall(b){
+  /* devuelve {y, v, landed, t} integrando hasta L4.t */
+  var dt=0.004, y=0, v=0, t=0, hMet = 20;      /* 20 m de caída */
+  var k = (L4.medio==="aire") ? 0.30*b.r*b.r/144 : 0;   /* arrastre ~ área */
+  while(t < L4.t && y < hMet){
+    var a = G_ACC - (k*v*v)/b.m;
+    v += a*dt; y += v*dt; t += dt;
+  }
+  return {y:Math.min(y,hMet), v:v, landed:y>=hMet, t:t, h:hMet};
+}
+function l4Scene(){
+  var s = paper(720, 330, 14);
+  s += '<line class="floor" x1="60" y1="'+L4_FLOOR+'" x2="660" y2="'+L4_FLOOR+'"/>';
+  s += '<line x1="120" y1="'+L4_TOP+'" x2="600" y2="'+L4_TOP+'" stroke="var(--grid)" stroke-width="1.4" stroke-dasharray="6 5"/>';
+  s += txt(96, L4_TOP+4, "20 m", "slabel", "end");
+  L4.balls.forEach(function(b){
+    var st = l4Fall(b);
+    var cy = L4_TOP + (st.y/st.h)*L4_H;
+    if(cy > L4_FLOOR-b.r) cy = L4_FLOOR-b.r;
+    s += '<circle class="blk" cx="'+b.x+'" cy="'+cy.toFixed(1)+'" r="'+b.r+'"/>';
+    s += txt(b.x, cy+5, b.m+" kg", "blabel");
+    if(!st.landed && L4.t>0)
+      s += arrow(b.x, cy+b.r+4, b.x, cy+b.r+4+Math.min(70, 12+st.v*2.4), css("--v-peso"), "P", 16, 10);
+    s += txt(b.x, L4_FLOOR+24, st.landed ? "llegó a "+n(st.v,1)+" m/s" : n(st.v,1)+" m/s", "slabel");
+  });
+  s += txt(26, 26, L4.medio==="vacio" ? "en el vacío: la única fuerza es el peso"
+                                      : "con aire: aparece una fuerza de resistencia hacia arriba", "slabel", "start");
+  return svg(720, 330, s);
+}
+function l4Render(){
+  $("#lab4-stage").innerHTML = l4Scene();
+  var a = L4.balls.map(l4Fall);
+  $("#lab4-read").innerHTML =
+      readRow("Tiempo","t = "+n(L4.t,2),"s")
+    + readRow("Esfera de 8 kg","v = "+n(a[0].v,2),"m/s","",true)
+    + readRow("Esfera de 1 kg","v = "+n(a[1].v,2),"m/s","",true)
+    + readRow("Diferencia","Δv = "+n(Math.abs(a[0].v-a[1].v),2),"m/s");
+}
+$("#l4-play").addEventListener("click",function(){
+  if(L4.t>3) { L4.t=0; }
+  L4.run=!L4.run; this.textContent = L4.run ? "❚❚ Pausar" : "▶ Soltar";
+});
+$("#l4-reset").addEventListener("click",function(){
+  L4.t=0; L4.run=false; $("#l4-play").textContent="▶ Soltar"; l4Render();
+});
+segment($("#l4-medio"), function(v){ L4.medio=v; L4.t=0; L4.run=false; $("#l4-play").textContent="▶ Soltar"; l4Render(); });
+l4Worlds(); l4Render();
+
+/* ══════════════════════════════════════════
+   LAB 5 · gravitación universal
+   ══════════════════════════════════════════ */
+var PRESETS = [
+  {nm:"Tierra – Luna",                 m1:5.97e24, m2:7.35e22, r:3.84e8,  n1:"Tierra", n2:"Luna"},
+  {nm:"Vos – la Tierra (tu peso)",     m1:6e24,    m2:65,      r:6.4e6,   n1:"Tierra", n2:"vos"},
+  {nm:"Bebé – Marte  (Repaso 6)",      m1:6.4e23,  m2:3,       r:5.6e10,  n1:"Marte",  n2:"bebé"},
+  {nm:"Bebé – obstetra  (Repaso 7)",   m1:100,     m2:3,       r:0.5,     n1:"obstetra", n2:"bebé"},
+  {nm:"Tierra – Júpiter  (Repaso 8)",  m1:6e24,    m2:1.9e27,  r:6.5e11,  n1:"Tierra", n2:"Júpiter"},
+  {nm:"Neptuno – Tritón  (Repaso 9)",  m1:1.02e26, m2:2.14e22, r:3.55e8,  n1:"Neptuno",n2:"Tritón"},
+  {nm:"Dos manzanas a 1 m",            m1:0.2,     m2:0.2,     r:1,       n1:"manzana",n2:"manzana"}
+];
+var L5 = {m1:5.97e24, m2:7.35e22, r:3.84e8, n1:"Tierra", n2:"Luna"};
+function mFromSlider(t){ return Math.pow(10, -4 + t/8); }
+function mToSlider(m){ return Math.max(0, Math.min(280, (Math.log10(m)+4)*8)); }
+function rFromSlider(t){ return Math.pow(10, -1 + t/20); }
+function rToSlider(r){ return Math.max(0, Math.min(280, (Math.log10(r)+1)*20)); }
+function l5Scene(){
+  var s = paper(720, 300, 14);
+  var Fg = BIG_G*L5.m1*L5.m2/(L5.r*L5.r);
+  var rad = function(m){ return Math.max(9, Math.min(56, 9 + (Math.log10(m)+4)*1.35)); };
+  var r1 = rad(L5.m1), r2 = rad(L5.m2);
+  var cy = 138, x1 = 150, x2 = 570;
+  s += '<circle cx="'+x1+'" cy="'+cy+'" r="'+r1.toFixed(1)+'" fill="var(--sunk)" stroke="var(--ink)" stroke-width="2"/>';
+  s += '<circle cx="'+x2+'" cy="'+cy+'" r="'+r2.toFixed(1)+'" fill="var(--sunk)" stroke="var(--ink)" stroke-width="2"/>';
+  s += txt(x1, cy-r1-14, L5.n1, "blabel");
+  s += txt(x2, cy-r2-14, L5.n2, "blabel");
+  s += txt(x1, cy+r1+22, sci(L5.m1)+" kg", "slabel");
+  s += txt(x2, cy+r2+22, sci(L5.m2)+" kg", "slabel");
+  /* flechas iguales, apuntando una a la otra */
+  var L = 96;
+  s += arrow(x1+r1+6, cy, x1+r1+6+L, cy, css("--v-tension"), "Fg", 0, -13);
+  s += arrow(x2-r2-6, cy, x2-r2-6-L, cy, css("--v-tension"), "Fg", 0, -13);
+  /* cota de distancia */
+  var yd = cy+r1+52;
+  s += '<line x1="'+x1+'" y1="'+(cy+r1+6)+'" x2="'+x1+'" y2="'+(yd+8)+'" stroke="var(--grid)" stroke-width="1.2"/>';
+  s += '<line x1="'+x2+'" y1="'+(cy+r2+6)+'" x2="'+x2+'" y2="'+(yd+8)+'" stroke="var(--grid)" stroke-width="1.2"/>';
+  s += '<line x1="'+x1+'" y1="'+yd+'" x2="'+x2+'" y2="'+yd+'" stroke="var(--ink-3)" stroke-width="1.4"/>';
+  s += '<rect x="'+((x1+x2)/2-72)+'" y="'+(yd-11)+'" width="144" height="22" fill="var(--paper)"/>';
+  s += txt((x1+x2)/2, yd+5, "r = "+sci(L5.r)+" m", "slabel");
+  s += txt(360, 262, "las dos flechas son iguales: 3ª ley de Newton", "slabel");
+  s += txt(360, 42, "Fg = "+sci(Fg)+" N", "blabel");
+  return svg(720, 300, s);
+}
+function l5Render(){
+  $("#lab5-stage").innerHTML = l5Scene();
+  var Fg = BIG_G*L5.m1*L5.m2/(L5.r*L5.r);
+  $("#l5-m1-v").textContent = sci(L5.m1)+" kg";
+  $("#l5-m2-v").textContent = sci(L5.m2)+" kg";
+  $("#l5-r-v").textContent  = sci(L5.r)+" m";
+  $("#lab5-read").innerHTML =
+      readRow("Masa 1","m₁ = "+sci(L5.m1),"kg")
+    + readRow("Masa 2","m₂ = "+sci(L5.m2),"kg")
+    + readRow("Distancia","r = "+sci(L5.r),"m")
+    + readRow("Fuerza gravitatoria","Fg = "+sci(Fg),"N","",true)
+    + readRow("Equivale al peso de","≈ "+sci(Fg/G_ACC),"kg en la Tierra");
+}
+(function l5Wire(){
+  $("#l5-preset").innerHTML = PRESETS.map(function(p,i){return '<option value="'+i+'">'+p.nm+'</option>';}).join("")
+    + '<option value="x">— personalizado —</option>';
+  var apply = function(){
+    $("#l5-m1").value = mToSlider(L5.m1);
+    $("#l5-m2").value = mToSlider(L5.m2);
+    $("#l5-r").value  = rToSlider(L5.r);
+    l5Render();
+  };
+  $("#l5-preset").addEventListener("change", function(){
+    var p = PRESETS[+this.value];
+    if(!p) return;
+    L5.m1=p.m1; L5.m2=p.m2; L5.r=p.r; L5.n1=p.n1; L5.n2=p.n2;
+    apply();
+  });
+  var onSlide = function(){
+    L5.m1 = mFromSlider(+$("#l5-m1").value);
+    L5.m2 = mFromSlider(+$("#l5-m2").value);
+    L5.r  = rFromSlider(+$("#l5-r").value);
+    L5.n1 = "cuerpo 1"; L5.n2 = "cuerpo 2";
+    $("#l5-preset").value = "x";
+    l5Render();
+  };
+  ["#l5-m1","#l5-m2","#l5-r"].forEach(function(id){ bind(id, onSlide); });
+  apply();
+})();
+
+/* ══════════════════════════════════════════
+   LAB 6 · g en función de la altura
+   ══════════════════════════════════════════ */
+var R_T = 6.4e6, M_T = 6e24;
+var L6 = {h:0};
+function gAt(r){ return BIG_G*M_T/(r*r); }
+function l6Scene(){
+  var w=660, h=250, x0=88, x1=630, y0=36, y1=196;
+  var rmaxR = 4;
+  var sx = function(rr){ return x0 + ((rr-1)/(rmaxR-1))*(x1-x0); };
+  var g0 = gAt(R_T);
+  var sy = function(g){ return y1 - (g/10)*(y1-y0); };
+  var s = "", i;
+  for(i=0;i<=10;i+=2){
+    s += '<line class="plotgrid" x1="'+x0+'" y1="'+sy(i).toFixed(1)+'" x2="'+x1+'" y2="'+sy(i).toFixed(1)+'"/>';
+    s += txt(x0-10, sy(i)+4, i, "tickt", "end");
+  }
+  for(i=1;i<=rmaxR;i++){
+    s += '<line class="plotgrid" x1="'+sx(i).toFixed(1)+'" y1="'+y0+'" x2="'+sx(i).toFixed(1)+'" y2="'+y1+'"/>';
+    s += txt(sx(i), y1+18, i+" RT", "tickt");
+  }
+  s += '<line class="plotax" x1="'+x0+'" y1="'+y0+'" x2="'+x0+'" y2="'+y1+'"/>';
+  s += '<line class="plotax" x1="'+x0+'" y1="'+y1+'" x2="'+x1+'" y2="'+y1+'"/>';
+  var d="";
+  for(i=0;i<=120;i++){
+    var rr = 1 + (rmaxR-1)*i/120;
+    d += (i?"L":"M")+sx(rr).toFixed(1)+" "+sy(gAt(rr*R_T)).toFixed(1);
+  }
+  s += '<path class="plot" d="'+d+'"/>';
+  var rNow = (R_T + L6.h)/R_T;
+  var cx = sx(Math.min(rNow, rmaxR)), cyv = sy(gAt(rNow*R_T));
+  s += '<line x1="'+cx.toFixed(1)+'" y1="'+cyv.toFixed(1)+'" x2="'+cx.toFixed(1)+'" y2="'+y1+'" stroke="'+css("--accent")+'" stroke-width="1.3" stroke-dasharray="5 4"/>';
+  s += '<circle cx="'+cx.toFixed(1)+'" cy="'+cyv.toFixed(1)+'" r="5" fill="'+css("--accent")+'" stroke="'+css("--paper")+'" stroke-width="2"/>';
+  s += txt(x0, y0-12, "aceleración de la gravedad (m/s²) según la distancia al centro", "slabel", "start");
+  s += txt(x1, sy(g0/4)-8, "g/4 a 2 RT", "tickt", "end");
+  return svg(w+0, h, s);
+}
+function l6Render(){
+  L6.h = Math.pow(+$("#l6-h").value/300, 3) * 3 * R_T;
+  var km = L6.h/1000;
+  $("#l6-h-v").textContent = km<1 ? n(L6.h,0)+" m" : (km<10000 ? n(km,1)+" km" : n(L6.h/R_T,2)+" R⊕");
+  $("#lab6-stage").innerHTML = l6Scene();
+  var g = gAt(R_T+L6.h), g0 = gAt(R_T);
+  $("#lab6-read").innerHTML =
+      readRow("Distancia al centro","r = "+sci(R_T+L6.h),"m")
+    + readRow("En radios terrestres","r = "+n((R_T+L6.h)/R_T,3),"R⊕")
+    + readRow("Gravedad allí","g = "+n(g,3),"m/s²","",true)
+    + readRow("Comparada con la superficie","× "+n(g/g0,3),"");
+}
+(function(){
+  bind("#l6-h", l6Render);
+  var ctl = $("#l6-h").parentNode.parentNode;
+  var box = document.createElement("div");
+  box.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+  [["Superficie",0],["Everest · 8 500 m",8500],["ISS · 400 km",4e5],["1 R⊕ de altura → g/4",R_T]]
+   .forEach(function(p){
+     var b=document.createElement("button"); b.className="btn"; b.textContent=p[0];
+     b.addEventListener("click",function(){
+       $("#l6-h").value = Math.pow(p[1]/(3*R_T),1/3)*300;
+       l6Render();
+     });
+     box.appendChild(b);
+   });
+  ctl.appendChild(box);
+  l6Render();
+})();
+
+/* ══════════════════════════════════════════
+   LAB 7 · punto de campo nulo Tierra–Luna
+   ══════════════════════════════════════════ */
+var M_L = 7.35e22, D_TL = 3.84e8;
+var L7 = {f:0.5};
+function l7Null(){ return 1/(1+Math.sqrt(M_L/M_T)); }
+function l7Scene(){
+  var w=660, h=250, xT=90, xL=580, cy=124;
+  var s = paper(w, h, 14);
+  s += '<line x1="'+xT+'" y1="'+cy+'" x2="'+xL+'" y2="'+cy+'" stroke="var(--grid)" stroke-width="1.6"/>';
+  s += '<circle cx="'+xT+'" cy="'+cy+'" r="34" fill="var(--sunk)" stroke="var(--ink)" stroke-width="2"/>';
+  s += '<circle cx="'+xL+'" cy="'+cy+'" r="13" fill="var(--sunk)" stroke="var(--ink)" stroke-width="2"/>';
+  s += txt(xT, cy+56, "Tierra", "blabel");
+  s += txt(xL, cy+40, "Luna", "blabel");
+  s += txt(xT, cy+72, "6 × 10²⁴ kg", "slabel");
+  s += txt(xL, cy+56, "7,35 × 10²² kg", "slabel");
+
+  var x  = xT + L7.f*(xL-xT);
+  var dT = Math.max(1e6, L7.f*D_TL), dL = Math.max(1e6, (1-L7.f)*D_TL);
+  var gT = BIG_G*M_T/(dT*dT), gL = BIG_G*M_L/(dL*dL);
+  var mx = Math.max(gT,gL);
+  var ln = function(g){ return 14 + 72*Math.pow(g/mx, 1/3); };
+  s += '<circle cx="'+x.toFixed(1)+'" cy="'+cy+'" r="6" fill="'+css("--accent")+'"/>';
+  s += arrow(x, cy-22, x-ln(gT), cy-22, css("--v-normal"), "hacia la Tierra", 0, -12);
+  s += arrow(x, cy+22, x+ln(gL), cy+22, css("--v-peso"), "hacia la Luna", 0, 20);
+
+  var xn = xT + l7Null()*(xL-xT);
+  s += '<line x1="'+xn.toFixed(1)+'" y1="'+(cy-84)+'" x2="'+xn.toFixed(1)+'" y2="'+(cy+84)+
+       '" stroke="'+css("--ok")+'" stroke-width="1.5" stroke-dasharray="6 4"/>';
+  s += txt(xn, cy-92, "punto nulo", "tickt");
+  s += txt(24, 26, "campo gravitatorio en el punto de la sonda", "slabel", "start");
+  return svg(w, h, s);
+}
+function l7Render(){
+  L7.f = +$("#l7-x").value/100;
+  $("#l7-x-v").textContent = n(L7.f*100,1)+" %";
+  $("#lab7-stage").innerHTML = l7Scene();
+  var dT = L7.f*D_TL, dL = (1-L7.f)*D_TL;
+  var gT = BIG_G*M_T/(dT*dT), gL = BIG_G*M_L/(dL*dL);
+  $("#lab7-read").innerHTML =
+      readRow("Distancia a la Tierra","dT = "+sci(dT),"m")
+    + readRow("Distancia a la Luna","dL = "+sci(dL),"m")
+    + readRow("Campo de la Tierra","gT = "+sci(gT),"m/s²",css("--v-normal"))
+    + readRow("Campo de la Luna","gL = "+sci(gL),"m/s²",css("--v-peso"))
+    + readRow("Resultante","Δ = "+sci(gT-gL),"m/s²","",true);
+}
+bind("#l7-x", l7Render);
+$("#l7-snap").addEventListener("click",function(){ $("#l7-x").value = (l7Null()*100).toFixed(1); l7Render(); });
+l7Render();
+
+/* ══════════════════════════════════════════
+   LAB 8 · plano inclinado
+   ══════════════════════════════════════════ */
+var L8 = {a:30, m:15, F:0, Fr:0, s:170, v:0, run:false, desc:true, ejes:true, msg:""};
+var L8W=760, L8H=372, L8_OX=104, L8_OY=306, L8_LEN=486, PPM8=17;
+
+function l8Phys(){
+  var rad = L8.a*Math.PI/180;
+  var P = L8.m*G_ACC, Px = P*Math.sin(rad), Py = P*Math.cos(rad), N = Py;
+  var drive = L8.F - Px;
+  var moving = Math.abs(L8.v) > 0.02, Fr, net;
+  if(!moving && Math.abs(drive) <= L8.Fr){ Fr = drive; net = 0; }
+  else { var dir = moving ? (L8.v>0?1:-1) : (drive>=0?1:-1); Fr = L8.Fr*dir; net = drive - Fr; }
+  return {rad:rad,P:P,Px:Px,Py:Py,N:N,Fr:Fr,net:net,a:net/L8.m,moving:moving,drive:drive};
+}
+function l8Scene(){
+  var f = l8Phys(), rad = f.rad, ca = Math.cos(rad), sa = Math.sin(rad);
+  var ux=ca, uy=-sa, nx=-sa, ny=-ca;                 /* eje x sobre el plano, eje y normal */
+  var s = paper(L8W, L8H, 14);
+  var tipX = L8_OX + L8_LEN*ca, tipY = L8_OY - L8_LEN*sa;
+  /* cuña */
+  s += '<path d="M'+L8_OX+' '+L8_OY+' L'+tipX.toFixed(1)+' '+tipY.toFixed(1)+' L'+tipX.toFixed(1)+' '+L8_OY+' Z" fill="var(--sunk)" opacity=".55"/>';
+  s += '<line class="floor" x1="'+(L8_OX-52)+'" y1="'+L8_OY+'" x2="'+(tipX+34).toFixed(1)+'" y2="'+L8_OY+'"/>';
+  s += '<line x1="'+L8_OX+'" y1="'+L8_OY+'" x2="'+tipX.toFixed(1)+'" y2="'+tipY.toFixed(1)+'" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>';
+  /* arco del ángulo */
+  var ar=54;
+  s += '<path d="M'+(L8_OX+ar)+' '+L8_OY+' A '+ar+' '+ar+' 0 0 0 '+(L8_OX+ar*ca).toFixed(1)+' '+(L8_OY-ar*sa).toFixed(1)+
+       '" fill="none" stroke="var(--ink-3)" stroke-width="1.5"/>';
+  s += txt(L8_OX+ar+30, L8_OY-11, "α = "+L8.a+"°", "blabel");
+
+  var bx = L8_OX + L8.s*ca, by = L8_OY - L8.s*sa;         /* punto de contacto */
+  var cx = bx + nx*22, cy = by + ny*22;                    /* centro del bloque */
+  /* ejes inclinados */
+  if(L8.ejes){
+    s += '<line class="axis" x1="'+(cx-ux*128).toFixed(1)+'" y1="'+(cy-uy*128).toFixed(1)+'" x2="'+(cx+ux*128).toFixed(1)+'" y2="'+(cy+uy*128).toFixed(1)+'"/>';
+    s += '<line class="axis" x1="'+(cx-nx*112).toFixed(1)+'" y1="'+(cy-ny*112).toFixed(1)+'" x2="'+(cx+nx*112).toFixed(1)+'" y2="'+(cy+ny*112).toFixed(1)+'"/>';
+    s += txt(cx+ux*140, cy+uy*140+4, "+x", "tickt");
+    s += txt(cx+nx*124, cy+ny*124+4, "+y", "tickt");
+  }
+  /* bloque */
+  s += '<g transform="rotate('+(-L8.a)+' '+cx.toFixed(1)+' '+cy.toFixed(1)+')">'+
+       '<rect class="blk" x="'+(cx-32).toFixed(1)+'" y="'+(cy-22).toFixed(1)+'" width="64" height="44" rx="3"/></g>';
+
+  var sc = 76/Math.max(f.P, Math.abs(L8.F), L8.Fr, 25);
+  var len = function(v){ v=Math.abs(v)*sc; return v<1?0:Math.max(v,15); };
+  var lp = len(f.P);
+  /* peso y su descomposición */
+  s += arrow(cx, cy, cx, cy+lp, css("--v-peso"), "P "+n(f.P,0), 30, 5);
+  if(L8.desc){
+    var lpx = len(f.Px), lpy = len(f.Py);
+    s += arrow(cx, cy, cx-ux*lpx, cy-uy*lpx, css("--v-peso"), "Px", -18, 18);
+    s += arrow(cx, cy, cx-nx*lpy, cy-ny*lpy, css("--v-peso"), "Py", 24, 14);
+    /* paralelogramo punteado */
+    s += '<line x1="'+(cx-ux*lpx).toFixed(1)+'" y1="'+(cy-uy*lpx).toFixed(1)+'" x2="'+cx.toFixed(1)+'" y2="'+(cy+lp).toFixed(1)+
+         '" stroke="'+css("--v-peso")+'" stroke-width="1.1" stroke-dasharray="4 4" opacity=".65"/>';
+    s += '<line x1="'+(cx-nx*lpy).toFixed(1)+'" y1="'+(cy-ny*lpy).toFixed(1)+'" x2="'+cx.toFixed(1)+'" y2="'+(cy+lp).toFixed(1)+
+         '" stroke="'+css("--v-peso")+'" stroke-width="1.1" stroke-dasharray="4 4" opacity=".65"/>';
+  }
+  /* normal */
+  s += arrow(bx, by, bx+nx*len(f.N), by+ny*len(f.N), css("--v-normal"), "N "+n(f.N,0), 22, -4);
+  /* aplicada */
+  if(len(L8.F)) {
+    var d1 = L8.F>0?1:-1;
+    s += arrow(cx, cy, cx+ux*len(L8.F)*d1, cy+uy*len(L8.F)*d1, css("--v-fuerza"), "F "+n(Math.abs(L8.F),0), 0, -13);
+  }
+  /* rozamiento */
+  if(len(f.Fr)){
+    var d2 = f.Fr>0?1:-1;
+    s += arrow(bx, by, bx-ux*len(f.Fr)*d2, by-uy*len(f.Fr)*d2, css("--v-roz"), "Fr "+n(Math.abs(f.Fr),0), 0, 20);
+  }
+  if(Math.abs(L8.v)>0.03){
+    var vl = Math.min(64, 12+Math.abs(L8.v)*6), dv = L8.v>0?1:-1;
+    s += arrow(cx+nx*54, cy+ny*54, cx+nx*54+ux*vl*dv, cy+ny*54+uy*vl*dv, css("--accent"), "v "+n(Math.abs(L8.v),1), 0, -12);
+  }
+  s += txt(26, 26, "el eje x se acuesta sobre el plano: sólo hay que descomponer el peso", "slabel", "start");
+  s += txt(26, 46, "bloque de "+L8.m+" kg   ·   α = "+L8.a+"°", "slabel", "start");
+  if(L8.msg) s += txt(L8W/2, 344, L8.msg, "slabel");
+  return svg(L8W, L8H, s);
+}
+function l8Render(){
+  var f = l8Phys();
+  $("#lab8-stage").innerHTML = l8Scene();
+  $("#lab8-read").innerHTML =
+      readRow("Peso","P = "+n(f.P,1),"N",css("--v-peso"))
+    + readRow("Componente que baja","Px = "+n(f.Px,1),"N",css("--v-peso"))
+    + readRow("Componente que aprieta","Py = "+n(f.Py,1),"N",css("--v-peso"))
+    + readRow("Normal","N = "+n(f.N,1),"N",css("--v-normal"))
+    + readRow("Rozamiento","Fr = "+n(Math.abs(f.Fr),1),"N",css("--v-roz"))
+    + readRow("Aplicada","F = "+n(L8.F,0),"N",css("--v-fuerza"))
+    + readRow("Neta sobre el plano","ΣFx = "+n(f.net,1),"N","",true)
+    + readRow("Aceleración","a = "+n(f.a,2),"m/s²","",true)
+    + readRow("Velocidad","v = "+n(L8.v,2),"m/s");
+  var v = $("#lab8-verdict"), c, t;
+  if(L8.a===0){ c="verdict"; t="<b>Plano horizontal.</b> Px = 0 y N = P: todo el peso aprieta el piso. Es el caso del laboratorio 1."; }
+  else if(!f.moving && Math.abs(f.net)<0.05){
+    c="verdict"; t="<b>En reposo.</b> El rozamiento estático aguanta: le alcanza con "+n(Math.abs(f.drive),1)+" N de los "+n(L8.Fr,0)+" N que tiene disponibles.";
+  } else if(Math.abs(f.net)<0.05){
+    c="verdict go"; t="<b>Velocidad constante.</b> ΣFx = 0. Ésta es la condición que piden los ejercicios 20, 21 y 25 a).";
+  } else if(f.net>0){
+    c="verdict go"; t="<b>Sube acelerando</b> a "+n(f.a,2)+" m/s². La fuerza aplicada le gana a P·sen α + Fr.";
+  } else {
+    c="verdict stop"; t="<b>Baja acelerando</b> a "+n(Math.abs(f.a),2)+" m/s². Gana la componente del peso: P·sen α = "+n(f.Px,1)+" N.";
+  }
+  v.className=c; v.innerHTML=t;
+}
+function l8Step(dt){
+  var f = l8Phys();
+  var vNew = L8.v + f.a*dt;
+  if(L8.v>0.02 && vNew<0 && Math.abs(f.drive)<=L8.Fr) vNew=0;
+  if(L8.v<-0.02 && vNew>0 && Math.abs(f.drive)<=L8.Fr) vNew=0;
+  L8.s += (L8.v+vNew)/2*dt*PPM8;
+  L8.v = vNew;
+  L8.msg = "";
+  if(L8.s > L8_LEN-60){ L8.s = L8_LEN-60; L8.v=0; L8.run=false; L8.msg="llegó a la cima del plano"; }
+  if(L8.s < 34){ L8.s = 34; L8.v=0; L8.run=false; L8.msg="llegó al pie del plano"; }
+  if(!L8.run) $("#l8-play").textContent="▶ Correr";
+}
+(function l8Wire(){
+  var sync = function(){
+    L8.a  = +$("#l8-a").value;  $("#l8-a-v").textContent  = L8.a+"°";
+    L8.m  = +$("#l8-m").value;  $("#l8-m-v").textContent  = L8.m+" kg";
+    L8.F  = +$("#l8-f").value;  $("#l8-f-v").textContent  = L8.F+" N";
+    L8.Fr = +$("#l8-fr").value; $("#l8-fr-v").textContent = L8.Fr+" N";
+    l8Render();
+  };
+  ["#l8-a","#l8-m","#l8-f","#l8-fr"].forEach(function(id){ bind(id, sync); });
+  $("#l8-desc").addEventListener("change",function(){ L8.desc=this.checked; l8Render(); });
+  $("#l8-ejes").addEventListener("change",function(){ L8.ejes=this.checked; l8Render(); });
+  $("#l8-play").addEventListener("click",function(){
+    L8.run=!L8.run; this.textContent = L8.run ? "❚❚ Pausar" : "▶ Correr";
+  });
+  $("#l8-reset").addEventListener("click",function(){
+    L8.s=170; L8.v=0; L8.run=false; L8.msg=""; $("#l8-play").textContent="▶ Correr"; l8Render();
+  });
+  sync();
+})();
+
+/* ── geometría del ángulo (figura de la guía) ── */
+(function l9(){
+  var W=660,H=300, A=[70,232], C=[566,232], B=[404,74], D=[404,232];
+  var s = paper(W,H,14);
+  var ln = function(p,q,w,col){ return '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+
+    '" stroke="'+(col||"var(--ink)")+'" stroke-width="'+(w||2.2)+'"/>'; };
+  s += ln(A,B); s += ln(B,C); s += ln(A,C); s += ln(B,D,1.6,"var(--ink-2)");
+  s += '<rect x="'+(D[0]-16)+'" y="'+(D[1]-16)+'" width="16" height="16" fill="none" stroke="var(--ink-3)" stroke-width="1.4"/>';
+  s += txt(D[0]-24, D[1]-24, "90°", "slabel", "end");
+  [[A,"A"],[B,"B"],[C,"C"],[D,"D"]].forEach(function(p){
+    s += '<circle cx="'+p[0][0]+'" cy="'+p[0][1]+'" r="4.5" fill="var(--ink)"/>';
+    s += txt(p[0][0]+(p[1]==="A"?-16:(p[1]==="C"?16:0)), p[0][1]+(p[1]==="B"?-14:20), p[1], "blabel");
+  });
+  /* arcos */
+  s += '<path d="M110 232 A 40 40 0 0 0 '+(A[0]+40*Math.cos(-0.309)).toFixed(1)+' '+(A[1]+40*Math.sin(-0.309)).toFixed(1)+
+       '" fill="none" stroke="'+css("--accent")+'" stroke-width="2"/>';
+  s += txt(122, 220, "α", "blabel");
+  s += '<path d="M'+(B[0]-30)+' '+(B[1]+38)+' A 48 48 0 0 0 '+B[0]+' '+(B[1]+48)+'" fill="none" stroke="'+css("--v-peso")+'" stroke-width="2"/>';
+  s += txt(B[0]-26, B[1]+58, "γ", "blabel");
+  s += '<path d="M'+B[0]+' '+(B[1]+48)+' A 48 48 0 0 0 '+(B[0]+34)+' '+(B[1]+34)+'" fill="none" stroke="'+css("--v-normal")+'" stroke-width="2"/>';
+  s += txt(B[0]+26, B[1]+58, "δ", "blabel");
+  s += txt(26, 26, "el mismo triángulo de la guía: el ángulo del plano reaparece en el peso", "slabel", "start");
+  $("#lab9-stage").innerHTML = svg(W,H,s);
+})();
+
+/* ══════════════════════════════════════════
+   LAB 10 · sogas, ascensores y bloques
+   ══════════════════════════════════════════ */
+var L10 = {scene:"ascensor", asc:{m:780, a:2.5}, bal:{m1:3, m2:2, F:60}, blo:{m1:8, m2:12, F:100}};
+function fld(id,label,min,max,step,val,unit){
+  return '<div class="fld"><label for="'+id+'">'+label+' <span id="'+id+'-v">'+val+' '+unit+'</span></label>'+
+         '<input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"></div>';
+}
+function l10Ctl(){
+  var c = $("#l10-ctl");
+  if(L10.scene==="ascensor")
+    c.innerHTML = fld("s-am","Masa del ascensor cargado",100,2000,10,L10.asc.m,"kg")
+                + fld("s-aa","Aceleración (↑ positiva)",-6,6,0.1,L10.asc.a,"m/s²");
+  else if(L10.scene==="baldes")
+    c.innerHTML = fld("s-b1","Balde de arriba  m₁",1,20,0.5,L10.bal.m1,"kg")
+                + fld("s-b2","Balde de abajo  m₂",1,20,0.5,L10.bal.m2,"kg")
+                + fld("s-bf","Fuerza F en la soga B",0,400,1,L10.bal.F,"N");
+  else
+    c.innerHTML = fld("s-c1","Bloque m₁ (recibe F)",1,40,1,L10.blo.m1,"kg")
+                + fld("s-c2","Bloque m₂",1,40,1,L10.blo.m2,"kg")
+                + fld("s-cf","Fuerza aplicada F",0,400,1,L10.blo.F,"N");
+  $$("input[type=range]", c).forEach(function(inp){
+    inp.addEventListener("input", function(){
+      var id=this.id, v=+this.value;
+      if(id==="s-am") L10.asc.m=v; if(id==="s-aa") L10.asc.a=v;
+      if(id==="s-b1") L10.bal.m1=v; if(id==="s-b2") L10.bal.m2=v; if(id==="s-bf") L10.bal.F=v;
+      if(id==="s-c1") L10.blo.m1=v; if(id==="s-c2") L10.blo.m2=v; if(id==="s-cf") L10.blo.F=v;
+      l10Render();
+    });
+  });
+}
+function l10Render(){
+  var W=700, H=340, s=paper(W,H,14), read="", eqs="", vd="", vc="verdict";
+  if(L10.scene==="ascensor"){
+    var m=L10.asc.m, ac=L10.asc.a, P=m*G_ACC, T=m*(G_ACC+ac);
+    var sc = 96/Math.max(T,P,1), cx=350, cy=196;
+    s += '<line x1="150" y1="34" x2="550" y2="34" stroke="var(--ink)" stroke-width="4"/>';
+    for(var i=150;i<=546;i+=12) s += '<line class="hatch" x1="'+i+'" y1="34" x2="'+(i+8)+'" y2="24"/>';
+    s += '<line x1="'+cx+'" y1="34" x2="'+cx+'" y2="'+(cy-52)+'" stroke="'+css("--v-tension")+'" stroke-width="3"/>';
+    s += '<rect class="blk" x="'+(cx-84)+'" y="'+(cy-52)+'" width="168" height="104" rx="4"/>';
+    s += txt(cx, cy+6, n(m,0)+" kg", "blabel");
+    s += arrow(cx-118, cy, cx-118, cy-Math.max(18,T*sc), css("--v-tension"), "T "+n(T,0)+" N", 0, -12);
+    s += arrow(cx+118, cy, cx+118, cy+Math.max(18,P*sc), css("--v-peso"), "P "+n(P,0)+" N", 0, 18);
+    if(Math.abs(ac)>0.05)
+      s += arrow(cx, cy+76, cx, cy+76-40*(ac>0?1:-1), css("--accent"), "a "+n(ac,1)+" m/s²", 0, ac>0?24:-16);
+    else s += txt(cx, cy+96, "a = 0", "vlabel");
+    read = readRow("Peso","P = m·g = "+n(P,0),"N",css("--v-peso"))
+         + readRow("Tensión del cable","T = "+n(T,0),"N",css("--v-tension"),true)
+         + readRow("Fuerza neta","ΣF = T − P = "+n(T-P,0),"N")
+         + readRow("Aceleración","a = "+n(ac,2),"m/s²","",true);
+    eqs = '<div class="eq">T − P = m · a</div><div class="eq">T = m · (g + a)</div>';
+    vc = "verdict go";
+    vd = ac>0.05 ? "<b>Sube acelerando</b> (o baja frenando): el cable tiene que tirar <em>más</em> que el peso. Por eso T &gt; P."
+       : ac<-0.05 ? "<b>Baja acelerando</b> (o sube frenando): el cable tira <em>menos</em> que el peso, T &lt; P. Si el cable se cortara, T = 0 y a = −g."
+       : "<b>Quieto o a velocidad constante:</b> T = P exactamente. Ojo, esto <em>no</em> es un par de interacción: las dos actúan sobre el ascensor.";
+    if(Math.abs(ac-2.5)<0.06) vd += " Con T = 9 600 N esto da m = 780 kg: es el ejercicio 11 de la guía.";
+  }
+  else if(L10.scene==="baldes"){
+    var m1=L10.bal.m1, m2=L10.bal.m2, F=L10.bal.F, M=m1+m2;
+    var aa = F/M - G_ACC, TA = m2*(aa+G_ACC);
+    var sc2 = 78/Math.max(F, m1*G_ACC, m2*G_ACC, TA, 1);
+    var xc=336, y1=124, y2=248;
+    s += arrow(xc, y1-52, xc, y1-52-Math.max(20,F*sc2), css("--v-fuerza"), "F "+n(F,0)+" N", 0, -12);
+    s += '<line x1="'+xc+'" y1="'+(y1-52)+'" x2="'+xc+'" y2="'+(y1-28)+'" stroke="'+css("--v-tension")+'" stroke-width="3"/>';
+    s += txt(xc+26, y1-40, "soga B", "slabel", "start");
+    s += '<rect class="blk" x="'+(xc-52)+'" y="'+(y1-28)+'" width="104" height="56" rx="4"/>';
+    s += txt(xc, y1+5, "m₁ "+n(m1,1)+" kg", "blabel");
+    s += '<line x1="'+xc+'" y1="'+(y1+28)+'" x2="'+xc+'" y2="'+(y2-26)+'" stroke="'+css("--v-tension")+'" stroke-width="3"/>';
+    s += txt(xc+26, (y1+y2)/2, "soga A", "slabel", "start");
+    s += '<rect class="blk" x="'+(xc-46)+'" y="'+(y2-26)+'" width="92" height="52" rx="4"/>';
+    s += txt(xc, y2+5, "m₂ "+n(m2,1)+" kg", "blabel");
+    s += arrow(xc-92, y2, xc-92, y2+Math.max(16,m2*G_ACC*sc2), css("--v-peso"), "P₂", 0, 17);
+    s += arrow(xc+96, y2, xc+96, y2-Math.max(16,TA*sc2), css("--v-tension"), "TA "+n(TA,0)+" N", 0, -11);
+    s += arrow(xc-104, y1, xc-104, y1+Math.max(16,m1*G_ACC*sc2), css("--v-peso"), "P₁", 0, 17);
+    read = readRow("Masa total","m₁+m₂ = "+n(M,1),"kg")
+         + readRow("Peso total","P = "+n(M*G_ACC,1),"N",css("--v-peso"))
+         + readRow("Aceleración del sistema","a = "+n(aa,2),"m/s²","",true)
+         + readRow("Tensión de la soga A","TA = "+n(TA,1),"N",css("--v-tension"),true);
+    eqs = '<div class="eq">a = F/(m₁+m₂) − g</div><div class="eq">TA = m₂ · (a + g) = m₂·F/(m₁+m₂)</div>';
+    vc = aa>0.02 ? "verdict go" : (aa<-0.02 ? "verdict stop" : "verdict");
+    vd = aa>0.02 ? "<b>El conjunto sube acelerando.</b> La soga A sólo tiene que ocuparse de m₂: por eso TA es mucho menor que F."
+       : aa<-0.02 ? "<b>F no alcanza para levantarlos:</b> el sistema cae con a = "+n(aa,2)+" m/s². Hace falta F &gt; "+n(M*G_ACC,1)+" N."
+       : "<b>Justo en el límite:</b> F = peso total, así que suben a velocidad constante.";
+  }
+  else {
+    var n1=L10.blo.m1, n2=L10.blo.m2, Fb=L10.blo.F, MT=n1+n2;
+    var ab = Fb/MT, Fc = n2*ab;
+    var sc3 = 88/Math.max(Fb,1), fy=252;
+    s += '<line class="floor" x1="70" y1="'+fy+'" x2="640" y2="'+fy+'"/>';
+    var w1=76+n1*1.4, w2=76+n2*1.4, h1=64+n1, h2=64+n2, bx1=250;
+    s += '<rect class="blk" x="'+bx1+'" y="'+(fy-h1)+'" width="'+w1.toFixed(0)+'" height="'+h1+'" rx="3"/>';
+    s += txt(bx1+w1/2, fy-h1/2+5, "m₁ "+n1+" kg", "blabel");
+    var bx2 = bx1+w1;
+    s += '<rect class="blk" x="'+bx2.toFixed(0)+'" y="'+(fy-h2)+'" width="'+w2.toFixed(0)+'" height="'+h2+'" rx="3"/>';
+    s += txt(bx2+w2/2, fy-h2/2+5, "m₂ "+n2+" kg", "blabel");
+    s += arrow(bx1-Math.max(24,Fb*sc3), fy-h1/2, bx1, fy-h1/2, css("--v-fuerza"), "F "+n(Fb,0)+" N", 0, -13);
+    s += arrow(bx2, fy-h1-30, bx2+Math.max(18,Fc*sc3), fy-h1-30, css("--v-normal"), "m₁ sobre m₂ = "+n(Fc,0)+" N", 0, -12);
+    s += arrow(bx2, fy-h1-58, bx2-Math.max(18,Fc*sc3), fy-h1-58, css("--v-normal"), "m₂ sobre m₁ = "+n(Fc,0)+" N", 0, -12);
+    s += txt(bx2, fy+26, "superficie de contacto", "slabel");
+    s += arrow(360, 60, 360+Math.min(80,20+ab*10), 60, css("--accent"), "a = "+n(ab,2)+" m/s²", 0, -12);
+    read = readRow("Masa total","m₁+m₂ = "+n(MT,0),"kg")
+         + readRow("Aceleración (igual para los dos)","a = "+n(ab,2),"m/s²","",true)
+         + readRow("Fuerza de contacto","Fc = "+n(Fc,1),"N",css("--v-normal"),true)
+         + readRow("Neta sobre m₁","ΣF₁ = "+n(Fb-Fc,1),"N")
+         + readRow("Neta sobre m₂","ΣF₂ = "+n(Fc,1),"N");
+    eqs = '<div class="eq">a = F / (m₁ + m₂)</div><div class="eq">Fc = m₂ · a = m₂·F/(m₁+m₂)</div>';
+    vc = "verdict go";
+    vd = "<b>Las dos flechas del contacto son un par de interacción:</b> iguales y opuestas, pero sobre cuerpos distintos, así que no se cancelan. "+
+         "Fijate que la fuerza de contacto <em>no</em> vale F: sólo la parte que le toca a m₂.";
+  }
+  $("#lab10-stage").innerHTML = svg(W,H,s);
+  $("#lab10-read").innerHTML = read;
+  $("#lab10-eqs").innerHTML = eqs;
+  var e = $("#lab10-verdict"); e.className = vc; e.innerHTML = vd;
+}
+segment($("#l10-scene"), function(v){ L10.scene=v; l10Ctl(); l10Render(); });
+l10Ctl(); l10Render();
+
+/* ══════════════════════════════════════════
+   bucle de animación
+   ══════════════════════════════════════════ */
+var lastTs = 0;
+function loop(ts){
+  var dt = lastTs ? Math.min(0.05,(ts-lastTs)/1000) : 0;
+  lastTs = ts;
+  if(L1.run){ l1Step(dt); l1Render(); }
+  if(L2.run){ l2Step(dt); l2Render(); }
+  if(L4.run){
+    L4.t += dt;
+    if(L4.t>3.2){ L4.t=3.2; L4.run=false; $("#l4-play").textContent="▶ Soltar"; }
+    l4Render();
+  }
+  if(L8.run){ l8Step(dt); l8Render(); }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ══════════════════════════════════════════
+   verdadero / falso
+   ══════════════════════════════════════════ */
+var VF_LEYES = [
+  ["a","Es posible que no actúen fuerzas sobre el cuerpo y esté moviéndose con velocidad variable.","F",
+   "Si no actúa ninguna fuerza, <b>ΣF = 0</b> y entonces <b>a = 0</b>. Con aceleración nula la velocidad no puede variar: el cuerpo sigue en reposo o con velocidad constante. Es exactamente la primera ley."],
+  ["b","Para que un cuerpo se acelere la sumatoria de las fuerzas que actúan sobre él debe ser igual a cero.","F",
+   "Al revés: para acelerar hace falta <b>ΣF ≠ 0</b>. Con ΣF = 0 la aceleración es cero y no hay ningún cambio de velocidad."],
+  ["c","Siempre que se aplique una única fuerza constante sobre un cuerpo, su velocidad será constante.","F",
+   "Una única fuerza constante significa ΣF constante y distinta de cero, o sea <b>a constante ≠ 0</b>: la velocidad cambia todo el tiempo, de manera uniforme (MRUV). Lo constante es la aceleración, no la velocidad."],
+  ["d","Si se triplica la fuerza total que actúa sobre un cuerpo, su aceleración disminuye a la tercera parte.","F",
+   "<b>a = ΣF/m</b>: fuerza y aceleración son directamente proporcionales. Si ΣF se triplica, la aceleración también se <em>triplica</em>. Lo que sí disminuye la aceleración es aumentar la masa."],
+  ["e","Si la fuerza total que actúa sobre un cuerpo disminuye a la mitad, su velocidad también disminuye a la mitad.","F",
+   "La fuerza no está atada a la velocidad sino a la <b>aceleración</b>. Si ΣF se reduce a la mitad, se reduce a la mitad la aceleración: la velocidad sigue creciendo, sólo que más despacio."],
+  ["f","Si la fuerza resultante que actúa sobre un cuerpo aumenta al doble, su aceleración también aumenta al doble.","V",
+   "Con la misma masa, <b>a = ΣF/m</b> es una proporcionalidad directa: al doble de fuerza neta, el doble de aceleración."],
+  ["g","Para que un cuerpo esté en movimiento debe estar actuando una fuerza sobre él.","F",
+   "Éste es <em>el</em> error clásico. Para <b>mantener</b> el movimiento no hace falta ninguna fuerza; hace falta para <b>cambiarlo</b>. Una nave con los motores apagados sigue viajando a velocidad constante para siempre."],
+  ["h","La normal y el peso son pares de interacción.","F",
+   "Las dos actúan sobre <b>el mismo cuerpo</b>, y un par siempre actúa sobre cuerpos distintos. El par del peso es la atracción que el cuerpo ejerce sobre la Tierra; el par de la normal es la fuerza con que el cuerpo aprieta la mesa."],
+  ["i","La normal siempre tiene el mismo valor que el peso.","F",
+   "Sólo coinciden en el caso particular de un plano horizontal sin otras fuerzas verticales. En un plano inclinado <b>N = P·cos α</b>, y si alguien tira o empuja verticalmente, la normal cambia (puede incluso valer cero)."]
+];
+var VF_ROCE = [
+  ["a","Se detendrá en el punto B.","F",
+   "En B deja de empujarse, pero entre B y C <b>no hay rozamiento</b>: ΣF = 0, así que sigue con la misma velocidad con que llegó. Dejar de empujar no es lo mismo que frenar."],
+  ["b","Se detendrá en el punto G.","F",
+   "Entre F y G tampoco hay rozamiento. Si sobrevive a las dos zonas rayadas, llega a G con velocidad y sigue de largo: <b>nada la frena</b>."],
+  ["c","Es posible que se detenga en alguno de los tramos CD y EF.","V",
+   "Son las únicas zonas donde hay una fuerza en contra. Si el rozamiento alcanza a consumir toda la velocidad que traía, se detiene ahí adentro. Probalo en la simulación subiendo el rozamiento."],
+  ["d","Es posible que se detenga en alguno de los tramos DE y FG.","F",
+   "En esos tramos ΣF = 0, así que la velocidad no cambia. Sólo podría estar quieta ahí si hubiera llegado con velocidad exactamente cero justo al final de la zona rugosa anterior."],
+  ["e","Se puede afirmar que no se detendrá nunca.","F",
+   "Depende de los valores: si el rozamiento de las zonas rayadas es suficiente, se detiene. No se puede afirmar nada sin comparar el empuje con el rozamiento."]
+];
+function renderVF(el, data){
+  var picks = data.map(function(){ return null; });   /* null | "V" | "F" | "sol" */
+  var full = function(a){ return a==="V" ? "VERDADERO" : "FALSO"; };
+
+  el.innerHTML =
+    '<div class="filterbar vfbar"><span class="score"></span>'+
+    '<button class="btn" data-act="show">Mostrar todas las soluciones</button>'+
+    '<button class="btn" data-act="clear">Borrar respuestas</button></div>'+
+    data.map(function(d,i){
+      return '<div class="q" data-i="'+i+'">'+
+        '<div class="q-head"><span class="lbl">'+d[0]+')</span>'+
+        '<span class="q-txt">'+d[1]+'</span>'+
+        '<span class="q-pick">'+
+          '<button class="vfb" data-v="V" aria-label="Responder verdadero a la afirmación '+d[0]+'">Verdadero</button>'+
+          '<button class="vfb" data-v="F" aria-label="Responder falso a la afirmación '+d[0]+'">Falso</button>'+
+        '</span></div>'+
+        '<div class="q-body" hidden></div></div>';
+    }).join("");
+
+  var paint = function(){
+    var answered = 0, correct = 0, shown = 0;
+    $$(".q", el).forEach(function(q, i){
+      var pick = picks[i], ans = data[i][2], body = $(".q-body", q);
+      q.classList.toggle("done", !!pick);
+      $$(".vfb", q).forEach(function(b){
+        b.className = "vfb";
+        b.disabled = !!pick;
+        if(!pick) return;
+        if(b.dataset.v === ans) b.classList.add("right");
+        else if(b.dataset.v === pick) b.classList.add("wrong");
+        else b.classList.add("dim");
+      });
+      if(!pick){ body.hidden = true; body.innerHTML = ""; return; }
+      var mark;
+      if(pick === "sol"){
+        shown++;
+        mark = '<span class="q-mark" style="color:var(--ink-3)">Solución · la respuesta es <b>'+full(ans)+'</b></span>';
+      } else {
+        answered++;
+        if(pick === ans){ correct++; mark = '<span class="q-mark" style="color:var(--ok)">✓ Correcto</span>'; }
+        else mark = '<span class="q-mark" style="color:var(--no)">✗ No. La respuesta correcta es <b>'+full(ans)+'</b></span>';
+      }
+      body.innerHTML = mark + '<p>'+data[i][3]+'</p>';
+      body.hidden = false;
+    });
+    var sc = $(".score", el);
+    if(!answered && !shown) sc.textContent = "Elegí verdadero o falso en cada afirmación";
+    else {
+      sc.textContent = answered + " de " + data.length + " respondidas · " +
+                       correct + (correct===1 ? " correcta" : " correctas") +
+                       (shown ? "  ·  " + shown + " con la solución a la vista" : "");
+    }
+  };
+
+  el.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b || !el.contains(b)) return;
+    if(b.dataset.act === "show"){
+      picks = picks.map(function(p){ return p || "sol"; });
+      paint(); return;
+    }
+    if(b.dataset.act === "clear"){
+      picks = data.map(function(){ return null; });
+      paint(); return;
+    }
+    if(b.dataset.v){
+      var i = +b.closest(".q").dataset.i;
+      if(picks[i]) return;
+      picks[i] = b.dataset.v;
+      paint();
+    }
+  });
+  paint();
+}
+renderVF($("#vf-leyes"), VF_LEYES);
+renderVF($("#vf-roce"), VF_ROCE);
+
+/* ══════════════════════════════════════════
+   ejercicios resueltos
+   ══════════════════════════════════════════ */
+var EX = [
+  {n:"3", t:["guia","newton"], q:"Un cuerpo de masa m está apoyado sobre una mesa horizontal sin rozamiento y un niño lo empuja horizontalmente. Analizar sin hacer cuentas.",
+   s:["<b>a) DCL.</b> Sobre el bloque: peso P (hacia abajo), normal N de la mesa (hacia arriba) y el empuje F del niño (horizontal). Sobre el niño: su peso, la normal del piso, la reacción del bloque (hacia atrás) y el rozamiento del piso (hacia adelante).",
+      "<b>b)</b> La ley es la <b>tercera</b>. Pero la conclusión del enunciado es falsa: las dos fuerzas del par actúan sobre <em>cuerpos distintos</em>, así que no se cancelan entre sí. El bloque sí se va a mover.",
+      "<b>c) Falso.</b> El peso es vertical y el empuje horizontal: no compiten. Sin rozamiento, cualquier fuerza horizontal distinta de cero ya produce aceleración.",
+      "<b>d) Verdadero</b> (con rozamiento despreciable): a = F/m ≠ 0 para cualquier F ≠ 0.",
+      "<b>e)</b> En el eje vertical: N + F − P = 0 con F = P, así que <b>N = 0</b>. No hay fuerza neta en ningún eje."],
+   r:"e) a = 0. La fuerza vertical no lo levanta: sólo deja de apretar la mesa (N = 0)."},
+
+  {n:"4", t:["guia","newton"], q:"Una hamaca paraguaya colgada de dos árboles, con una pelota apoyada encima. Discutir las afirmaciones sobre los diagramas.",
+   s:["<b>a-i) Falso.</b> Las dos flechas dibujadas están sobre <em>la pelota</em>. Un par de interacción nunca aparece dos veces en el mismo diagrama.",
+      "<b>a-ii) Falso.</b> La que apunta hacia abajo es el <b>peso</b>, es decir la interacción con la <em>Tierra</em>. La interacción con la hamaca es la que apunta hacia arriba.",
+      "<b>b-i) Falso.</b> Sobre la hamaca hay dos fuerzas hacia abajo <em>distintas</em>: su propio peso y la fuerza que la pelota ejerce sobre ella. Ninguna sobra.",
+      "<b>b-ii) Verdadero.</b> Una de esas dos es justamente la reacción a la fuerza con que la hamaca sostiene la pelota."],
+   r:"Ver el laboratorio 3: elegí «Pelota sobre la hamaca» y tocá cada fuerza."},
+
+  {n:"5", t:["guia","newton"], q:"Un hombre empuja una caja de 18 kg aplicando una fuerza igual a 37,8 N. a) Calcular el peso de la caja. b) ¿Qué sentido, dirección y módulo tiene la fuerza normal?",
+   s:["<b>a)</b> P = m · g = 18 kg × 9,8 m/s²",
+      "<b>b)</b> La caja no acelera verticalmente, así que en el eje y: N − P = 0. La normal es <b>vertical, hacia arriba</b> y vale lo mismo que el peso.",
+      "La fuerza de 37,8 N es horizontal: no entra en la ecuación del eje vertical."],
+   r:"P = 176,4 N   ·   N = 176,4 N, vertical y hacia arriba"},
+
+  {n:"6", t:["guia","newton","grav"], q:"¿Por qué en el vacío, si un cuerpo es más pesado que otro y se los suelta desde la misma altura, ambos caen con la misma aceleración y llegan con la misma velocidad?",
+   s:["En el vacío la única fuerza es el peso: ΣF = P = m · g.",
+      "Por la segunda ley: a = ΣF/m = (m · g)/m.",
+      "<b>La masa se cancela.</b> Cuanto más pesado es el cuerpo, más fuerte lo tira la Tierra, pero también más cuesta acelerarlo, y las dos cosas se compensan exactamente."],
+   r:"a = g para cualquier masa, así que la caída es idéntica"},
+
+  {n:"7", t:["guia","newton"], q:"Se aplica una fuerza de 60 N a un cuerpo de masa m = 10 kg. ¿Qué módulo de aceleración adquiere?",
+   s:["Segunda ley: ΣF = m · a  →  a = ΣF/m", "a = 60 N / 10 kg"],
+   r:"a = 6 m/s²"},
+
+  {n:"8", t:["guia","newton"], q:"¿Cuál es la masa de un cuerpo al que una fuerza de 80 N le imprime una aceleración de 4 m/s²?",
+   s:["De ΣF = m · a se despeja m = ΣF / a", "m = 80 N / 4 m/s²"],
+   r:"m = 20 kg"},
+
+  {n:"9", t:["guia","newton"], q:"Un camión cargado con 8000 kg puede acelerarse a 1 m/s² y de pronto pierde carga hasta quedar en 3/4 de su masa inicial. a) ¿Cuánto vale la nueva masa? b) ¿Qué aceleración desarrolla con la misma fuerza?",
+   s:["Primero la fuerza del motor, que no cambia: F = m · a = 8000 kg × 1 m/s² = 8000 N.",
+      "<b>a)</b> m′ = 3/4 × 8000 kg = 6000 kg.",
+      "<b>b)</b> a′ = F / m′ = 8000 N / 6000 kg."],
+   r:"m′ = 6000 kg   ·   a′ ≈ 1,33 m/s²"},
+
+  {n:"10", t:["guia","newton"], q:"Nave de 200 kg: 30 s con motores apagados a 40 m/s constantes; después 60 s de motores encendidos que la llevan a 50 m/s. Sin rozamiento.",
+   s:["<b>a)</b> Motor apagado: no hay ninguna fuerza, ΣF = 0 (primera ley: por eso la velocidad se mantiene). Motor encendido: sólo el empuje del motor, hacia adelante.",
+      "<b>b)</b> Tramo 1: velocidad constante → a₁ = 0. Tramo 2: a₂ = Δv/Δt = (50 − 40)/60 s.",
+      "<b>c)</b> F = m · a₂ = 200 kg × 0,167 m/s².",
+      "<b>d)</b> x₁ = 40 m/s × 30 s = 1200 m.  x₂ = 40 × 60 + ½ × 0,167 × 60² = 2400 + 300 = 2700 m."],
+   r:"a₁ = 0 · a₂ ≈ 0,17 m/s² · F ≈ 33,3 N · distancia total = 3900 m"},
+
+  {n:"11", t:["guia","newton"], q:"Un ascensor cargado se levanta con una aceleración de 2,5 m/s². Si la tensión del cable es 9600 N, ¿cuál es la masa del elevador?",
+   s:["DCL del ascensor: la tensión T hacia arriba y el peso P hacia abajo. Tomamos positivo hacia arriba.",
+      "T − m·g = m·a   →   T = m·(g + a)",
+      "m = T / (g + a) = 9600 N / (9,8 + 2,5) m/s² = 9600 / 12,3"],
+   r:"m ≈ 780,5 kg"},
+
+  {n:"12", t:["guia","newton"], q:"La fuerza de fricción sobre una caja que se desliza horizontalmente es de 100 N.",
+   s:["<b>a)</b> Velocidad constante ⇒ ΣF = 0 ⇒ la fuerza aplicada tiene que igualar al rozamiento: F = 100 N.",
+      "<b>b)</b> Con ese valor, ΣF = 100 − 100 = 0 N y por lo tanto a = 0.",
+      "<b>c)</b> Ahora F = 130 N: ΣF = 130 − 100 = 30 N. Como a = 2 m/s², m = ΣF/a = 30/2."],
+   r:"a) F = 100 N · b) ΣF = 0, a = 0 · c) ΣF = 30 N, m = 15 kg"},
+
+  {n:"13", t:["guia","grav"], q:"Calcular el peso en newtons de un cuerpo de 62 kg en el ecuador (g = 9,78), en el sur (g = 9,83) y en la Luna (g = 1,67).",
+   s:["P = m · g, con la misma masa en los tres lugares.",
+      "Ecuador: 62 × 9,78 = 606,36 N",
+      "Sur: 62 × 9,83 = 609,46 N",
+      "Luna: 62 × 1,67 = 103,54 N"],
+   r:"606,36 N · 609,46 N · 103,54 N (la masa sigue siendo 62 kg en los tres)"},
+
+  {n:"14", t:["guia","newton"], q:"Dos baldes m₁ y m₂ unidos verticalmente por la soga A; una soga B atada a m₁ tira del conjunto hacia arriba con fuerza F.",
+   s:["<b>a)</b> Sistema completo, positivo hacia arriba: F − (m₁+m₂)·g = (m₁+m₂)·a  →  <b>a = F/(m₁+m₂) − g</b>.",
+      "<b>b)</b> Ahora sólo el balde de abajo, que únicamente siente la soga A y su peso: TA − m₂·g = m₂·a  →  <b>TA = m₂·(a + g) = m₂·F/(m₁+m₂)</b>.",
+      "<b>c)</b> Con m₁ = 3 kg, m₂ = 2 kg y F = 60 N: a = 60/5 − 9,8 = 12 − 9,8 = 2,2 m/s². TA = 2 × (2,2 + 9,8) = 24 N."],
+   r:"a = 2,2 m/s²   ·   TA = 24 N"},
+
+  {n:"15", t:["guia","grav"], q:"Calcular la aceleración de la gravedad de la Tierra sabiendo que su radio es 6,4 × 10⁶ m y su masa 6 × 10²⁴ kg.",
+   s:["Igualamos el peso con la fuerza gravitatoria: m·g = G·MT·m/R² → la masa del cuerpo se cancela.",
+      "g = G · MT / R² = (6,67 × 10⁻¹¹ × 6 × 10²⁴) / (6,4 × 10⁶)²",
+      "Numerador: 4,002 × 10¹⁴.  Denominador: 4,096 × 10¹³."],
+   r:"g ≈ 9,77 m/s²  —  de ahí sale el 9,8 que usamos siempre"},
+
+  {n:"16", t:["guia","grav"], q:"Determine la aceleración de la gravedad a 8500 m de altura sobre la superficie terrestre.",
+   s:["Ahora la distancia al centro es r = RT + h = 6,4 × 10⁶ + 8500 = 6,4085 × 10⁶ m.",
+      "g = G·MT/r² = 4,002 × 10¹⁴ / (6,4085 × 10⁶)² = 4,002 × 10¹⁴ / 4,1069 × 10¹³"],
+   r:"g ≈ 9,75 m/s²  —  en la cima del Everest apenas baja 0,03 m/s²"},
+
+  {n:"17", t:["guia","grav"], q:"(Desafío) ¿A qué distancia del centro de la Tierra debe alejarse un cuerpo de 100 kg para que la gravedad sea 1/4 de la de la superficie?",
+   s:["g depende de 1/r². Para que g se reduzca a la cuarta parte, r² tiene que ser 4 veces mayor, o sea r debe ser <b>2 veces</b> mayor.",
+      "r = 2 · RT = 2 × 6,4 × 10⁶ m",
+      "La masa de 100 kg no interviene: la aceleración de la gravedad no depende del cuerpo atraído."],
+   r:"r = 1,28 × 10⁷ m desde el centro (o sea un radio terrestre de altura)"},
+
+  {n:"18", t:["guia","grav"], q:"(Desafío) ¿En qué punto entre la Tierra y la Luna se anula el campo gravitatorio de ambos cuerpos?",
+   s:["Buscamos x (distancia a la Tierra) tal que G·MT/x² = G·ML/(d−x)².",
+      "Se cancela G y se saca raíz: (d−x)/x = √(ML/MT) = √(1/81) = 1/9.",
+      "Entonces d = x + x/9 = x·(10/9) → x = 0,9 · d.",
+      "Con d = 3,84 × 10⁸ m: x = 0,9 × 3,84 × 10⁸."],
+   r:"x ≈ 3,46 × 10⁸ m desde el centro de la Tierra (un 90 % del camino)"},
+
+  {n:"19", t:["guia","plano"], q:"Un peón egipcio sube un bloque de 60 kg por una pendiente de 40°, sin rozamiento. ¿Cuánta fuerza necesita como mínimo?",
+   s:["«Como mínimo» = que suba a velocidad constante, o sea ΣFx = 0.",
+      "Sobre el eje del plano sólo hay dos fuerzas: la aplicada y la componente del peso. F = P · sen α.",
+      "P = 60 × 9,8 = 588 N.  sen 40° ≈ 0,643.",
+      "F = 588 × 0,643"],
+   r:"F ≈ 378 N  (mucho menos que los 588 N de levantarlo a pulso: para eso sirve la rampa)"},
+
+  {n:"20", t:["guia","plano"], q:"Desde la cima de una rampa un hombre tira de una soga para que no se caiga una caja de 10 kg. La cima está a 3 m del suelo y la rampa mide 5 m. Sin rozamiento.",
+   s:["No dan el ángulo, dan el triángulo: sen α = altura/hipotenusa = 3/5 = 0,6.",
+      "Que no se caiga ⇒ equilibrio sobre el plano: T = P · sen α.",
+      "P = 10 × 9,8 = 98 N.  T = 98 × 0,6"],
+   r:"T = 58,8 N"},
+
+  {n:"21", t:["guia","plano"], q:"Paula va en bici y le cuesta subir una cuesta. a) ¿Por qué? b) ¿Cuánta fuerza necesita para subir a velocidad constante una pendiente de 15° con 75 kg?",
+   s:["<b>a)</b> En el llano el peso es perpendicular al movimiento y no molesta. En la subida aparece la componente <b>P·sen α</b>, paralela al plano y en contra: hay que hacer esa fuerza extra sólo para no frenarse.",
+      "<b>b)</b> Velocidad constante ⇒ F = P · sen α.",
+      "P = 75 × 9,8 = 735 N.  sen 15° ≈ 0,259.",
+      "F = 735 × 0,259"],
+   r:"F ≈ 190 N"},
+
+  {n:"22", t:["guia","plano"], q:"Caja de 15 kg en un plano de 30° sin rozamiento. Hallar la fuerza paralela al plano para que deslice: a) hacia arriba con a = 1,2 m/s²; b) hacia abajo con a = 1,2 m/s²; c) hacia abajo a velocidad constante.",
+   s:["P = 15 × 9,8 = 147 N.  P·sen 30° = 147 × 0,5 = <b>73,5 N</b>. Tomamos positivo hacia arriba del plano.",
+      "<b>a)</b> F − 73,5 = 15 × 1,2 → F = 18 + 73,5 = 91,5 N, hacia arriba.",
+      "<b>b)</b> Ojo: soltada sola bajaría con a = g·sen α = 4,9 m/s². Para que baje con sólo 1,2 hay que <b>frenarla</b>. F − 73,5 = 15 × (−1,2) → F = −18 + 73,5 = 55,5 N, hacia arriba del plano.",
+      "<b>c)</b> Velocidad constante ⇒ ΣF = 0 ⇒ F = 73,5 N, hacia arriba del plano."],
+   r:"a) 91,5 N ↗   ·   b) 55,5 N ↗ (frenando)   ·   c) 73,5 N ↗"},
+
+  {n:"23", t:["guia","plano"], q:"Caja de 25 kg en un plano de 18° con una fuerza de rozamiento de 20 N. Hallar la fuerza paralela al plano para que deslice: a) hacia arriba con a = 1,4 m/s²; b) hacia abajo con a = 0,8 m/s².",
+   s:["P = 25 × 9,8 = 245 N.  P·sen 18° = 245 × 0,309 = <b>75,7 N</b>. Positivo hacia arriba del plano.",
+      "<b>a)</b> Sube, así que el rozamiento va hacia abajo del plano: F − 75,7 − 20 = 25 × 1,4 → F = 35 + 75,7 + 20 = 130,7 N.",
+      "<b>b)</b> Baja, así que el rozamiento va hacia arriba: F − 75,7 + 20 = 25 × (−0,8) → F = −20 + 75,7 − 20 = 35,7 N, hacia arriba del plano.",
+      "Fijate cómo el rozamiento cambia de signo según hacia dónde se mueva: siempre en contra del movimiento."],
+   r:"a) 130,7 N ↗   ·   b) 35,7 N ↗ (frenando la bajada)"},
+
+  {n:"24", t:["guia","plano"], q:"(Desafío) Cuerpo de 4 kg tirado por una soga con T = 60 N a lo largo de un plano de 37°, con rozamiento de 8 N.",
+   s:["P = 4 × 9,8 = 39,2 N.  P·sen 37° = 39,2 × 0,602 = 23,6 N.  N = P·cos 37° = 39,2 × 0,799 = 31,3 N.",
+      "<b>a) DCL:</b> T hacia arriba del plano, P·sen α hacia abajo del plano, Fr hacia abajo del plano (porque sube), N perpendicular.",
+      "<b>b)</b> ΣFx = 60 − 23,6 − 8 = 28,4 N → a = 28,4/4 = 7,1 m/s². Con MRUV desde el reposo a los 2 s: v = a·t = 14,2 m/s y x = ½·a·t² = ½ × 7,1 × 4 = 14,2 m.",
+      "<b>c)</b> Velocidad constante ⇒ T = P·sen α + Fr = 23,6 + 8."],
+   r:"a ≈ 7,1 m/s² · v(2s) ≈ 14,2 m/s · x(2s) ≈ 14,2 m · T para v constante ≈ 31,6 N"},
+
+  {n:"25", t:["guia","plano"], q:"Dos bloques unidos por una soga sobre un plano de 37° sin rozamiento: m₁ = 25 kg (adelante, recibe F) y m₂ = 15 kg. ",
+   s:["sen 37° ≈ 0,602.  P₁·sen α = 25 × 9,8 × 0,602 = 147,4 N.  P₂·sen α = 15 × 9,8 × 0,602 = 88,5 N. Total = 235,9 N.",
+      "<b>a)</b> Velocidad constante ⇒ F = 235,9 N ≈ 236 N.",
+      "<b>b)</b> Sólo m₂: T − 88,5 = 0 → T = 88,5 N.",
+      "<b>c)</b> Con a = 1,5: F = (25+15)×1,5 + 235,9 = 60 + 235,9 = 295,9 N.  Y para m₂: T = 15×1,5 + 88,5 = 111 N.",
+      "<b>d)</b> Cortada la soga, con F = 295,9 N: m₁ queda con a₁ = (295,9 − 147,4)/25 = 5,94 m/s² <b>hacia arriba</b>. m₂ queda sólo con su peso: a₂ = −9,8 × 0,602 = 5,90 m/s² <b>hacia abajo</b> del plano (primero frena y después vuelve)."],
+   r:"a) F ≈ 236 N · b) T ≈ 88,5 N · c) F ≈ 296 N y T = 111 N · d) a₁ ≈ 5,94 m/s² ↗ y a₂ ≈ 5,90 m/s² ↘"},
+
+  {n:"R1", t:["repaso","newton"], q:"Un cajón de 24 kg se arrastra horizontalmente con 120 N. El rozamiento vale 36 N.",
+   s:["<b>a) DCL:</b> P abajo, N arriba, F = 120 N hacia adelante, Fr = 36 N hacia atrás.",
+      "<b>b)</b> ΣF = 120 − 36 = 84 N.",
+      "<b>c)</b> a = ΣF/m = 84/24."],
+   r:"ΣF = 84 N   ·   a = 3,5 m/s²"},
+
+  {n:"R2", t:["repaso","newton"], q:"Un automóvil de 1200 kg: el motor ejerce 2400 N y los rozamientos suman 1800 N.",
+   s:["ΣF = 2400 − 1800 = 600 N.", "a = 600 N / 1200 kg."],
+   r:"ΣF = 600 N   ·   a = 0,5 m/s²"},
+
+  {n:"R3", t:["repaso","newton"], q:"Una persona empuja una caja con 90 N horizontales y la caja se mueve a velocidad constante.",
+   s:["Velocidad constante ⇒ <b>ΣF = 0</b>: eso ya contesta b) y c).",
+      "<b>a)</b> Si ΣF = 0 entonces Fr = 90 N.",
+      "<b>b)</b> ΣF = 0 N.  <b>c)</b> a = 0 m/s².",
+      "No hace falta saber la masa: la primera ley alcanza."],
+   r:"Fr = 90 N   ·   ΣF = 0   ·   a = 0"},
+
+  {n:"R4", t:["repaso","newton"], q:"Un balde de 120 kg es elevado por una grúa. La tensión en el cable es 1350 N.",
+   s:["<b>a) DCL:</b> T hacia arriba, P hacia abajo. P = 120 × 9,8 = 1176 N.",
+      "<b>b)</b> ΣF = T − P = 1350 − 1176 = 174 N (hacia arriba). a = 174/120."],
+   r:"a = 1,45 m/s², hacia arriba"},
+
+  {n:"R5", t:["repaso","newton"], q:"Dos bloques m₁ y m₂ apoyados sobre una superficie sin roce; F horizontal actúa sobre m₁, que empuja a m₂.",
+   s:["<b>b)</b> Van pegados, así que tienen la <b>misma</b> aceleración: tratamos el conjunto como un cuerpo de masa m₁+m₂ → <b>a = F/(m₁+m₂)</b>.",
+      "<b>a)</b> Ahora sólo m₂, sobre el que la única fuerza horizontal es el contacto: <b>Fc = m₂·a = m₂·F/(m₁+m₂)</b>.",
+      "<b>c)</b> Con m₁ = 8 kg, m₂ = 12 kg y F = 100 N: a = 100/20 = 5 m/s² y Fc = 12 × 5 = 60 N.",
+      "Chequeo sobre m₁: 100 − 60 = 40 N = 8 kg × 5 m/s². ✓"],
+   r:"a = 5 m/s²   ·   fuerza de contacto = 60 N"},
+
+  {n:"R6", t:["repaso","grav"], q:"Fuerza de gravedad entre un recién nacido de 3 kg y Marte (6,4 × 10²³ kg) a 5,6 × 10¹⁰ m.",
+   s:["Fg = G·m₁·m₂/r²",
+      "Numerador: 6,67 × 10⁻¹¹ × 3 × 6,4 × 10²³ = 1,28 × 10¹⁴.",
+      "Denominador: (5,6 × 10¹⁰)² = 3,14 × 10²¹."],
+   r:"Fg ≈ 4,1 × 10⁻⁸ N"},
+
+  {n:"R7", t:["repaso","grav"], q:"Fuerza de gravedad entre el mismo bebé de 3 kg y el obstetra de 100 kg, a 0,5 m. Comparar con Marte.",
+   s:["Fg = 6,67 × 10⁻¹¹ × 3 × 100 / (0,5)² = 6,67 × 10⁻¹¹ × 300 / 0,25 = 6,67 × 10⁻¹¹ × 1200.",
+      "Fg ≈ 8,0 × 10⁻⁸ N.",
+      "Comparación: 8,0 × 10⁻⁸ / 4,1 × 10⁻⁸ ≈ 2."],
+   r:"El obstetra atrae al bebé unas 2 veces más que Marte — chau astrología"},
+
+  {n:"R8", t:["repaso","grav"], q:"Distancia Tierra–Júpiter en su máxima aproximación, sabiendo que la atracción es 1,8 × 10¹⁸ N. (MT = 6 × 10²⁴ kg, MJ = 1,9 × 10²⁷ kg)",
+   s:["De F = G·M₁·M₂/r² se despeja r = √(G·M₁·M₂ / F).",
+      "G·M₁·M₂ = 6,67 × 10⁻¹¹ × 6 × 10²⁴ × 1,9 × 10²⁷ = 7,6 × 10⁴¹.",
+      "7,6 × 10⁴¹ / 1,8 × 10¹⁸ = 4,22 × 10²³.  r = √(4,22 × 10²³)."],
+   r:"r ≈ 6,5 × 10¹¹ m"},
+
+  {n:"R9", t:["repaso","grav"], q:"Masa de Neptuno, sabiendo que Tritón (2,14 × 10²² kg) orbita a 3,55 × 10⁸ m y la fuerza entre ambos es 1,16 × 10²¹ N.",
+   s:["De F = G·M·m/R² se despeja M = F·R² / (G·m).",
+      "R² = (3,55 × 10⁸)² = 1,26 × 10¹⁷.  Numerador: 1,16 × 10²¹ × 1,26 × 10¹⁷ = 1,46 × 10³⁸.",
+      "Denominador: 6,67 × 10⁻¹¹ × 2,14 × 10²² = 1,43 × 10¹²."],
+   r:"M ≈ 1,0 × 10²⁶ kg"},
+
+  {n:"R10", t:["repaso","plano"], q:"Un trineo de 18 kg desciende por una pendiente de 30°. El rozamiento con la nieve es de 25 N. Determinar la aceleración.",
+   s:["P = 18 × 9,8 = 176,4 N.  P·sen 30° = 176,4 × 0,5 = 88,2 N (hacia abajo del plano).",
+      "Baja, así que el rozamiento va hacia arriba del plano: ΣF = 88,2 − 25 = 63,2 N.",
+      "a = 63,2 / 18."],
+   r:"a ≈ 3,51 m/s², hacia abajo del plano"},
+
+  {n:"R11", t:["repaso","plano"], q:"Un operario arrastra un tambor de 40 kg por una rampa de 20° con rozamiento de 30 N. ¿Qué fuerza paralela al plano hace falta para subirlo a velocidad constante?",
+   s:["P = 40 × 9,8 = 392 N.  P·sen 20° = 392 × 0,342 = 134,1 N.",
+      "Sube a velocidad constante ⇒ ΣF = 0, y el rozamiento se opone (va hacia abajo del plano):",
+      "F = P·sen α + Fr = 134,1 + 30."],
+   r:"F ≈ 164,1 N"},
+
+  {n:"R12", t:["repaso","plano"], q:"Una caja de 16 kg sobre una pendiente de 35° con rozamiento de 18 N. ¿Qué fuerza paralela al plano hace falta para que descienda con a = 1,5 m/s²?",
+   s:["P = 16 × 9,8 = 156,8 N.  P·sen 35° = 156,8 × 0,574 = 89,9 N.",
+      "Sola bajaría con a = (89,9 − 18)/16 = 4,49 m/s²: hay que <b>frenarla</b>.",
+      "Positivo hacia abajo del plano: 89,9 − 18 − F = 16 × 1,5 → F = 89,9 − 18 − 24."],
+   r:"F ≈ 47,9 N, dirigida hacia arriba del plano"}
+];
+(function exRender(){
+  var list = $("#ex-list");
+  list.innerHTML = EX.map(function(e){
+    var label = e.n.charAt(0)==="R" ? "Rep. "+e.n.slice(1) : "Ej. "+e.n;
+    return '<details class="ex" data-tags="'+e.t.join(" ")+'">'+
+      '<summary><span class="no">'+label+'</span><span style="flex:1">'+e.q+'</span></summary>'+
+      '<div class="sol"><ol class="steps">'+e.s.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ol>'+
+      '<div class="res">'+e.r+'</div></div></details>';
+  }).join("");
+  segment($("#ex-filter"), function(v){
+    $$(".ex", list).forEach(function(d){
+      d.hidden = (v!=="all") && d.dataset.tags.split(" ").indexOf(v)<0;
+    });
+  });
+  $("#ex-open").addEventListener("click", function(){ $$(".ex",list).forEach(function(d){ if(!d.hidden) d.open=true; }); });
+  $("#ex-close").addEventListener("click",function(){ $$(".ex",list).forEach(function(d){ d.open=false; }); });
+})();
+
+})();
+</script>
