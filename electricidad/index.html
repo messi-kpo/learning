@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Electricidad · índice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#ECEFEC; --panel:#FBFCFA; --panel-2:#F3F5F2;
+  --ink:#161D19; --ink-2:#4E5A54; --ink-3:#7D8A84;
+  --line:#CDD5CF; --line-2:#DFE5E0;
+  --accent:#1E6B4E; --accent-soft:#DCE9E1;
+  --shadow:0 1px 2px rgba(21,30,25,.06), 0 10px 26px -14px rgba(21,30,25,.28);
+  --shadow-lift:0 2px 4px rgba(21,30,25,.08), 0 18px 38px -18px rgba(21,30,25,.4);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121915; --panel:#1A231E; --panel-2:#202B24;
+    --ink:#E6EDE7; --ink-2:#A3B1A8; --ink-3:#6E7C73;
+    --line:#2A352E; --line-2:#222C26;
+    --accent:#43B992; --accent-soft:#17332A;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -16px rgba(0,0,0,.75);
+    --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 22px 44px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121915; --panel:#1A231E; --panel-2:#202B24;
+  --ink:#E6EDE7; --ink-2:#A3B1A8; --ink-3:#6E7C73;
+  --line:#2A352E; --line-2:#222C26;
+  --accent:#43B992; --accent-soft:#17332A;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -16px rgba(0,0,0,.75);
+  --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 22px 44px -18px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2{font-family:Spectral,Georgia,"Times New Roman",serif;font-weight:600;margin:0;text-wrap:balance}
+
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel-2))}
+.hd{max-width:1000px;margin:0 auto;padding-block:26px 28px;padding-inline:22px}
+.crumb{margin:0 0 16px;font-size:13px;color:var(--ink-3)}
+.crumb a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line)}
+.crumb a:hover,.crumb a:focus-visible{color:var(--accent);border-color:var(--accent)}
+.crumb span{margin:0 7px;color:var(--ink-3)}
+h1{font-size:clamp(27px,4.2vw,42px);line-height:1.03;letter-spacing:-.015em}
+h1 em{font-style:normal;color:var(--ink-3);font-weight:500}
+.sub{margin:12px 0 0;max-width:62ch;color:var(--ink-2)}
+
+main{max-width:1000px;margin:0 auto;padding-block:34px 72px;padding-inline:22px}
+.eyebrow{
+  font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 14px;font-weight:500;
+}
+
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{
+  display:block;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:22px 22px 18px;text-decoration:none;color:inherit;
+  box-shadow:var(--shadow);
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.card:hover,.card:focus-visible{
+  transform:translateY(-2px);box-shadow:var(--shadow-lift);
+  border-color:var(--accent);outline:none;
+}
+.card h2{font-size:21px;letter-spacing:-.01em}
+.card p{margin:8px 0 0;color:var(--ink-2);font-size:14.5px}
+.meta{
+  margin-top:16px;padding-top:13px;border-top:1px solid var(--line-2);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:12.5px;color:var(--ink-3);
+}
+.count{
+  background:var(--accent-soft);color:var(--accent);
+  padding:3px 9px;border-radius:999px;font-weight:500;
+}
+.arrow{color:var(--accent);font-weight:600;font-size:15px}
+
+.peek{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.peek li{
+  font-size:12px;color:var(--ink-2);background:var(--panel-2);
+  border:1px solid var(--line-2);border-radius:6px;padding:2px 8px;
+}
+
+footer{
+  max-width:1000px;margin:0 auto;padding-block:0 60px;padding-inline:22px;
+  color:var(--ink-3);font-size:12.5px;
+}
+</style>
+
+<header>
+  <div class="hd">
+    <p class="crumb"><a href="../">Apuntes</a><span>/</span>Electricidad</p>
+    <h1>Electricidad <em>· temas</em></h1>
+    <p class="sub">Instalaciones domiciliarias de 220&nbsp;V dibujadas como son en la realidad. Elegí un tema para abrirlo.</p>
+  </div>
+</header>
+
+<main>
+  <p class="eyebrow">Temas</p>
+  <div class="grid">
+    <a class="card" href="tablero/">
+      <h2>Tablero de cuatro circuitos</h2>
+      <p>Los cuatro tableros de práctica con ficha, cables, llaves y lámparas: conectá, accioná
+      las llaves y mirá qué se enciende.</p>
+      <ul class="peek">
+        <li>Tabla de conexiones</li>
+        <li>Tabla de verdad</li>
+        <li>Materiales</li>
+      </ul>
+      <div class="meta"><span class="count">220 V</span><span class="arrow">→</span></div>
+    </a>
+  </div>
+</main>
+
+<footer>Cada tablero es interactivo: se puede accionar las llaves y seguir el recorrido de la corriente.</footer>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apuntes interactivos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#ECEFEC; --panel:#FBFCFA; --panel-2:#F3F5F2;
+  --ink:#161D19; --ink-2:#4E5A54; --ink-3:#7D8A84;
+  --line:#CDD5CF; --line-2:#DFE5E0;
+  --accent:#1E6B4E; --accent-soft:#DCE9E1;
+  --shadow:0 1px 2px rgba(21,30,25,.06), 0 10px 26px -14px rgba(21,30,25,.28);
+  --shadow-lift:0 2px 4px rgba(21,30,25,.08), 0 18px 38px -18px rgba(21,30,25,.4);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121915; --panel:#1A231E; --panel-2:#202B24;
+    --ink:#E6EDE7; --ink-2:#A3B1A8; --ink-3:#6E7C73;
+    --line:#2A352E; --line-2:#222C26;
+    --accent:#43B992; --accent-soft:#17332A;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -16px rgba(0,0,0,.75);
+    --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 22px 44px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121915; --panel:#1A231E; --panel-2:#202B24;
+  --ink:#E6EDE7; --ink-2:#A3B1A8; --ink-3:#6E7C73;
+  --line:#2A352E; --line-2:#222C26;
+  --accent:#43B992; --accent-soft:#17332A;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -16px rgba(0,0,0,.75);
+  --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 22px 44px -18px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2{font-family:Spectral,Georgia,"Times New Roman",serif;font-weight:600;margin:0;text-wrap:balance}
+.mono{font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace}
+
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel-2))}
+.hd{max-width:1000px;margin:0 auto;padding-block:36px 28px;padding-inline:22px}
+h1{font-size:clamp(28px,4.4vw,44px);line-height:1.03;letter-spacing:-.015em}
+h1 em{font-style:normal;color:var(--ink-3);font-weight:500}
+.sub{margin:12px 0 0;max-width:62ch;color:var(--ink-2)}
+
+main{max-width:1000px;margin:0 auto;padding-block:34px 72px;padding-inline:22px}
+.eyebrow{
+  font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 14px;font-weight:500;
+}
+
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{
+  display:block;position:relative;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:22px 22px 18px;text-decoration:none;color:inherit;
+  box-shadow:var(--shadow);
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.card:hover,.card:focus-visible{
+  transform:translateY(-2px);box-shadow:var(--shadow-lift);
+  border-color:var(--accent);outline:none;
+}
+.card h2{font-size:21px;letter-spacing:-.01em}
+.card p{margin:8px 0 0;color:var(--ink-2);font-size:14.5px}
+.meta{
+  margin-top:16px;padding-top:13px;border-top:1px solid var(--line-2);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:12.5px;color:var(--ink-3);
+}
+.count{
+  background:var(--accent-soft);color:var(--accent);
+  padding:3px 9px;border-radius:999px;font-weight:500;
+}
+.arrow{color:var(--accent);font-weight:600;font-size:15px}
+
+.peek{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.peek li{
+  font-size:12px;color:var(--ink-2);background:var(--panel-2);
+  border:1px solid var(--line-2);border-radius:6px;padding:2px 8px;
+}
+
+footer{
+  max-width:1000px;margin:0 auto;padding-block:0 60px;padding-inline:22px;
+  color:var(--ink-3);font-size:12.5px;
+}
+</style>
+
+<header>
+  <div class="hd">
+    <h1>Apuntes interactivos <em>· índice</em></h1>
+    <p class="sub">Material de estudio para explorar con el mouse: circuitos que se pueden
+    encender y fuerzas que se pueden mover. Elegí una materia para ver sus temas.</p>
+  </div>
+</header>
+
+<main>
+  <p class="eyebrow">Materias</p>
+  <div class="grid">
+
+    <a class="card" href="electricidad/">
+      <h2>Electricidad</h2>
+      <p>Instalaciones domiciliarias de 220&nbsp;V: tableros, conexiones y tablas de verdad.</p>
+      <ul class="peek">
+        <li>Tablero de cuatro circuitos</li>
+      </ul>
+      <div class="meta"><span class="count">1 tema</span><span class="arrow">→</span></div>
+    </a>
+
+    <a class="card" href="fisica/">
+      <h2>Física</h2>
+      <p>Dinámica: leyes de Newton, rozamiento, peso y normal, plano inclinado y tensiones.</p>
+      <ul class="peek">
+        <li>Unidad 5 · Banco de dinámica</li>
+      </ul>
+      <div class="meta"><span class="count">1 unidad</span><span class="arrow">→</span></div>
+    </a>
+
+  </div>
+</main>
+
+<footer>Todas las páginas funcionan sin conexión una vez cargadas y se adaptan al tema claro u oscuro del sistema.</footer>
+</html>
