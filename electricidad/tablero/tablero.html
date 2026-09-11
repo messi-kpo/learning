@@ -1,0 +1,979 @@
+<title>Tablero de Cuatro Circuitos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --panel-2:#F6F9FB; --sunk:#E7ECF1;
+  --ink:#131A20; --ink-2:#48545F; --ink-3:#7B8895;
+  --line:#D2DAE2; --line-2:#E2E8EE;
+  --board:#E3E9EF; --dot:#C4CED7;
+  --dev:#FBFCFD; --dev-edge:#AEBAC5; --dev-face:#EEF2F6; --dev-ink:#3A4650;
+  --c-fase:#8C5432; --c-neutro:#3E90CC; --c-tierra:#5E9B2E; --c-tierra-2:#DDBE18;
+  --c-negro:#242A30; --c-rojo:#BE362C;
+  --live:#D9840F; --live-2:#F0B152; --lit:#FFC64D; --warn:#B85C16; --ok:#2F8A5D;
+  --accent:#2C7CB8; --accent-soft:#DCEAF5;
+  --shadow:0 1px 2px rgba(19,26,32,.06),0 8px 24px -12px rgba(19,26,32,.18);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1418; --panel:#171E24; --panel-2:#1D262D; --sunk:#12181D;
+    --ink:#E7EEF4; --ink-2:#A5B2BE; --ink-3:#6F7D8A;
+    --line:#28323B; --line-2:#202932;
+    --board:#131A1F; --dot:#243038;
+    --dev:#222C34; --dev-edge:#3C4A55; --dev-face:#1A232A; --dev-ink:#C3D0DA;
+    --c-fase:#B0764C; --c-neutro:#57A8E0; --c-tierra:#77B843; --c-tierra-2:#EBD03C;
+    --c-negro:#7C8894; --c-rojo:#DE5C4D;
+    --live:#F0A93B; --live-2:#FFD08A; --lit:#FFD873; --warn:#E5883C; --ok:#4FB584;
+    --accent:#57A8E0; --accent-soft:#1B2C3A;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1418; --panel:#171E24; --panel-2:#1D262D; --sunk:#12181D;
+  --ink:#E7EEF4; --ink-2:#A5B2BE; --ink-3:#6F7D8A;
+  --line:#28323B; --line-2:#202932;
+  --board:#131A1F; --dot:#243038;
+  --dev:#222C34; --dev-edge:#3C4A55; --dev-face:#1A232A; --dev-ink:#C3D0DA;
+  --c-fase:#B0764C; --c-neutro:#57A8E0; --c-tierra:#77B843; --c-tierra-2:#EBD03C;
+  --c-negro:#7C8894; --c-rojo:#DE5C4D;
+  --live:#F0A93B; --live-2:#FFD08A; --lit:#FFD873; --warn:#E5883C; --ok:#4FB584;
+  --accent:#57A8E0; --accent-soft:#1B2C3A;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1220px;margin:0 auto;padding:0 24px 80px}
+
+h1,h2,h3,h4,.disp,.lbl,th,button,.tab,.chip{
+  font-family:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace}
+
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel-2))}
+.hd{max-width:1220px;margin:0 auto;padding:34px 24px 26px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font-size:clamp(30px,4.4vw,46px);font-weight:700;line-height:1;letter-spacing:-.015em;text-wrap:balance}
+h1 span{color:var(--ink-3);font-weight:500}
+.sub{margin:10px 0 0;max-width:62ch;color:var(--ink-2);font-size:15.5px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px}
+.leg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);
+  font-family:"Barlow Semi Condensed","Arial Narrow",sans-serif;font-weight:500;letter-spacing:.02em}
+.leg i{width:26px;height:7px;border-radius:4px;flex:none;box-shadow:inset 0 -1px 0 rgba(0,0,0,.18)}
+
+.tabs{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line);margin-bottom:26px;padding:0 24px}
+.tabs-in{max-width:1220px;margin:0 auto;display:flex;gap:2px;overflow-x:auto}
+.tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  padding:13px 16px 11px;font-size:15px;font-weight:600;letter-spacing:.02em;
+  color:var(--ink-3);cursor:pointer;white-space:nowrap;text-align:left}
+.tab b{display:block;font-size:10.5px;letter-spacing:.16em;font-weight:600;opacity:.72}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:4px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow)}
+.card-hd{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:baseline;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--line-2)}
+.card-hd h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}
+.card-hd p{margin:4px 0 0;font-size:14px;color:var(--ink-2);max-width:64ch}
+
+.board{background:var(--board);padding:6px;overflow-x:auto}
+svg.scene{display:block;width:100%;height:auto;min-width:780px}
+
+.ctl{display:flex;flex-wrap:wrap;gap:10px;padding:14px 20px 4px;align-items:center}
+.btn{appearance:none;cursor:pointer;background:var(--panel-2);color:var(--ink);
+  border:1px solid var(--line);border-radius:7px;padding:8px 13px;
+  font-size:13.5px;font-weight:600;letter-spacing:.02em;display:inline-flex;gap:9px;align-items:center}
+.btn:hover{border-color:var(--ink-3)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn .pos{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;
+  background:var(--sunk);border-radius:4px;padding:2px 6px;color:var(--ink-2)}
+.btn.on .pos{background:var(--live);color:#20150a}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{appearance:none;background:var(--panel-2);border:0;cursor:pointer;
+  padding:8px 13px;font-size:13px;font-weight:600;color:var(--ink-3);
+  font-family:"Barlow Semi Condensed","Arial Narrow",sans-serif;letter-spacing:.02em}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+.status{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px 4px}
+.chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;
+  padding:5px 12px 5px 10px;font-size:12.5px;font-weight:600;letter-spacing:.02em;
+  border:1px solid var(--line);background:var(--panel-2);color:var(--ink-2)}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--ink-3);flex:none}
+.chip.lit{border-color:#d9a63c;background:color-mix(in srgb,var(--lit) 15%,var(--panel));color:var(--ink)}
+.chip.lit i{background:var(--lit);box-shadow:0 0 8px var(--lit)}
+.chip.dim{border-color:#c9a86a;background:color-mix(in srgb,var(--lit) 8%,var(--panel));color:var(--ink)}
+.chip.dim i{background:#c9a153}
+.chip.live{border-color:var(--live);background:color-mix(in srgb,var(--live) 12%,var(--panel));color:var(--ink)}
+.chip.live i{background:var(--live)}
+.chip.warn{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,var(--panel));color:var(--ink)}
+.chip.warn i{background:var(--warn)}
+.chip.earth i{background:var(--c-tierra)}
+.chip.off i{background:var(--ink-3)}
+
+.notes{display:grid;gap:10px;padding:16px 20px 18px}
+.note{display:flex;gap:12px;padding:12px 15px;border-radius:8px;font-size:14.5px;
+  border:1px solid var(--line);background:var(--panel-2);color:var(--ink-2);line-height:1.55}
+.note b{color:var(--ink);font-family:"Barlow Semi Condensed","Arial Narrow",sans-serif;font-weight:600;letter-spacing:.02em}
+.note .mk{flex:none;width:3px;border-radius:2px;background:var(--ink-3);align-self:stretch}
+.note.warn{border-color:color-mix(in srgb,var(--warn) 45%,var(--line));background:color-mix(in srgb,var(--warn) 7%,var(--panel))}
+.note.warn .mk{background:var(--warn)}
+.note.ok{border-color:color-mix(in srgb,var(--ok) 40%,var(--line));background:color-mix(in srgb,var(--ok) 7%,var(--panel))}
+.note.ok .mk{background:var(--ok)}
+
+.grid2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;margin-top:22px;
+  align-items:start}
+@media (max-width:960px){.grid2{grid-template-columns:minmax(0,1fr)}}
+
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.hoverable{cursor:pointer}
+tbody tr.hoverable:hover,tbody tr.pinned{background:var(--accent-soft)}
+tbody tr.act{background:color-mix(in srgb,var(--live) 16%,var(--panel))}
+tbody tr.act td{color:var(--ink);font-weight:600}
+.num{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;min-width:26px;
+  padding:2px 5px;border-radius:5px;background:var(--sunk);color:var(--ink-2)}
+.cc{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  font-family:"Barlow Semi Condensed","Arial Narrow",sans-serif;font-weight:500;font-size:13px}
+.cc i{width:20px;height:6px;border-radius:3px;flex:none}
+.tn{font-family:"IBM Plex Mono",monospace;font-size:12.5px;white-space:nowrap}
+.tn em{font-style:normal;color:var(--ink-3)}
+td.st{white-space:nowrap}
+.dotflag{display:inline-flex;align-items:center;gap:6px;
+  font-family:"Barlow Semi Condensed","Arial Narrow",sans-serif;font-weight:600;font-size:12.5px}
+.dotflag i{width:8px;height:8px;border-radius:50%;flex:none;background:var(--ink-3)}
+.dotflag.flow i{background:var(--live);box-shadow:0 0 7px var(--live)}
+.dotflag.hot i{background:var(--live)}
+.dotflag.neutral i{background:var(--c-neutro)}
+.dotflag.earth i{background:var(--c-tierra)}
+.dotflag.flow{color:var(--live)}
+.dotflag.hot{color:var(--warn)}
+.dotflag.neutral{color:var(--c-neutro)}
+.dotflag.earth{color:var(--c-tierra)}
+.dotflag.dead{color:var(--ink-3)}
+.truthkey{font-family:"IBM Plex Mono",monospace;font-size:12px}
+
+ul.mat{margin:0;padding:14px 20px 18px;list-style:none;display:grid;gap:7px;font-size:14.5px}
+ul.mat li{display:flex;gap:11px;color:var(--ink-2)}
+ul.mat li span.q{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-3);
+  flex:none;min-width:22px;text-align:right;padding-top:2px}
+ul.mat li b{color:var(--ink);font-weight:600}
+
+footer{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);
+  color:var(--ink-3);font-size:13.5px;max-width:78ch}
+footer b{color:var(--ink-2)}
+
+/* ---- SVG ---- */
+.cas{fill:none;stroke:var(--board);stroke-width:13.5;stroke-linecap:round;stroke-linejoin:round}
+.core{fill:none;stroke-width:6.5;stroke-linecap:round;stroke-linejoin:round}
+.core.fase{stroke:var(--c-fase)}
+.core.neutro{stroke:var(--c-neutro)}
+.core.negro{stroke:var(--c-negro)}
+.core.rojo{stroke:var(--c-rojo)}
+.core.tierra{stroke:var(--c-tierra)}
+.tstripe{fill:none;stroke:var(--c-tierra-2);stroke-width:6.5;stroke-linecap:butt;stroke-dasharray:9 11}
+/* scoped to g.cable: a bare .flow would also match the table's .dotflag.flow and hide it */
+g.cable .flow{fill:none;stroke:var(--live-2);stroke-width:3;stroke-linecap:butt;
+  stroke-dasharray:10 14;opacity:0}
+.glowline{fill:none;stroke:var(--live);stroke-width:13;opacity:0;stroke-linecap:round;stroke-linejoin:round}
+/* carrying current: marching dashes along the conductor */
+g.cable.is-flow .flow{opacity:1;animation:march 1.05s linear infinite}
+g.cable.is-flow .glowline{opacity:.26}
+/* live but idle: still dots, so it never reads as flow */
+g.cable.is-hot .glowline{opacity:.16}
+g.cable.is-hot .flow{opacity:1;stroke:var(--live);stroke-width:3.2;
+  stroke-linecap:round;stroke-dasharray:0.1 9;animation:none}
+g.cable.is-dead .core,g.cable.is-dead .tstripe{opacity:.4}
+g.cable.hl .cas{stroke:var(--accent);stroke-width:17}
+@keyframes march{to{stroke-dashoffset:-26}}
+@media (prefers-reduced-motion:reduce){g.cable.is-flow .flow{animation:none;opacity:1}}
+
+.cnum{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;fill:var(--ink-2)}
+.cnum-bg{fill:var(--board)}
+.body{fill:var(--dev);stroke:var(--dev-edge);stroke-width:1.6}
+.face{fill:var(--dev-face);stroke:var(--dev-edge);stroke-width:1.2}
+.dlabel{font-family:"Barlow Semi Condensed","Arial Narrow",sans-serif;font-weight:600;font-size:15px;
+  fill:var(--dev-ink);letter-spacing:.03em}
+.dsub{font-family:"Barlow Semi Condensed","Arial Narrow",sans-serif;font-weight:500;font-size:11px;
+  fill:var(--ink-3);letter-spacing:.1em}
+/* knock the perf-board dots out from behind the captions */
+.dlabel,.dsub{paint-order:stroke fill;stroke:var(--board);stroke-width:3.5px;
+  stroke-linejoin:round;stroke-linecap:round}
+.tlabel{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;fill:var(--ink-3)}
+.rocker{fill:var(--dev-face);stroke:var(--dev-edge);stroke-width:1.3}
+.screw-r{fill:var(--dev-face);stroke:var(--dev-edge);stroke-width:1.4}
+.screw-c{fill:none;stroke:var(--ink-3);stroke-width:1.6;stroke-linecap:round}
+.blade{stroke:var(--dev-edge);stroke-width:3.6;stroke-linecap:round;fill:none}
+.blade.hot{stroke:var(--live)}
+.contact{fill:var(--dev-edge)}
+.contact.hot{fill:var(--live)}
+.swg{cursor:pointer}
+.swg:hover .body{stroke:var(--accent);stroke-width:2.2}
+.swg:focus-visible{outline:none}
+.swg:focus-visible .body{stroke:var(--accent);stroke-width:2.6}
+.bulb{stroke:var(--dev-edge);stroke-width:1.6}
+.fil{fill:none;stroke:var(--ink-3);stroke-width:1.8;stroke-linecap:round}
+.badge-bg{fill:var(--dev-face);stroke:var(--dev-edge);stroke-width:1.2}
+.badge-tx{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;fill:var(--ink-3)}
+.unused{stroke:var(--ink-3);stroke-dasharray:5 5;stroke-width:1.4;fill:none;opacity:.75}
+</style>
+
+<header>
+  <div class="hd">
+    <div>
+      <h1>Tablero de Cuatro Circuitos <span>· 220 V</span></h1>
+      <p class="sub">Los cuatro tableros de práctica dibujados como son en la realidad: ficha,
+        borneras, portalámparas, llaves y tomacorriente, con cada conductor en su color.
+        Accioná las llaves sobre la placa y el tablero resuelve el circuito — qué cables llevan
+        corriente, cuáles quedan con fase presente y qué lámparas prenden.</p>
+    </div>
+    <div class="legend" aria-label="Colores de conductor">
+      <span class="leg"><i style="background:var(--c-fase)"></i>Marrón · fase</span>
+      <span class="leg"><i style="background:var(--c-neutro)"></i>Celeste · neutro</span>
+      <span class="leg"><i style="background:linear-gradient(90deg,var(--c-tierra) 0 55%,var(--c-tierra-2) 55%)"></i>Verde/amarillo · tierra</span>
+      <span class="leg"><i style="background:var(--c-negro)"></i>Negro · retorno</span>
+      <span class="leg"><i style="background:var(--c-rojo)"></i>Rojo · 2.ª vía</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs"><div class="tabs-in" id="tabs" role="tablist"></div></nav>
+
+<div class="wrap">
+  <section class="card">
+    <div class="card-hd">
+      <div><h2 id="cTitle"></h2><p id="cDesc"></p></div>
+      <div id="variant"></div>
+    </div>
+    <div class="board"><div id="scene"></div></div>
+    <div class="ctl" id="controls"></div>
+    <div class="status" id="statusRow"></div>
+    <div class="notes" id="notes"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-hd"><div><h2>Tabla de conexiones</h2>
+        <p>Un renglón por cable, con sus dos bornes reales. Pasá el cursor por un renglón para ubicar ese cable en la placa.</p></div></div>
+      <div class="tw"><table><thead><tr>
+        <th>Cable</th><th>Desde</th><th>Hasta</th><th>Color</th><th>Estado</th>
+      </tr></thead><tbody id="tblCables"></tbody></table></div>
+    </section>
+
+    <div style="display:grid;gap:22px;align-content:start">
+      <section class="card" id="truthCard" hidden>
+        <div class="card-hd"><div><h2>Tabla de verdad</h2>
+          <p>El renglón resaltado es el estado actual de las llaves.</p></div></div>
+        <div class="tw"><table><thead id="truthHead"></thead><tbody id="truthBody"></tbody></table></div>
+      </section>
+      <section class="card">
+        <div class="card-hd"><div><h2>Materiales</h2><p id="matNote"></p></div></div>
+        <ul class="mat" id="tblMat"></ul>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    Cable unipolar 1,5 mm² para los circuitos de luz, 2,5 mm² para el tomacorriente.
+    La regla general: <b>la llave siempre corta la fase, nunca el neutro</b>. Antes de tocar un
+    borne, verificar con buscapolo o tester que el conductor esté sin tensión — la placa marca en
+    ámbar todo conductor que queda con 220 V, incluso con la llave apagada.
+  </footer>
+</div>
+<script>
+/* ============ geometry helpers ============ */
+function rp(pts,r){
+  r=r||11;
+  if(pts.length<2) return "";
+  var d="M "+pts[0][0]+" "+pts[0][1];
+  for(var i=1;i<pts.length-1;i++){
+    var p=pts[i-1],c=pts[i],n=pts[i+1];
+    var v1x=c[0]-p[0],v1y=c[1]-p[1],v2x=n[0]-c[0],v2y=n[1]-c[1];
+    var l1=Math.hypot(v1x,v1y)||1,l2=Math.hypot(v2x,v2y)||1;
+    var rr=Math.min(r,l1/2,l2/2);
+    d+=" L "+(c[0]-v1x/l1*rr)+" "+(c[1]-v1y/l1*rr);
+    d+=" Q "+c[0]+" "+c[1]+" "+(c[0]+v2x/l2*rr)+" "+(c[1]+v2y/l2*rr);
+  }
+  var L=pts[pts.length-1];
+  return d+" L "+L[0]+" "+L[1];
+}
+function screw(x,y){
+  return '<circle class="screw-r" cx="'+x+'" cy="'+y+'" r="7.5"/>'+
+         '<path class="screw-c" d="M'+(x-4)+' '+y+' h8"/>'+
+         '<path class="screw-c" d="M'+x+' '+(y-4)+' v8"/>';
+}
+function tl(x,y,t){
+  return '<text class="tlabel" x="'+x+'" y="'+y+'" text-anchor="middle">'+t+'</text>';
+}
+function cap(x,y,name,sub){
+  var s='<text class="dlabel" x="'+x+'" y="'+y+'" text-anchor="middle">'+name+'</text>';
+  if(sub) s+='<text class="dsub" x="'+x+'" y="'+(y+14)+'" text-anchor="middle">'+sub+'</text>';
+  return s;
+}
+
+/* ============ device renderers ============ */
+function P_plug(p){
+  var x=p.x,y=p.y,w=92,h=104;
+  return '<g>'+
+   '<rect class="body" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="13"/>'+
+   '<rect class="face" x="'+(x+11)+'" y="'+(y+13)+'" width="'+(w-22)+'" height="'+(h-26)+'" rx="8"/>'+
+   '<rect class="body" x="'+(x-15)+'" y="'+(y+24)+'" width="17" height="9" rx="3"/>'+
+   '<rect class="body" x="'+(x-15)+'" y="'+(y+71)+'" width="17" height="9" rx="3"/>'+
+   '<rect class="body" x="'+(x-23)+'" y="'+(y+48)+'" width="25" height="9" rx="3"/>'+
+   '<text class="dlabel" x="'+(x+w/2)+'" y="'+(y+h/2-2)+'" text-anchor="middle" font-size="14">FICHA</text>'+
+   '<text class="dsub" x="'+(x+w/2)+'" y="'+(y+h/2+14)+'" text-anchor="middle">2P + T</text>'+
+   '</g>';
+}
+function P_bornera(p){
+  var x=p.x,y=p.y,w=150,h=76,s='<g>';
+  s+='<rect class="body" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="6"/>';
+  s+='<rect class="face" x="'+(x+9)+'" y="'+(y+9)+'" width="'+(w-18)+'" height="'+(h-18)+'" rx="3"/>';
+  for(var i=1;i<4;i++)
+    s+='<path d="M'+(x+9+(w-18)*i/4)+' '+(y+9)+' v'+(h-18)+'" stroke="var(--dev-edge)" stroke-width="1" opacity=".45"/>';
+  s+='<text class="dlabel" x="'+(x+w/2)+'" y="'+(y+h/2+1)+'" text-anchor="middle" font-size="24">'+p.k+'</text>';
+  s+='<text class="dsub" x="'+(x+w/2)+'" y="'+(y+h/2+19)+'" text-anchor="middle">'+(p.sub||"")+'</text>';
+  s+=screw(x,p.lw);
+  (p.rw||[]).forEach(function(yy){ s+=screw(x+w,yy); });
+  if(p.unused) s+='<rect class="badge-bg" x="'+(x+36)+'" y="'+(y+h+12)+'" width="78" height="26" rx="6"/>'+
+    '<text class="badge-tx" x="'+(x+75)+'" y="'+(y+h+29)+'" text-anchor="middle">SIN USO</text>';
+  return s+'</g>';
+}
+function P_holder(p){
+  var x=p.x,y=p.y,w=96,h=64,cx=x+w/2,bcy=y-48,r=32,b=p.bright||0,s='<g>';
+  s+='<circle cx="'+cx+'" cy="'+bcy+'" r="72" fill="url(#glow)" opacity="'+(b*0.95).toFixed(3)+'"/>';
+  s+='<path class="bulb" d="M'+(cx-13)+' '+(bcy+29)+' L'+(cx-11)+' '+(y+1)+' L'+(cx+11)+' '+(y+1)+' L'+(cx+13)+' '+(bcy+29)+' Z" fill="var(--dev-face)"/>';
+  s+='<circle class="bulb" cx="'+cx+'" cy="'+bcy+'" r="'+r+'" fill="'+(b>0?"var(--lit)":"var(--dev-face)")+'" fill-opacity="'+(b>0?(0.3+b*0.6).toFixed(2):"1")+'"/>';
+  s+='<path class="fil" d="M'+(cx-11)+' '+(bcy+9)+' l4 -11 l5 11 l5 -11 l4 11" stroke="'+(b>0?"var(--warn)":"var(--ink-3)")+'"/>';
+  s+='<rect class="body" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="7"/>';
+  for(var i=0;i<3;i++)
+    s+='<path d="M'+(x+8)+' '+(y+16+i*15)+' h'+(w-16)+'" stroke="var(--dev-edge)" stroke-width="1.1" opacity=".55"/>';
+  s+=cap(cx,y+h+26,p.name,p.sub||"PORTALÁMPARAS E27");
+  s+=screw(x,y+32)+screw(x+w,y+32);
+  s+=tl(x+18,y+36,"C")+tl(x+w-18,y+36,"R");
+  return s+'</g>';
+}
+function P_sw1(p){
+  var x=p.x,y=p.y,w=140,h=100,on=p.pos==="on";
+  var s='<g class="swg" tabindex="0" role="button" data-sw="'+p.sw+'" aria-label="'+p.name+', actualmente '+(on?"cerrada":"abierta")+'. Accionar.">';
+  s+='<rect class="body" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="11"/>';
+  s+='<rect class="face" x="'+(x+9)+'" y="'+(y+9)+'" width="'+(w-18)+'" height="'+(h-18)+'" rx="7"/>';
+  s+='<rect class="rocker" x="'+(x+34)+'" y="'+(y+15)+'" width="72" height="40" rx="7"/>';
+  s+='<rect x="'+(x+34)+'" y="'+(on?y+15:y+35)+'" width="72" height="20" rx="7" fill="var(--dev-edge)" opacity="'+(on?".5":".3")+'"/>';
+  s+='<rect x="'+(x+20)+'" y="'+(y+64)+'" width="100" height="26" rx="5" fill="var(--sunk)" stroke="var(--dev-edge)" stroke-width="1"/>';
+  var ax=x+34,ay=y+77,bx=x+106;
+  s+='<circle class="contact'+(on?" hot":"")+'" cx="'+ax+'" cy="'+ay+'" r="3.4"/>';
+  s+='<circle class="contact'+(on?" hot":"")+'" cx="'+bx+'" cy="'+ay+'" r="3.4"/>';
+  s+=on ? '<path class="blade hot" d="M'+ax+' '+ay+' L'+bx+' '+ay+'"/>'
+        : '<path class="blade" d="M'+ax+' '+ay+' L'+(bx-14)+' '+(ay-12)+'"/>';
+  s+=cap(x+w/2,y-32,p.name,p.sub||"UNIPOLAR · 1 PUNTO");
+  s+=screw(x,y+47)+screw(x+w,y+47);
+  s+=tl(x+19,y+51,p.t1||"1")+tl(x+w-19,y+51,p.t2||"2");
+  s+='<rect fill="transparent" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="11"/>';
+  return s+'</g>';
+}
+function P_swc(p){
+  var x=p.x,y=p.y,w=150,h=120,v1=p.pos==="v1",R=p.com==="R";
+  var s='<g class="swg" tabindex="0" role="button" data-sw="'+p.sw+'" aria-label="'+p.name+', actualmente en vía '+(v1?1:2)+'. Accionar.">';
+  s+='<rect class="body" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="11"/>';
+  s+='<rect class="face" x="'+(x+9)+'" y="'+(y+9)+'" width="'+(w-18)+'" height="'+(h-18)+'" rx="7"/>';
+  s+='<rect class="rocker" x="'+(x+38)+'" y="'+(y+16)+'" width="74" height="42" rx="7"/>';
+  s+='<rect x="'+(x+38)+'" y="'+(v1?y+16:y+37)+'" width="74" height="21" rx="7" fill="var(--dev-edge)" opacity=".45"/>';
+  s+='<rect x="'+(x+22)+'" y="'+(y+70)+'" width="106" height="34" rx="5" fill="var(--sunk)" stroke="var(--dev-edge)" stroke-width="1"/>';
+  var cxp=R?x+114:x+36, vxp=R?x+36:x+114, cyp=y+87, y1=y+78, y2=y+96;
+  s+='<circle class="contact hot" cx="'+cxp+'" cy="'+cyp+'" r="3.4"/>';
+  s+='<circle class="contact'+(v1?" hot":"")+'" cx="'+vxp+'" cy="'+y1+'" r="3.4"/>';
+  s+='<circle class="contact'+(v1?"":" hot")+'" cx="'+vxp+'" cy="'+y2+'" r="3.4"/>';
+  s+='<path class="blade hot" d="M'+cxp+' '+cyp+' L'+vxp+' '+(v1?y1:y2)+'"/>';
+  s+=cap(x+w/2,y-32,p.name,p.sub||"COMBINACIÓN · 3 BORNES");
+  var comX=R?x+w:x, viaX=R?x:x+w, ci=R?-19:19, vi=R?19:-19;
+  s+=screw(comX,y+60)+screw(viaX,y+32)+screw(viaX,y+88);
+  s+=tl(comX+ci,y+64,"C")+tl(viaX+vi,y+36,"1")+tl(viaX+vi,y+92,"2");
+  s+='<circle cx="'+(comX+ci)+'" cy="'+(y+51)+'" r="2.6" fill="var(--ink-3)"/>';
+  s+='<rect fill="transparent" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="11"/>';
+  return s+'</g>';
+}
+function P_swx(p){
+  var x=p.x,y=p.y,w=170,h=140,dd=p.pos==="derecho";
+  var s='<g class="swg" tabindex="0" role="button" data-sw="'+p.sw+'" aria-label="Conmutador de cruce, actualmente '+p.pos+'. Accionar.">';
+  s+='<rect class="body" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="11"/>';
+  s+='<rect class="face" x="'+(x+9)+'" y="'+(y+9)+'" width="'+(w-18)+'" height="'+(h-18)+'" rx="7"/>';
+  s+='<rect class="rocker" x="'+(x+48)+'" y="'+(y+18)+'" width="74" height="42" rx="7"/>';
+  s+='<rect x="'+(x+48)+'" y="'+(dd?y+18:y+39)+'" width="74" height="21" rx="7" fill="var(--dev-edge)" opacity=".45"/>';
+  s+='<rect x="'+(x+22)+'" y="'+(y+74)+'" width="126" height="48" rx="5" fill="var(--sunk)" stroke="var(--dev-edge)" stroke-width="1"/>';
+  var lx=x+42,rx2=x+128,ya=y+88,yb=y+110;
+  [[lx,ya],[lx,yb],[rx2,ya],[rx2,yb]].forEach(function(d){
+    s+='<circle class="contact hot" cx="'+d[0]+'" cy="'+d[1]+'" r="3.4"/>';});
+  if(dd) s+='<path class="blade hot" d="M'+lx+' '+ya+' L'+rx2+' '+ya+'"/><path class="blade hot" d="M'+lx+' '+yb+' L'+rx2+' '+yb+'"/>';
+  else   s+='<path class="blade hot" d="M'+lx+' '+ya+' L'+rx2+' '+yb+'"/><path class="blade hot" d="M'+lx+' '+yb+' L'+rx2+' '+ya+'"/>';
+  s+=cap(x+w/2,y-32,"CONMUTADOR DE CRUCE","4 BORNES · 2 PARES");
+  s+=screw(x,y+42)+screw(x,y+98)+screw(x+w,y+42)+screw(x+w,y+98);
+  s+=tl(x+21,y+46,"A1")+tl(x+21,y+102,"A2")+tl(x+w-21,y+46,"B1")+tl(x+w-21,y+102,"B2");
+  s+='<rect fill="transparent" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="11"/>';
+  return s+'</g>';
+}
+function P_outlet(p){
+  var x=p.x,y=p.y,w=210,h=180,cx=x+w/2+12,cy=y+h/2-4,s='<g>';
+  s+='<rect class="body" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="13"/>';
+  s+='<circle class="face" cx="'+cx+'" cy="'+cy+'" r="62"/>';
+  s+='<rect x="'+(cx-5)+'" y="'+(cy-40)+'" width="10" height="27" rx="3" fill="var(--sunk)" stroke="var(--dev-edge)" stroke-width="1"/>';
+  s+='<g transform="rotate(-28 '+(cx-26)+' '+(cy+18)+')"><rect x="'+(cx-31)+'" y="'+(cy+4)+'" width="10" height="29" rx="3" fill="var(--sunk)" stroke="var(--dev-edge)" stroke-width="1"/></g>';
+  s+='<g transform="rotate(28 '+(cx+26)+' '+(cy+18)+')"><rect x="'+(cx+21)+'" y="'+(cy+4)+'" width="10" height="29" rx="3" fill="var(--sunk)" stroke="var(--dev-edge)" stroke-width="1"/></g>';
+  s+=cap(x+w/2,y-32,"TOMACORRIENTE","2P + T · 10 A");
+  s+=screw(x,y+50)+screw(x,y+95)+screw(x,y+140);
+  s+=tl(x+19,y+54,"L")+tl(x+19,y+99,"N")+tl(x+19,y+144,"T");
+  s+='<rect class="badge-bg" x="'+(x+w/2-33)+'" y="'+(y+h-28)+'" width="66" height="21" rx="6"/>';
+  s+='<text class="badge-tx" x="'+(x+w/2)+'" y="'+(y+h-13)+'" text-anchor="middle" fill="'+(p.live?"var(--live)":"var(--ink-3)")+'">'+(p.live?"220 V":"sin tensión")+'</text>';
+  return s+'</g>';
+}
+var DRAW={plug:P_plug,bornera:P_bornera,holder:P_holder,sw1:P_sw1,swc:P_swc,swx:P_swx,outlet:P_outlet};
+</script>
+<script>
+/* ============ shared left rail ============ */
+function railParts(o){
+  o=o||{};
+  return [
+    {kind:"label",x:255,y:64,t:"BORNERAS"},
+    {kind:"plug",x:30,y:40},
+    {kind:"bornera",x:180,y:80,k:"F",sub:"FASE",lw:116,rw:o.F||[]},
+    {kind:"bornera",x:180,y:180,k:"N",sub:"NEUTRO",lw:216,rw:o.N||[]},
+    {kind:"bornera",x:180,y:280,k:"T",sub:"TIERRA",lw:318,rw:o.T||[],unused:o.tu}
+  ];
+}
+function leads(){return[
+  {id:"aF",a:"PF",b:"F",color:"fase",hidden:true,pts:[[122,66],[170,66],[170,116],[180,116]]},
+  {id:"aN",a:"PN",b:"N",color:"neutro",hidden:true,pts:[[122,86],[158,86],[158,216],[180,216]]},
+  {id:"aT",a:"PT",b:"T",color:"tierra",hidden:true,pts:[[122,106],[145,106],[145,318],[180,318]]}
+];}
+var TOMA_ROWS=function(a,b,c){return[
+  {id:a,a:"F",b:"TL",color:"fase",pts:[[330,96],[700,96],[700,120],[790,120]],lab:[500,96],
+   from:"BORNERA F",to:"TOMA · borne L"},
+  {id:b,a:"N",b:"TN",color:"neutro",pts:[[330,196],[670,196],[670,165],[790,165]],lab:[520,196],
+   from:"BORNERA N",to:"TOMA · borne N"},
+  {id:c,a:"T",b:"TT",color:"tierra",pts:[[330,318],[630,318],[630,210],[790,210]],lab:[455,318],
+   from:"BORNERA T",to:"TOMA · borne T"}
+];};
+
+/* ============ circuit definitions ============ */
+var C1={
+  title:"Circuito 1 · Dos lámparas en serie con una llave",
+  desc:"Una llave unipolar comanda dos portalámparas encadenados: la rosca de la lámpara 2 alimenta el centro de la lámpara 1. Más el tomacorriente, que no pasa por la llave.",
+  vb:[1060,620],
+  parts:railParts({F:[96,116],N:[196,236],T:[318]}).concat([
+    {kind:"sw1",x:410,y:390,sw:"K",name:"LLAVE",t1:"1",t2:"2"},
+    {kind:"holder",x:620,y:405,lamp:"L2",name:"LÁMPARA 2"},
+    {kind:"holder",x:810,y:405,lamp:"L1",name:"LÁMPARA 1"},
+    {kind:"outlet",x:790,y:70}
+  ]),
+  cables:leads().concat([
+    {id:"1",a:"F",b:"K.1",color:"fase",pts:[[330,116],[390,116],[390,437],[410,437]],lab:[390,250],
+     from:"BORNERA F",to:"LLAVE · borne 1"},
+    {id:"2",a:"K.2",b:"L2.C",color:"negro",pts:[[550,437],[620,437]],lab:[585,437],
+     from:"LLAVE · borne 2",to:"LÁMPARA 2 · CENTRO"},
+    {id:"3",a:"L2.R",b:"L1.C",color:"negro",pts:[[716,437],[810,437]],lab:[763,437],
+     from:"LÁMPARA 2 · ROSCA",to:"LÁMPARA 1 · CENTRO"},
+    {id:"4",a:"L1.R",b:"N",color:"neutro",pts:[[906,437],[1010,437],[1010,570],[350,570],[350,236],[330,236]],lab:[690,570],
+     from:"LÁMPARA 1 · ROSCA",to:"BORNERA N"}
+  ]).concat(TOMA_ROWS("5","6","7")),
+  switches:[{id:"K",label:"Llave unipolar",pos:{on:[["K.1","K.2"]],off:[]},
+    order:["on","off"],names:{on:"CERRADA",off:"ABIERTA"}}],
+  lamps:[{id:"L2",a:"L2.C",b:"L2.R",name:"Lámpara 2"},{id:"L1",a:"L1.C",b:"L1.R",name:"Lámpara 1"}],
+  init:{K:"on"}, toma:true,
+  notes:[
+    {t:"warn",h:"Están en SERIE, no en paralelo.",b:"El cable (3) une la ROSCA de la lámpara 2 con el CENTRO de la lámpara 1: la corriente atraviesa las dos. Cada una recibe unos 110 V y alumbra a media luz, y si se saca una, la otra se apaga. Es justamente el circuito que muestra la diferencia con el paralelo del Circuito 2."},
+    {t:"ok",h:"La llave corta la fase.",b:"Está antes de la lámpara 2, del lado del marrón. Con la llave abierta el único conductor con 220 V es el (1); los dos portalámparas quedan sin tensión y se pueden cambiar."},
+    {t:"",h:"El toma no pasa por la llave.",b:"Los cables (5), (6) y (7) salen directo de las borneras: el tomacorriente tiene 220 V siempre, esté la llave prendida o apagada."}
+  ],
+  matNote:"Al quedar en serie, usar lámparas incandescentes de igual potencia — con LED o bajo consumo el circuito no funciona.",
+  mat:[["1","ficha 2P+T con cable tripolar"],["3","borneras (F, N, T)"],
+    ["2","portalámparas E27 + lámparas incandescentes de igual potencia"],
+    ["1","llave unipolar (1 punto) 10 A + caja"],["1","tomacorriente 2P+T + caja"],
+    ["","cable unipolar 1,5 mm²: marrón, celeste, negro, verde/amarillo"]]
+};
+
+var C2_COMMON={
+  vb:[1060,810],
+  lamps:[{id:"LA",a:"LA.C",b:"LA.R",name:"Lámpara A"},{id:"LB",a:"LB.C",b:"LB.R",name:"Lámpara B"}],
+  switches:[{id:"K",label:"Llave unipolar",pos:{on:[["K.1","K.2"]],off:[]},
+    order:["on","off"],names:{on:"CERRADA",off:"ABIERTA"}}],
+  init:{K:"off"}, toma:true,
+  matNote:"En paralelo cada lámpara recibe los 220 V completos: acá sí se pueden usar LED o bajo consumo.",
+  mat:[["1","ficha 2P+T con cable tripolar"],["3","borneras (F, N, T)"],
+    ["2","portalámparas E27 + lámparas"],["1","llave unipolar (1 punto) 10 A + caja"],
+    ["1","tomacorriente 2P+T + caja"],
+    ["","cable unipolar 1,5 mm²: marrón, celeste, negro, verde/amarillo"]]
+};
+var C2A=Object.assign({},C2_COMMON,{
+  vlabel:"Como está dibujado",
+  title:"Circuito 2 · Dos lámparas en paralelo — como está dibujado",
+  desc:"Lámpara A sin comando y lámpara B con llave, las dos en paralelo. Tal como lo muestra el plano, la llave queda del lado del neutro.",
+  parts:railParts({F:[96,116,136],N:[196,216,236],T:[318]}).concat([
+    {kind:"holder",x:470,y:420,lamp:"LA",name:"LÁMPARA A",sub:"SIN LLAVE · E27"},
+    {kind:"holder",x:620,y:600,lamp:"LB",name:"LÁMPARA B"},
+    {kind:"sw1",x:800,y:585,sw:"K",name:"LLAVE",t1:"2",t2:"1"},
+    {kind:"outlet",x:790,y:70}
+  ]),
+  cables:leads().concat([
+    {id:"1",a:"F",b:"LA.C",color:"fase",pts:[[330,116],[420,116],[420,452],[470,452]],lab:[420,250],
+     from:"BORNERA F",to:"LÁMPARA A · CENTRO"},
+    {id:"2",a:"LA.R",b:"N",color:"neutro",pts:[[566,452],[610,452],[610,550],[352,550],[352,216],[330,216]],lab:[480,550],
+     from:"LÁMPARA A · ROSCA",to:"BORNERA N"},
+    {id:"3",a:"F",b:"LB.C",color:"fase",pts:[[330,136],[450,136],[450,632],[620,632]],lab:[450,590],
+     from:"BORNERA F",to:"LÁMPARA B · CENTRO"},
+    {id:"4",a:"LB.R",b:"K.2",color:"negro",pts:[[716,632],[800,632]],lab:[758,632],
+     from:"LÁMPARA B · ROSCA",to:"LLAVE · borne 2"},
+    {id:"5",a:"K.1",b:"N",color:"neutro",pts:[[940,632],[1020,632],[1020,760],[386,760],[386,236],[330,236]],lab:[700,760],
+     from:"LLAVE · borne 1",to:"BORNERA N"}
+  ]).concat(TOMA_ROWS("6","7","8")),
+  notes:[
+    {t:"warn",h:"La llave corta el NEUTRO, no la fase.",b:"Funciona, pero el portalámparas de la lámpara B queda con fase adentro incluso apagado: no se puede cambiar la lámpara sin riesgo. Apagá la llave y mirá los cables (3) y (4) — quedan en ámbar. Pasá a «Corregido» para ver los tres cables que hay que invertir."},
+    {t:"",h:"Lámpara A no tiene comando.",b:"Prende sola en cuanto se enchufa el panel. Al estar en paralelo con la B, cada una recibe los 220 V completos y si se saca una la otra sigue funcionando."}
+  ]
+});
+var C2B=Object.assign({},C2_COMMON,{
+  vlabel:"Corregido",
+  title:"Circuito 2 · Dos lámparas en paralelo — corregido",
+  desc:"El mismo circuito con la llave pasada al lado de la fase. Cambian solamente los cables (3), (4) y (5).",
+  parts:railParts({F:[96,116,136],N:[196,216,236],T:[318]}).concat([
+    {kind:"holder",x:470,y:420,lamp:"LA",name:"LÁMPARA A",sub:"SIN LLAVE · E27"},
+    {kind:"sw1",x:620,y:585,sw:"K",name:"LLAVE",t1:"1",t2:"2"},
+    {kind:"holder",x:840,y:600,lamp:"LB",name:"LÁMPARA B"},
+    {kind:"outlet",x:790,y:70}
+  ]),
+  cables:leads().concat([
+    {id:"1",a:"F",b:"LA.C",color:"fase",pts:[[330,116],[420,116],[420,452],[470,452]],lab:[420,250],
+     from:"BORNERA F",to:"LÁMPARA A · CENTRO"},
+    {id:"2",a:"LA.R",b:"N",color:"neutro",pts:[[566,452],[610,452],[610,550],[352,550],[352,216],[330,216]],lab:[480,550],
+     from:"LÁMPARA A · ROSCA",to:"BORNERA N"},
+    {id:"3",a:"F",b:"K.1",color:"fase",pts:[[330,136],[450,136],[450,632],[620,632]],lab:[450,590],
+     from:"BORNERA F",to:"LLAVE · borne 1"},
+    {id:"4",a:"K.2",b:"LB.C",color:"negro",pts:[[760,632],[840,632]],lab:[800,632],
+     from:"LLAVE · borne 2",to:"LÁMPARA B · CENTRO"},
+    {id:"5",a:"LB.R",b:"N",color:"neutro",pts:[[936,632],[1020,632],[1020,760],[386,760],[386,236],[330,236]],lab:[700,760],
+     from:"LÁMPARA B · ROSCA",to:"BORNERA N"}
+  ]).concat(TOMA_ROWS("6","7","8")),
+  notes:[
+    {t:"ok",h:"Ahora la llave interrumpe la fase.",b:"Al apagar, la lámpara B queda desconectada de los 220 V y se puede cambiar sin riesgo. Es la regla general: la llave siempre corta la fase, nunca el neutro."},
+    {t:"",h:"Qué cambió respecto del plano.",b:"Sólo tres cables: (3) va de la bornera F al borne 1 de la llave, (4) del borne 2 al CENTRO de la lámpara B, y (5) de la ROSCA de la lámpara B a la bornera N."}
+  ]
+});
+
+var C3={
+  title:"Circuito 3 · Escalera de dos puntos con dos lámparas en paralelo",
+  desc:"Dos llaves de combinación unidas por dos vías comandan las dos lámparas desde cualquiera de los dos puntos. Los cables (4) y (5) van al mismo borne CENTRO de la lámpara 1.",
+  vb:[1150,970],
+  parts:railParts({F:[96,116],N:[196,216,236],T:[318]}).concat([
+    {kind:"holder",x:450,y:420,lamp:"L1",name:"LÁMPARA 1"},
+    {kind:"holder",x:450,y:620,lamp:"L2",name:"LÁMPARA 2"},
+    {kind:"swc",x:700,y:760,sw:"K2",name:"LLAVE 2",com:"L"},
+    {kind:"swc",x:940,y:760,sw:"K1",name:"LLAVE 1",com:"R"},
+    {kind:"outlet",x:790,y:70}
+  ]),
+  cables:leads().concat([
+    {id:"1",a:"F",b:"K2.C",color:"fase",pts:[[330,116],[380,116],[380,820],[700,820]],lab:[380,600],
+     from:"BORNERA F",to:"LLAVE 2 · COMÚN"},
+    {id:"2",a:"K2.V1",b:"K1.V1",color:"negro",pts:[[850,792],[940,792]],lab:[895,792],
+     from:"LLAVE 2 · VÍA 1",to:"LLAVE 1 · VÍA 1"},
+    {id:"3",a:"K2.V2",b:"K1.V2",color:"rojo",pts:[[850,848],[940,848]],lab:[895,848],
+     from:"LLAVE 2 · VÍA 2",to:"LLAVE 1 · VÍA 2"},
+    {id:"4",a:"K1.C",b:"L1.C",color:"negro",pts:[[1090,820],[1120,820],[1120,288],[412,288],[412,452],[450,452]],lab:[760,288],
+     from:"LLAVE 1 · COMÚN",to:"LÁMPARA 1 · CENTRO"},
+    {id:"5",a:"L1.C",b:"L2.C",color:"negro",pts:[[450,452],[436,466],[436,638],[450,652]],lab:[436,560],
+     from:"LÁMPARA 1 · CENTRO",to:"LÁMPARA 2 · CENTRO"},
+    {id:"6",a:"L1.R",b:"N",color:"neutro",pts:[[546,452],[590,452],[590,236],[330,236]],lab:[590,370],
+     from:"LÁMPARA 1 · ROSCA",to:"BORNERA N"},
+    {id:"7",a:"L2.R",b:"N",color:"neutro",pts:[[546,652],[620,652],[620,920],[350,920],[350,216],[330,216]],lab:[480,920],
+     from:"LÁMPARA 2 · ROSCA",to:"BORNERA N"}
+  ]).concat(TOMA_ROWS("8","9","10")),
+  switches:[
+    {id:"K2",label:"Llave 2 (combinación)",pos:{v1:[["K2.C","K2.V1"]],v2:[["K2.C","K2.V2"]]},
+     order:["v1","v2"],names:{v1:"VÍA 1",v2:"VÍA 2"}},
+    {id:"K1",label:"Llave 1 (combinación)",pos:{v1:[["K1.C","K1.V1"]],v2:[["K1.C","K1.V2"]]},
+     order:["v1","v2"],names:{v1:"VÍA 1",v2:"VÍA 2"}}
+  ],
+  lamps:[{id:"L1",a:"L1.C",b:"L1.R",name:"Lámpara 1"},{id:"L2",a:"L2.C",b:"L2.R",name:"Lámpara 2"}],
+  init:{K1:"v1",K2:"v2"}, toma:true,
+  truth:{cols:["Llave 1","Llave 2","Lámparas"],keys:["K1","K2"],
+    rows:[["v1","v1","ENCENDIDAS"],["v1","v2","apagadas"],["v2","v1","apagadas"],["v2","v2","ENCENDIDAS"]]},
+  notes:[
+    {t:"",h:"Cualquiera de las dos llaves, sola, prende y apaga las dos lámparas.",b:"Lo que decide es si las dos están en la misma vía. El estado inicial es el del plano: llave 1 en vía 1 y llave 2 en vía 2, o sea apagado."},
+    {t:"",h:"Las dos vías van en colores distintos.",b:"El cable (2) negro y el (3) rojo unen los mismos bornes de las dos llaves. Si se cruzan, el circuito funciona igual pero se invierte la lógica y cuesta seguir el error."},
+    {t:"",h:"Los cables (4) y (5) comparten un borne.",b:"Los dos van al CENTRO de la lámpara 1: de ahí sale el puente al CENTRO de la lámpara 2. Así quedan en paralelo, cada una con sus 220 V."}
+  ],
+  matNote:"Las dos vías en colores distintos (negro y rojo) son lo que hace rastreable el circuito.",
+  mat:[["1","ficha 2P+T con cable tripolar"],["3","borneras (F, N, T)"],
+    ["2","llaves de combinación 10 A (3 bornes) + cajas"],["2","portalámparas E27 + lámparas"],
+    ["1","tomacorriente 2P+T + caja"],
+    ["","cable unipolar 1,5 mm²: marrón, celeste, negro, rojo, verde/amarillo"]]
+};
+
+var C4={
+  title:"Circuito 4 · Una lámpara comandada desde tres puntos",
+  desc:"Dos llaves de combinación en los extremos y un conmutador de cruce en el medio. Las tres, cada una sola, invierten el estado de la lámpara.",
+  vb:[1150,700],
+  parts:railParts({F:[116],N:[216],T:[],tu:true}).concat([
+    {kind:"holder",x:620,y:320,lamp:"LP",name:"LÁMPARA"},
+    {kind:"swc",x:400,y:510,sw:"K4",name:"LLAVE 4",com:"L"},
+    {kind:"swx",x:640,y:500,sw:"X"},
+    {kind:"swc",x:900,y:510,sw:"K1",name:"LLAVE 1",com:"R"}
+  ]),
+  cables:leads().concat([
+    {id:"1",a:"F",b:"K4.C",color:"fase",pts:[[330,116],[365,116],[365,570],[400,570]],lab:[365,420],
+     from:"BORNERA F",to:"LLAVE 4 · COMÚN"},
+    {id:"2",a:"K4.V1",b:"X.A1",color:"negro",pts:[[550,542],[640,542]],lab:[595,542],
+     from:"LLAVE 4 · VÍA 1",to:"CRUCE · borne A1"},
+    {id:"3",a:"K4.V2",b:"X.A2",color:"rojo",pts:[[550,598],[640,598]],lab:[595,598],
+     from:"LLAVE 4 · VÍA 2",to:"CRUCE · borne A2"},
+    {id:"4",a:"X.B1",b:"K1.V1",color:"negro",pts:[[810,542],[900,542]],lab:[855,542],
+     from:"CRUCE · borne B1",to:"LLAVE 1 · VÍA 1"},
+    {id:"5",a:"X.B2",b:"K1.V2",color:"rojo",pts:[[810,598],[900,598]],lab:[855,598],
+     from:"CRUCE · borne B2",to:"LLAVE 1 · VÍA 2"},
+    {id:"6",a:"K1.C",b:"LP.C",color:"negro",pts:[[1050,570],[1090,570],[1090,220],[590,220],[590,352],[620,352]],lab:[880,220],
+     from:"LLAVE 1 · COMÚN",to:"LÁMPARA · CENTRO"},
+    {id:"7",a:"LP.R",b:"N",color:"neutro",pts:[[716,352],[790,352],[790,180],[345,180],[345,216],[330,216]],lab:[600,180],
+     from:"LÁMPARA · ROSCA",to:"BORNERA N"}
+  ]),
+  switches:[
+    {id:"K4",label:"Llave 4 (combinación)",pos:{v1:[["K4.C","K4.V1"]],v2:[["K4.C","K4.V2"]]},
+     order:["v1","v2"],names:{v1:"VÍA 1",v2:"VÍA 2"}},
+    {id:"X",label:"Conmutador de cruce",
+     pos:{derecho:[["X.A1","X.B1"],["X.A2","X.B2"]],cruzado:[["X.A1","X.B2"],["X.A2","X.B1"]]},
+     order:["derecho","cruzado"],names:{derecho:"DERECHO",cruzado:"CRUZADO"}},
+    {id:"K1",label:"Llave 1 (combinación)",pos:{v1:[["K1.C","K1.V1"]],v2:[["K1.C","K1.V2"]]},
+     order:["v1","v2"],names:{v1:"VÍA 1",v2:"VÍA 2"}}
+  ],
+  lamps:[{id:"LP",a:"LP.C",b:"LP.R",name:"Lámpara"}],
+  init:{K1:"v1",X:"derecho",K4:"v1"}, toma:false,
+  truth:{cols:["Llave 1","Cruce","Llave 4","Lámpara"],keys:["K1","X","K4"],
+    rows:[["v1","derecho","v1","ENCENDIDA"],["v1","derecho","v2","apagada"],
+          ["v1","cruzado","v1","apagada"],["v1","cruzado","v2","ENCENDIDA"],
+          ["v2","derecho","v1","apagada"],["v2","derecho","v2","ENCENDIDA"],
+          ["v2","cruzado","v1","ENCENDIDA"],["v2","cruzado","v2","apagada"]]},
+  notes:[
+    {t:"",h:"El cruce es UN solo aparato de cuatro bornes.",b:"Los dos bornes de un mismo par (A1-A2, B1-B2) van a la MISMA llave, a sus dos vías. En la mayoría de los modelos son los dos que están del mismo lado del cuerpo."},
+    {t:"warn",h:"El error típico: mezclar los pares.",b:"Si A1 y B1 van juntos a la llave 4, la lámpara enciende igual pero la llave del medio deja de hacer efecto. Para identificar los pares con el conmutador suelto y el tester en continuidad: el borne que NUNCA da continuidad con el elegido, en ninguna posición, es su compañero de par."},
+    {t:"",h:"La bornera T queda sin uso.",b:"Este plano no lleva tomacorriente ni puesta a tierra de la luminaria. Dejar el cable de tierra terminado en la bornera, nunca suelto. Si el portalámparas fuera metálico, habría que llevar un verde/amarillo desde la bornera T a su carcasa."}
+  ],
+  matNote:"Para comandar desde 4, 5 o más puntos se agregan más conmutadores de cruce en el medio, siempre entre las dos llaves de combinación de los extremos.",
+  mat:[["1","ficha 2P+T con cable tripolar"],["3","borneras (F, N, T)"],
+    ["2","llaves de combinación 10 A (3 bornes) + cajas"],
+    ["1","conmutador de cruce 10 A (4 bornes) + caja"],["1","portalámparas E27 + lámpara"],
+    ["","cable unipolar 1,5 mm²: marrón, celeste, negro, rojo, verde/amarillo"]]
+};
+
+var TABS=[
+  {n:"01",name:"Serie con una llave",variants:[C1]},
+  {n:"02",name:"Paralelo y toma",variants:[C2A,C2B]},
+  {n:"03",name:"Escalera, dos puntos",variants:[C3]},
+  {n:"04",name:"Tres puntos con cruce",variants:[C4]}
+];
+</script>
+<script>
+/* ============ circuit solver ============
+   Everything is an edge: cables and closed switch contacts are zero-ohm,
+   lamps are the loads. Current flows on any node-simple path F -> N.
+   Potential propagates through cables, closed contacts, and lamps that
+   carry NO current (that is how a switched-neutral leaves a holder live). */
+function solve(c,st){
+  var E=[];
+  c.cables.forEach(function(cb){E.push({t:"cable",id:cb.id,a:cb.a,b:cb.b});});
+  (c.switches||[]).forEach(function(sw){
+    (sw.pos[st[sw.id]]||[]).forEach(function(p,i){E.push({t:"sw",id:sw.id+":"+i,a:p[0],b:p[1]});});
+  });
+  (c.lamps||[]).forEach(function(l){E.push({t:"lamp",id:l.id,a:l.a,b:l.b});});
+
+  var adj={};
+  E.forEach(function(e,i){
+    (adj[e.a]=adj[e.a]||[]).push(i);
+    (adj[e.b]=adj[e.b]||[]).push(i);
+  });
+  var other=function(e,n){return e.a===n?e.b:e.a;};
+  var paths=[],used=[],seen={F:1};
+  (function dfs(n){
+    if(n==="N"){paths.push(used.slice());return;}
+    (adj[n]||[]).forEach(function(i){
+      if(used.indexOf(i)>=0) return;
+      var nx=other(E[i],n);
+      if(seen[nx]) return;
+      seen[nx]=1; used.push(i); dfs(nx); used.pop(); delete seen[nx];
+    });
+  })("F");
+
+  var flow={},bright={},shorted=false;
+  paths.forEach(function(p){
+    var lam=p.filter(function(i){return E[i].t==="lamp";});
+    if(!lam.length){shorted=true;return;}
+    p.forEach(function(i){flow[i]=1;});
+    var b=1/lam.length;
+    lam.forEach(function(i){bright[E[i].id]=Math.max(bright[E[i].id]||0,b);});
+  });
+  function spread(seed){
+    var S={},ch=true; S[seed]=1;
+    while(ch){ ch=false;
+      E.forEach(function(e,i){
+        if(e.t==="lamp"&&flow[i]) return;
+        if(S[e.a]&&!S[e.b]){S[e.b]=1;ch=true;}
+        if(S[e.b]&&!S[e.a]){S[e.a]=1;ch=true;}
+      });
+    }
+    return S;
+  }
+  var hot=spread("F"),neu=spread("N"),cs={};
+  c.cables.forEach(function(cb){
+    var i=-1,k;
+    for(k=0;k<E.length;k++) if(E[k].t==="cable"&&E[k].id===cb.id){i=k;break;}
+    cs[cb.id] = cb.color==="tierra" ? "earth"
+      : flow[i] ? "flow"
+      : (hot[cb.a]&&hot[cb.b]) ? "hot"
+      : (neu[cb.a]&&neu[cb.b]) ? "neutral" : "dead";
+  });
+  return {cables:cs,bright:bright,shorted:shorted,
+    warnLamps:(c.lamps||[]).filter(function(l){return !(bright[l.id]>0)&&(hot[l.a]||hot[l.b]);}),
+    tomaLive:!!(hot.TL&&neu.TN)};
+}
+
+/* ============ scene ============ */
+function P_label(p){
+  return '<text class="dsub" x="'+p.x+'" y="'+p.y+'" text-anchor="middle">'+p.t+'</text>';
+}
+DRAW.label=P_label;
+
+function defsSVG(){
+  return '<defs>'+
+   '<pattern id="perf" width="26" height="26" patternUnits="userSpaceOnUse">'+
+     '<rect width="26" height="26" fill="var(--board)"/>'+
+     '<circle cx="13" cy="13" r="1.5" fill="var(--dot)"/></pattern>'+
+   '<radialGradient id="glow">'+
+     '<stop offset="0" stop-color="var(--lit)" stop-opacity=".72"/>'+
+     '<stop offset="55%" stop-color="var(--lit)" stop-opacity=".26"/>'+
+     '<stop offset="100%" stop-color="var(--lit)" stop-opacity="0"/></radialGradient>'+
+   '</defs>';
+}
+function cableSVG(cb,state){
+  var d=rp(cb.pts);
+  var s='<g class="cable is-'+state+'" data-cable="'+cb.id+'">';
+  s+='<path class="cas" d="'+d+'"/>';
+  s+='<path class="glowline" d="'+d+'"/>';
+  s+='<path class="core '+cb.color+'" d="'+d+'"/>';
+  if(cb.color==="tierra") s+='<path class="tstripe" d="'+d+'"/>';
+  s+='<path class="flow" d="'+d+'"/>';
+  return s+'</g>';
+}
+function numSVG(cb){
+  var x=cb.lab[0],y=cb.lab[1],w=cb.id.length>1?32:26;
+  return '<g><rect x="'+(x-w/2)+'" y="'+(y-10)+'" width="'+w+'" height="20" rx="6" fill="var(--board)" opacity=".93"/>'+
+    '<text class="cnum" x="'+x+'" y="'+(y+4.5)+'" text-anchor="middle">'+cb.id+'</text></g>';
+}
+function scene(c,st,res){
+  var W=c.vb[0],H=c.vb[1];
+  var s='<svg class="scene" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+c.title+'">'+defsSVG();
+  s+='<rect width="'+W+'" height="'+H+'" fill="url(#perf)"/>';
+  c.cables.forEach(function(cb){s+=cableSVG(cb,res.cables[cb.id]);});
+  c.parts.forEach(function(p){
+    var q={},k;
+    for(k in p) q[k]=p[k];
+    if(p.kind==="holder") q.bright=res.bright[p.lamp]||0;
+    if(p.kind==="sw1"||p.kind==="swc"||p.kind==="swx") q.pos=st[p.sw];
+    if(p.kind==="outlet") q.live=res.tomaLive;
+    s+=(DRAW[p.kind]||function(){return "";})(q);
+  });
+  c.cables.forEach(function(cb){if(cb.lab) s+=numSVG(cb);});
+  return s+'</svg>';
+}
+
+/* ============ panels ============ */
+var STN={flow:["flow","con corriente"],hot:["hot","fase, sin corriente"],
+  neutral:["neutral","al neutro"],earth:["earth","tierra"],dead:["dead","sin tensión"]};
+var CN={fase:"marrón",neutro:"celeste",negro:"negro",rojo:"rojo",tierra:"verde/amarillo"};
+var POSNM={v1:"vía 1",v2:"vía 2",derecho:"derecho",cruzado:"cruzado",on:"cerrada",off:"abierta"};
+function swatch(color){
+  if(color==="tierra") return '<i style="background:linear-gradient(90deg,var(--c-tierra) 0 55%,var(--c-tierra-2) 55%)"></i>';
+  return '<i style="background:var(--c-'+color+')"></i>';
+}
+function renderControls(c,st){
+  document.getElementById("controls").innerHTML=(c.switches||[]).map(function(sw){
+    var p=st[sw.id];
+    return '<button class="btn'+(p==="on"?" on":"")+'" data-swbtn="'+sw.id+'">'+
+      sw.label+'<span class="pos">'+sw.names[p]+'</span></button>';
+  }).join("")+'<span style="font-size:13px;color:var(--ink-3);padding-left:4px">'+
+    'o accioná las teclas directamente sobre la placa</span>';
+}
+function renderStatus(c,res){
+  var out=[];
+  (c.lamps||[]).forEach(function(l){
+    var b=res.bright[l.id]||0;
+    var cls=b>=0.99?"lit":(b>0?"dim":"off");
+    var txt=b>=0.99?"encendida":(b>0?"a media luz · unos "+Math.round(220*b)+" V":"apagada");
+    out.push('<span class="chip '+cls+'"><i></i>'+l.name+' · '+txt+'</span>');
+  });
+  if(c.toma){
+    out.push('<span class="chip '+(res.tomaLive?"live":"off")+'"><i></i>Toma · '+
+      (res.tomaLive?"220 V siempre":"sin tensión")+'</span>');
+    out.push('<span class="chip earth"><i></i>Tierra conectada</span>');
+  }
+  var hotC=c.cables.filter(function(cb){return res.cables[cb.id]==="hot"&&!cb.hidden;});
+  if(hotC.length) out.push('<span class="chip live"><i></i>Con fase y sin corriente · '+
+    hotC.map(function(x){return "("+x.id+")";}).join(" ")+'</span>');
+  if(res.warnLamps.length) out.push('<span class="chip warn"><i></i>'+
+    res.warnLamps.map(function(l){return l.name;}).join(", ")+' · portalámparas con fase adentro</span>');
+  document.getElementById("statusRow").innerHTML=out.join("");
+}
+function renderNotes(c,res){
+  var out=(c.notes||[]).map(function(n){
+    return '<div class="note '+(n.t||"")+'"><span class="mk"></span><div><b>'+n.h+'</b> '+n.b+'</div></div>';
+  });
+  if(res.warnLamps.length) out.unshift('<div class="note warn"><span class="mk"></span><div>'+
+    '<b>Ahora mismo hay 220 V en un portalámparas apagado.</b> '+
+    res.warnLamps.map(function(l){return l.name;}).join(" y ")+
+    ' está apagada, pero su borne CENTRO sigue conectado a la fase — los conductores marcados en ámbar tienen tensión. '+
+    'No se puede cambiar esa lámpara sin cortar antes desde el tablero.</div></div>');
+  if(res.shorted) out.unshift('<div class="note warn"><span class="mk"></span><div>'+
+    '<b>Cortocircuito.</b> Hay un camino de fase a neutro sin ninguna lámpara en el medio. '+
+    'Revisar la tabla de conexiones antes de enchufar nada.</div></div>');
+  document.getElementById("notes").innerHTML=out.join("");
+}
+function renderCables(c,res){
+  document.getElementById("tblCables").innerHTML=c.cables.filter(function(cb){return !cb.hidden;})
+   .map(function(cb){
+     var s=STN[res.cables[cb.id]];
+     return '<tr class="hoverable" data-row="'+cb.id+'">'+
+      '<td><span class="num">'+cb.id+'</span></td>'+
+      '<td class="tn">'+cb.from+'</td><td class="tn">'+cb.to+'</td>'+
+      '<td><span class="cc">'+swatch(cb.color)+CN[cb.color]+'</span></td>'+
+      '<td class="st"><span class="dotflag '+s[0]+'"><i></i>'+s[1]+'</span></td></tr>';
+   }).join("");
+}
+function renderTruth(c,st){
+  var card=document.getElementById("truthCard");
+  if(!c.truth){card.hidden=true;return;}
+  card.hidden=false;
+  var T=c.truth;
+  document.getElementById("truthHead").innerHTML='<tr>'+
+    T.cols.map(function(x){return '<th>'+x+'</th>';}).join("")+'</tr>';
+  document.getElementById("truthBody").innerHTML=T.rows.map(function(r){
+    var act=T.keys.every(function(k,i){return st[k]===r[i];});
+    return '<tr class="'+(act?"act":"")+'">'+
+      T.keys.map(function(k,i){return '<td class="truthkey">'+POSNM[r[i]]+'</td>';}).join("")+
+      '<td>'+r[r.length-1]+'</td></tr>';
+  }).join("");
+}
+function renderMat(c){
+  document.getElementById("matNote").textContent=c.matNote||"";
+  document.getElementById("tblMat").innerHTML=c.mat.map(function(m){
+    return '<li><span class="q">'+(m[0]||"·")+'</span><span>'+m[1]+'</span></li>';
+  }).join("");
+}
+
+/* ============ state + wiring ============ */
+var tabIdx=0,varIdx={},state={},lastSw=null;
+function curDef(){return TABS[tabIdx].variants[varIdx[tabIdx]||0];}
+function sKey(){return tabIdx+":"+(varIdx[tabIdx]||0);}
+function ensureState(){
+  var k=sKey(),init=curDef().init,o,p;
+  if(!state[k]){o={};for(p in init)o[p]=init[p];state[k]=o;}
+  return state[k];
+}
+function renderTabs(){
+  document.getElementById("tabs").innerHTML=TABS.map(function(T,i){
+    return '<button class="tab" role="tab" aria-selected="'+(i===tabIdx)+'" data-tab="'+i+'">'+
+      '<b>CIRCUITO '+T.n+'</b>'+T.name+'</button>';
+  }).join("");
+}
+function renderVariant(){
+  var T=TABS[tabIdx],el=document.getElementById("variant");
+  if(T.variants.length<2){el.innerHTML="";return;}
+  el.innerHTML='<div class="seg">'+T.variants.map(function(v,i){
+    return '<button aria-pressed="'+(i===(varIdx[tabIdx]||0))+'" data-var="'+i+'">'+v.vlabel+'</button>';
+  }).join("")+'</div>';
+}
+function toggleSw(id){
+  var c=curDef(),st=ensureState(),sw=null;
+  (c.switches||[]).forEach(function(s){if(s.id===id)sw=s;});
+  if(!sw) return;
+  st[id]=sw.order[(sw.order.indexOf(st[id])+1)%sw.order.length];
+  lastSw=id;
+  render();
+}
+function bindScene(){
+  Array.prototype.forEach.call(document.querySelectorAll("#scene [data-sw]"),function(g){
+    var id=g.getAttribute("data-sw");
+    g.addEventListener("click",function(){toggleSw(id);});
+    g.addEventListener("keydown",function(e){
+      if(e.key==="Enter"||e.key===" "||e.key==="Spacebar"){e.preventDefault();toggleSw(id);}
+    });
+  });
+  if(lastSw){
+    var t=document.querySelector('#scene [data-sw="'+lastSw+'"]');
+    if(t) t.focus();
+  }
+}
+function bindTable(){
+  var pick=function(id){return document.querySelector('#scene g[data-cable="'+id+'"]');};
+  Array.prototype.forEach.call(document.querySelectorAll("#tblCables tr[data-row]"),function(tr){
+    var id=tr.getAttribute("data-row");
+    tr.addEventListener("mouseenter",function(){var e=pick(id);if(e)e.classList.add("hl");});
+    tr.addEventListener("mouseleave",function(){
+      if(tr.classList.contains("pinned"))return;
+      var e=pick(id);if(e)e.classList.remove("hl");
+    });
+    tr.addEventListener("click",function(){
+      var was=tr.classList.contains("pinned");
+      Array.prototype.forEach.call(document.querySelectorAll("#tblCables tr.pinned"),
+        function(x){x.classList.remove("pinned");});
+      Array.prototype.forEach.call(document.querySelectorAll("#scene g.cable.hl"),
+        function(x){x.classList.remove("hl");});
+      if(!was){tr.classList.add("pinned");var e=pick(id);if(e)e.classList.add("hl");}
+    });
+  });
+}
+function render(){
+  var c=curDef(),st=ensureState(),res=solve(c,st);
+  document.getElementById("cTitle").textContent=c.title;
+  document.getElementById("cDesc").textContent=c.desc;
+  renderVariant();
+  document.getElementById("scene").innerHTML=scene(c,st,res);
+  renderControls(c,st);
+  renderStatus(c,res);
+  renderNotes(c,res);
+  renderCables(c,res);
+  renderTruth(c,st);
+  renderMat(c);
+  bindScene();
+  bindTable();
+}
+function near(e,sel){
+  var n=e.target;
+  while(n&&n!==document){ if(n.getAttribute&&n.getAttribute(sel)!==null) return n; n=n.parentNode; }
+  return null;
+}
+document.getElementById("tabs").addEventListener("click",function(e){
+  var b=near(e,"data-tab"); if(!b)return;
+  tabIdx=+b.getAttribute("data-tab"); lastSw=null;
+  renderTabs(); render();
+});
+document.getElementById("variant").addEventListener("click",function(e){
+  var b=near(e,"data-var"); if(!b)return;
+  var old=ensureState(),st,p;
+  varIdx[tabIdx]=+b.getAttribute("data-var");
+  st=ensureState();
+  for(p in st) if(old[p]!==undefined) st[p]=old[p];
+  lastSw=null; render();
+});
+document.getElementById("controls").addEventListener("click",function(e){
+  var b=near(e,"data-swbtn"); if(b) toggleSw(b.getAttribute("data-swbtn"));
+});
+renderTabs();
+render();
+</script>
+<!--END-->
