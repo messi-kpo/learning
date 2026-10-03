@@ -2,7 +2,7 @@
 <html lang="es">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Apuntes interactivos</title>
+<title>Matemática · índice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:wght@500;600&display=swap">
@@ -40,11 +40,14 @@ body{
   font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased;
 }
 h1,h2{font-family:Spectral,Georgia,"Times New Roman",serif;font-weight:600;margin:0;text-wrap:balance}
-.mono{font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace}
 
 header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel-2))}
-.hd{max-width:1000px;margin:0 auto;padding-block:36px 28px;padding-inline:22px}
-h1{font-size:clamp(28px,4.4vw,44px);line-height:1.03;letter-spacing:-.015em}
+.hd{max-width:1000px;margin:0 auto;padding-block:26px 28px;padding-inline:22px}
+.crumb{margin:0 0 16px;font-size:13px;color:var(--ink-3)}
+.crumb a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line)}
+.crumb a:hover,.crumb a:focus-visible{color:var(--accent);border-color:var(--accent)}
+.crumb span{margin:0 7px;color:var(--ink-3)}
+h1{font-size:clamp(27px,4.2vw,42px);line-height:1.03;letter-spacing:-.015em}
 h1 em{font-style:normal;color:var(--ink-3);font-weight:500}
 .sub{margin:12px 0 0;max-width:62ch;color:var(--ink-2)}
 
@@ -56,7 +59,7 @@ main{max-width:1000px;margin:0 auto;padding-block:34px 72px;padding-inline:22px}
 
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 .card{
-  display:block;position:relative;
+  display:block;
   background:var(--panel);border:1px solid var(--line);border-radius:14px;
   padding:22px 22px 18px;text-decoration:none;color:inherit;
   box-shadow:var(--shadow);
@@ -93,46 +96,43 @@ footer{
 
 <header>
   <div class="hd">
-    <h1>Apuntes interactivos <em>· índice</em></h1>
-    <p class="sub">Material de estudio para explorar con el mouse: circuitos que se pueden
-    encender, fuerzas que se pueden mover y cuentas que se siguen paso a paso. Elegí una materia para ver sus temas.</p>
+    <p class="crumb"><a href="../">Apuntes</a><span>/</span>Matemática</p>
+    <h1>Matemática <em>· unidades</em></h1>
+    <p class="sub">Álgebra paso a paso: cada cuenta se arma de a un renglón. Elegí una unidad para abrirla.</p>
   </div>
 </header>
 
 <main>
-  <p class="eyebrow">Materias</p>
+  <p class="eyebrow">Unidades</p>
   <div class="grid">
-
-    <a class="card" href="electricidad/">
-      <h2>Electricidad</h2>
-      <p>Instalaciones domiciliarias de 220&nbsp;V: tableros, conexiones y tablas de verdad.</p>
+    <a class="card" href="unidad6/">
+      <h2>Unidad 6 · División de polinomios</h2>
+      <p>La división de 2x⁴ − 3x² + x − 5 por x² − x + 2, resuelta paso a paso.
+      Avanzá o retrocedé y mirá qué términos intervienen en cada paso.</p>
       <ul class="peek">
-        <li>Tablero de cuatro circuitos</li>
+        <li>Ordenar y completar</li>
+        <li>Dividir</li>
+        <li>Multiplicar</li>
+        <li>Restar y bajar</li>
+        <li>Cociente y resto</li>
       </ul>
-      <div class="meta"><span class="count">1 tema</span><span class="arrow">→</span></div>
+      <div class="meta"><span class="count">10 pasos</span><span class="arrow">→</span></div>
     </a>
-
-    <a class="card" href="fisica/">
-      <h2>Física</h2>
-      <p>Dinámica: leyes de Newton, rozamiento, peso y normal, plano inclinado y tensiones.</p>
+    <a class="card" href="unidad6-pasos/">
+      <h2>Unidad 6 · Todos los pasos</h2>
+      <p>La misma división, con los diez pasos uno debajo del otro para leerla de corrido
+      y comparar cómo crece la cuenta. Cierra con el resultado y la verificación.</p>
       <ul class="peek">
-        <li>Unidad 5 · Banco de dinámica</li>
+        <li>Primera vuelta</li>
+        <li>Segunda vuelta</li>
+        <li>Tercera vuelta</li>
+        <li>Resultado</li>
+        <li>Verificación</li>
       </ul>
-      <div class="meta"><span class="count">1 unidad</span><span class="arrow">→</span></div>
+      <div class="meta"><span class="count">10 pasos</span><span class="arrow">→</span></div>
     </a>
-
-    <a class="card" href="matematica/">
-      <h2>Matemática</h2>
-      <p>Álgebra: operaciones con polinomios, resueltas paso a paso.</p>
-      <ul class="peek">
-        <li>Unidad 6 · División de polinomios</li>
-        <li>Unidad 6 · Todos los pasos</li>
-      </ul>
-      <div class="meta"><span class="count">2 páginas</span><span class="arrow">→</span></div>
-    </a>
-
   </div>
 </main>
 
-<footer>Todas las páginas funcionan sin conexión una vez cargadas y se adaptan al tema claro u oscuro del sistema.</footer>
+<footer>Cada paso resalta los términos que se usan y explica la cuenta con sus signos.</footer>
 </html>

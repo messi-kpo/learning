@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unidad 6 · División de polinomios, todos los pasos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#ECEFEC; --panel:#FBFCFA; --panel-2:#F3F5F2;
+  --ink:#161D19; --ink-2:#4E5A54; --ink-3:#7D8A84;
+  --line:#CDD5CF; --line-2:#DFE5E0;
+  --accent:#1E6B4E; --accent-soft:#DCE9E1;
+  --shadow:0 1px 2px rgba(21,30,25,.06), 0 10px 26px -14px rgba(21,30,25,.28);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121915; --panel:#1A231E; --panel-2:#202B24;
+    --ink:#E6EDE7; --ink-2:#A3B1A8; --ink-3:#6E7C73;
+    --line:#2A352E; --line-2:#222C26;
+    --accent:#43B992; --accent-soft:#17332A;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -16px rgba(0,0,0,.75);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121915; --panel:#1A231E; --panel-2:#202B24;
+  --ink:#E6EDE7; --ink-2:#A3B1A8; --ink-3:#6E7C73;
+  --line:#2A352E; --line-2:#222C26;
+  --accent:#43B992; --accent-soft:#17332A;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -16px rgba(0,0,0,.75);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:Spectral,Georgia,"Times New Roman",serif;font-weight:600;margin:0;text-wrap:balance}
+.mono{font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace}
+
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel-2))}
+.hd{max-width:1000px;margin:0 auto;padding-block:26px 28px;padding-inline:22px}
+.crumb{margin:0 0 16px;font-size:13px;color:var(--ink-3)}
+.crumb a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line)}
+.crumb a:hover,.crumb a:focus-visible{color:var(--accent);border-color:var(--accent)}
+.crumb span{margin:0 7px;color:var(--ink-3)}
+h1{font-size:clamp(27px,4.2vw,42px);line-height:1.03;letter-spacing:-.015em}
+h1 em{font-style:normal;color:var(--ink-3);font-weight:500}
+.sub{margin:12px 0 0;max-width:62ch;color:var(--ink-2)}
+.sub a{color:var(--accent)}
+
+main{max-width:1000px;margin:0 auto;padding-block:30px 72px;padding-inline:22px}
+.problem{
+  display:flex;flex-wrap:wrap;gap:8px 28px;margin:0 0 24px;
+  font-size:15px;color:var(--ink-2);
+}
+.problem b{color:var(--ink);font-weight:500}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.step{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 32px;align-items:start;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:20px 22px;box-shadow:var(--shadow);
+}
+.num{
+  display:inline-block;font-size:12px;letter-spacing:.06em;
+  background:var(--accent-soft);color:var(--accent);
+  padding:2px 9px;border-radius:999px;font-weight:500;
+}
+.step h2{font-size:21px;letter-spacing:-.01em;margin-top:8px}
+.step p{margin:6px 0 0;color:var(--ink-2);max-width:56ch}
+.round{
+  margin:14px 0 0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;
+}
+.round:first-child{margin-top:0}
+
+/* La cuenta: 1 columna de signo, 5 de términos, 1 para divisor/cociente */
+.wrap{overflow-x:auto;max-width:100%}
+.g{
+  display:grid;grid-template-columns:1.1em repeat(5,3.5em) auto;row-gap:2px;
+  font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace;
+  /* ~26em + 42px de ancho: el tamaño acompaña al ancho de la tarjeta */
+  font-size:clamp(12.5px,calc((100vw - 150px) / 26),17px);font-variant-numeric:tabular-nums;
+}
+.c{text-align:right;padding:1px 5px;border-radius:4px;white-space:nowrap;color:var(--ink)}
+.op{text-align:right;padding:1px 3px;color:var(--ink-3);border-radius:4px}
+.u{border-bottom:1px solid var(--ink-3);border-radius:0}
+.ds{border-left:1px solid var(--ink-3);border-bottom:1px solid var(--ink-3);padding:1px 10px;margin-left:10px;white-space:nowrap}
+.qs{padding:1px 10px;margin-left:10px;white-space:nowrap}
+.ds span,.qs span{padding:1px 2px;border-radius:4px}
+.hl{background:var(--accent-soft);color:var(--accent)!important;font-weight:500}
+
+.result{
+  margin-top:14px;background:var(--panel-2);border:1px solid var(--line);border-radius:14px;
+  padding:20px 22px;
+}
+.result h2{font-size:21px}
+.result dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:12px 0 0}
+.result dt{color:var(--ink-3)}
+.result dd{margin:0;font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace}
+.result p{margin:14px 0 0;color:var(--ink-2)}
+.result .mono{color:var(--ink);font-size:14.5px}
+
+.result .eq{display:block;margin-top:4px}
+.result .eq span{white-space:nowrap}
+
+@media (max-width:960px){
+  .step{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  main{padding-inline:16px}
+  .step,.result{padding:18px 12px}
+  .g{grid-template-columns:1em repeat(5,2.9em) auto;font-size:clamp(11.5px,calc((100vw - 96px) / 23.5),15px)}
+  .c{padding:1px 3px}
+  .ds,.qs{padding:1px 6px;margin-left:6px}
+  .ds span,.qs span{padding:1px}
+}
+</style>
+
+<header>
+  <div class="hd">
+    <p class="crumb"><a href="../../">Apuntes</a><span>/</span><a href="../">Matemática</a><span>/</span>Unidad 6</p>
+    <h1>División de polinomios <em>· todos los pasos</em></h1>
+    <p class="sub">La misma cuenta, con los diez pasos uno debajo del otro. En cada paso
+    se resaltan los términos que intervienen. ¿Preferís ir de a uno?
+    <a href="../unidad6/">Mirá la versión paso a paso</a>.</p>
+  </div>
+</header>
+
+<main>
+  <div class="problem">
+    <span>Dividendo <b class="mono">2x⁴ − 3x² + x − 5</b></span>
+    <span>Divisor <b class="mono">x² − x + 2</b></span>
+  </div>
+
+  <ol class="steps" id="steps"></ol>
+
+  <section class="result">
+    <h2>Resultado</h2>
+    <dl>
+      <dt>Cociente</dt><dd>2x² + 2x − 5</dd>
+      <dt>Resto</dt><dd>−8x + 5</dd>
+    </dl>
+    <p>Para verificar: divisor · cociente + resto tiene que dar el dividendo.
+    <span class="eq mono"><span>(x² − x + 2)(2x² + 2x − 5)</span> <span>= 2x⁴ − 3x² + 9x − 10</span></span>
+    <span class="eq mono"><span>2x⁴ − 3x² + 9x − 10 + (−8x + 5)</span> <span>= 2x⁴ − 3x² + x − 5 ✓</span></span></p>
+  </section>
+</main>
+
+<script>
+// Cada término de la cuenta: [id, fila, columna, paso en que aparece, texto, clase]
+const C=[
+  ['r1c1',1,2,0,'2x⁴'],['r1c2',1,3,0,'+0x³'],['r1c3',1,4,0,'−3x²'],['r1c4',1,5,0,'+x'],['r1c5',1,6,0,'−5'],
+  ['o2',2,1,2,'−','op'],['r2c1',2,2,2,'2x⁴','c u'],['r2c2',2,3,2,'−2x³','c u'],['r2c3',2,4,2,'+4x²','c u'],
+  ['r3c1',3,2,3,'0'],['r3c2',3,3,3,'+2x³'],['r3c3',3,4,3,'−7x²'],['r3c4',3,5,3,'+x'],
+  ['o4',4,2,5,'−','op'],['r4c2',4,3,5,'2x³','c u'],['r4c3',4,4,5,'−2x²','c u'],['r4c4',4,5,5,'+4x','c u'],
+  ['r5c2',5,3,6,'0'],['r5c3',5,4,6,'−5x²'],['r5c4',5,5,6,'−3x'],['r5c5',5,6,6,'−5'],
+  ['o6',6,3,8,'−','op'],['r6c3',6,4,8,'−5x²','c u'],['r6c4',6,5,8,'+5x','c u'],['r6c5',6,6,8,'−10','c u'],
+  ['r7c3',7,4,9,'0'],['r7c4',7,5,9,'−8x'],['r7c5',7,6,9,'+5']
+];
+const D=[['d1','x²'],['d2','− x'],['d3','+ 2']];
+const Q=[['q1',1,'2x²'],['q2',4,'+ 2x'],['q3',7,'− 5']];
+
+// Pasos: [título, explicación, ids resaltados] — los mismos de la versión de a uno
+const S=[
+['Ordenar y completar','Ordenamos el dividendo de mayor a menor grado y agregamos 0x³ en el lugar del término que falta.',['r1c2']],
+['Dividir','Primer término del dividendo ÷ primer término del divisor: 2x⁴ ÷ x² = 2x². Es el primer término del cociente.',['r1c1','d1','q1']],
+['Multiplicar','2x² · (x² − x + 2) = 2x⁴ − 2x³ + 4x². Lo escribimos debajo, cada término con su signo, y ponemos un menos a la izquierda porque se va a restar.',['q1','d1','d2','d3','o2','r2c1','r2c2','r2c3']],
+['Restar y bajar','Restamos columna por columna: 2x⁴ − 2x⁴ = 0; 0x³ − (−2x³) = +2x³; −3x² − 4x² = −7x². Bajamos el siguiente término, +x.',['r3c1','r3c2','r3c3','r3c4']],
+['Dividir','Ahora el primer término del renglón es 2x³: 2x³ ÷ x² = 2x. Se agrega al cociente.',['r3c2','d1','q2']],
+['Multiplicar','2x · (x² − x + 2) = 2x³ − 2x² + 4x. Lo anotamos con sus signos, debajo de los términos del mismo grado, con el menos a la izquierda.',['q2','d1','d2','d3','o4','r4c2','r4c3','r4c4']],
+['Restar y bajar','Restamos: 2x³ − 2x³ = 0; −7x² − (−2x²) = −5x²; x − 4x = −3x. Bajamos el último término, −5.',['r5c2','r5c3','r5c4','r5c5']],
+['Dividir','−5x² ÷ x² = −5. El signo negativo también pasa al cociente.',['r5c3','d1','q3']],
+['Multiplicar','−5 · (x² − x + 2) = −5x² + 5x − 10. Va con sus propios signos; el menos de la izquierda solo indica la resta.',['q3','d1','d2','d3','o6','r6c3','r6c4','r6c5']],
+['Restar y terminar','−5x² − (−5x²) = 0; −3x − 5x = −8x; −5 − (−10) = 5. El resto −8x + 5 tiene grado 1, menor que el del divisor (2), así que terminamos. Cociente: 2x² + 2x − 5.',['r7c4','r7c5','q1','q2','q3']]
+];
+// Cada vuelta de dividir–multiplicar–restar arranca en estos pasos
+const ROUNDS={1:'Primera vuelta',4:'Segunda vuelta',7:'Tercera vuelta'};
+
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+
+// Arma la cuenta tal como queda al final del paso i
+function grid(i){
+  const hl=new Set(S[i][2]), g=el('div','g');
+  g.setAttribute('role','img');
+  for(const [id,r,c,s,t,cls] of C){
+    if(s>i) continue;
+    const e=el('span',(cls||'c')+(hl.has(id)?' hl':''),t);
+    e.style.gridRow=r; e.style.gridColumn=c; g.append(e);
+  }
+  const ds=el('div','ds'); ds.style.gridRow=1; ds.style.gridColumn=7;
+  D.forEach(([id,t],k)=>{if(k)ds.append(' ');ds.append(el('span',hl.has(id)?'hl':'',t))});
+  g.append(ds);
+  const qs=el('div','qs'); qs.style.gridRow=2; qs.style.gridColumn=7;
+  Q.filter(q=>q[1]<=i).forEach(([id,,t],k)=>{if(k)qs.append(' ');qs.append(el('span',hl.has(id)?'hl':'',t))});
+  g.append(qs);
+  return g;
+}
+
+const list=document.getElementById('steps');
+S.forEach(([t,x],i)=>{
+  const li=el('li','step'), txt=el('div');
+  if(ROUNDS[i]) txt.append(el('p','round',ROUNDS[i]));
+  txt.append(el('span','num mono','Paso '+(i+1)), el('h2',null,t), el('p',null,x));
+  const w=el('div','wrap'); w.append(grid(i));
+  w.firstChild.setAttribute('aria-label','Cuenta al terminar el paso '+(i+1));
+  li.append(txt,w); list.append(li);
+});
+</script>
+</html>
