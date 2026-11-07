@@ -16,8 +16,10 @@ fisica/index.html               subject index -> units
 fisica/unidad5/index.html       content page
 ```
 
-Folder indexes link to child folders with a trailing slash (`href="tablero/"`),
-so GitHub Pages resolves the nested `index.html`. Content pages are the leaves.
+Navigation links point directly to each folder's `index.html` (for example,
+`href="tablero/index.html"`). This works both on GitHub Pages and when the
+root `index.html` is opened directly from the local file system. Content pages
+are the leaves.
 
 ## Rule: adding a page means updating the indexes
 
@@ -31,14 +33,15 @@ When adding a new page at `<subject>/<topic>/index.html`:
 1. **Create the page** as `<topic>/index.html` inside its folder — never
    `<topic>.html`. The folder-per-page convention is what makes the URLs clean
    and the indexes uniform.
-2. **Add a card to the parent index** (`<subject>/index.html`): `<h2>` title,
+2. **Add a card to the parent index** (`<subject>/index.html`) linking to
+   `<topic>/index.html`: `<h2>` title,
    one-sentence `<p>` description, `.peek` chips naming a few real sections from
    the page, and a `.meta` row with a `.count` badge.
 3. **Update the root index** (`index.html`): if the subject is new, add a card
    for it; if it already exists, add the page to that card's `.peek` list and
    correct the `.count` badge (e.g. `1 tema` -> `2 temas`).
 4. **Give the new page a breadcrumb** back up the chain, matching the existing
-   ones: `<a href="../">Apuntes</a><span>/</span><Subject>`.
+   ones: `<a href="../../index.html">Apuntes</a><span>/</span><a href="../index.html"><Subject></a>`.
 
 Removing or renaming a page reverses the same steps — delete or fix every card,
 chip, count and breadcrumb that referenced it.
