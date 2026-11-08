@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Cómo elegir la técnica · Unidad 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Spectral:wght@500;600;700&display=swap">
+<style>
+:root{--bg:#ecefec;--paper:#fbfcfa;--soft:#f2f5f1;--ink:#18221c;--muted:#536158;--subtle:#6f7c72;--line:#cdd7ce;--accent:#1e6b4e;--accent-soft:#dcebe1;--example:#f5f8f4;--warn:#8b5517;--warn-soft:#fff0d8;--shadow:0 10px 28px -20px #23372a55}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111a14;--paper:#1b271e;--soft:#223026;--ink:#ecf3ec;--muted:#b0c0b2;--subtle:#94a597;--line:#344638;--accent:#76dbac;--accent-soft:#1f4130;--example:#1e2d23;--warn:#f1bb79;--warn-soft:#42301d;--shadow:0 10px 28px -20px #000}}
+:root[data-theme="dark"]{--bg:#111a14;--paper:#1b271e;--soft:#223026;--ink:#ecf3ec;--muted:#b0c0b2;--subtle:#94a597;--line:#344638;--accent:#76dbac;--accent-soft:#1f4130;--example:#1e2d23;--warn:#f1bb79;--warn-soft:#42301d;--shadow:0 10px 28px -20px #000}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:var(--accent)}a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}.wrap{width:min(1040px,100% - 40px);margin-inline:auto}
+header{background:linear-gradient(160deg,var(--paper),var(--soft));border-bottom:1px solid var(--line)}.head{padding:26px 0 38px}.crumb{font-size:13px;color:var(--subtle);margin:0 0 27px}.crumb a{text-decoration:none;color:var(--muted);border-bottom:1px solid var(--line)}.crumb span{margin:0 8px}.eyebrow{margin:0 0 8px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-size:12px;font-weight:700}h1,h2,h3{font-family:Spectral,Georgia,serif;line-height:1.12;margin:0}h1{font-size:clamp(34px,5vw,54px);max-width:17ch;letter-spacing:-.025em}.lede{max-width:65ch;color:var(--muted);margin:16px 0 0;font-size:17px}.head-meta{display:flex;gap:9px;flex-wrap:wrap;margin-top:21px}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:5px 11px;background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:600;text-decoration:none}.pill.secondary{background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+main{padding:30px 0 72px}.contents{border:1px solid var(--line);background:var(--paper);border-radius:16px;padding:21px 24px 23px;box-shadow:var(--shadow)}.contents h2{font:700 13px/1.3 "IBM Plex Sans",sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--subtle)}.toc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px 13px;margin:15px 0 0;padding:0;list-style:none}.toc a{display:block;padding:7px 9px;border-radius:7px;text-decoration:none;color:var(--ink);font-size:14px}.toc a:hover,.toc a:focus-visible{background:var(--accent-soft);color:var(--accent)}.toc b{color:var(--accent);margin-right:6px}
+.section{scroll-margin-top:18px;margin-top:24px;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}.section-head{padding:22px 25px 18px;border-bottom:1px solid var(--line)}.section-number{font-size:12px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;font-weight:700}.section h2{font-size:29px;margin:3px 0 0}.section-grid{display:grid;grid-template-columns:minmax(250px,.86fr) minmax(0,1.14fr)}.memory,.worked{padding:23px 25px 27px}.memory{background:var(--soft);border-right:1px solid var(--line)}.worked{background:var(--example)}h3{font:700 12px/1.3 "IBM Plex Sans",sans-serif;text-transform:uppercase;letter-spacing:.11em;color:var(--accent);margin:0 0 14px}.memory p,.worked p{margin:0 0 11px}.memory p:last-child,.worked p:last-child{margin-bottom:0}.formula{font-family:Georgia,"Times New Roman",serif;font-size:1.13em;line-height:1.5;font-weight:600;overflow-wrap:anywhere}.formula-box{border:1px solid var(--line);border-radius:9px;background:var(--paper);padding:11px 13px;margin:12px 0}.steps{list-style:none;counter-reset:step;margin:0;padding:0}.steps li{counter-increment:step;position:relative;padding-left:31px;margin:0 0 13px}.steps li::before{content:counter(step);position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:12px;font-weight:700}.steps li:last-child{margin-bottom:0}.result{margin-top:16px!important;padding:11px 13px;border-radius:9px;background:var(--accent-soft);color:var(--ink)}.result strong{color:var(--accent)}.note{font-size:14px;color:var(--muted)}.small-list{padding-left:21px;margin:9px 0}.small-list li{margin:3px 0}.ruffini{border-collapse:collapse;width:auto;max-width:100%;margin:11px 0;font-variant-numeric:tabular-nums;text-align:center}.ruffini th,.ruffini td{padding:3px 11px;min-width:36px}.ruffini th{font-weight:600}.ruffini th:first-child,.ruffini td:first-child{border-right:2px solid var(--accent);color:var(--accent)}.ruffini tr:last-child{border-top:2px solid var(--accent)}.ruffini td:last-child{color:var(--accent);font-weight:700}.sketches{display:flex;gap:10px;flex-wrap:wrap;margin:13px 0 0}.sketch{background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:8px 11px;min-width:105px;text-align:center}.sketch svg{display:block;width:92px;height:55px;margin:auto}.sketch span{font-size:12px;color:var(--muted)}.endnote{font-size:13px;color:var(--subtle);margin:25px 3px 0}.endnote a{font-weight:600}
+.case-review{padding:20px 25px 24px;border-top:1px solid var(--line)}.case-review h3{margin-bottom:12px}.case-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}.case-list li{padding:13px 14px;border:1px solid var(--line);border-radius:9px;background:var(--soft)}.case-list b{display:block;color:var(--accent);margin-bottom:5px}.case-list p{font-size:14px;margin:0 0 8px}.case-list .formula{font-size:1.03em}
+.choose-intro{padding:22px 25px 24px}.choose-intro>p{max-width:76ch;margin:0 0 17px;color:var(--muted)}.choose-intro>p strong,.choose-intro>p em{color:var(--ink)}
+.golden{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}.golden li{padding:14px 15px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;background:var(--soft)}.golden i{display:block;font:700 11px/1.3 "IBM Plex Sans",sans-serif;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}.golden b{display:block;font:600 19px/1.2 Spectral,Georgia,serif;margin-bottom:5px}.golden span{font-size:14px;color:var(--muted)}
+.block{padding:22px 25px 25px;border-top:1px solid var(--line)}.block .intro{margin:-4px 0 17px;color:var(--muted);max-width:76ch;font-size:15px}
+.flow{max-width:900px;margin:0 auto}.flow-step{display:grid;grid-template-columns:32px minmax(0,1fr);gap:13px;align-items:start;padding:13px 16px;border:1px solid var(--line);border-radius:11px;background:var(--paper)}.flow-step.key{border-color:var(--accent);background:var(--accent-soft)}.flow-step.loop{border:2px dashed var(--accent)}.flow-n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--paper);font-weight:700;font-size:14px}.flow-step strong{display:block;line-height:1.35}.flow-step p{margin:3px 0 0;font-size:14.5px;color:var(--muted)}.flow-step p strong{display:inline;color:var(--ink)}
+.flow-down{position:relative;width:2px;height:16px;background:var(--accent);margin:0 auto 8px}.flow-down::after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid var(--accent)}
+.tech{display:inline-block;margin:3px 0 0;padding:2px 10px;border-radius:999px;border:1px solid var(--accent);background:var(--paper);color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}a.tech:hover{background:var(--accent);color:var(--paper)}.tech.stop{border-color:var(--warn);color:var(--warn)}
+.branches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.branch{border:1px solid var(--line);border-radius:11px;background:var(--soft);padding:13px 14px}.branch-title{display:flex;align-items:baseline;gap:7px;margin:0 0 9px;font:700 12px/1 "IBM Plex Sans",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}.branch-title .big{font:600 30px/1 Spectral,Georgia,serif;letter-spacing:0}.branch ol{list-style:none;margin:0;padding:0;counter-reset:q}.branch li{counter-increment:q;position:relative;padding:9px 0 9px 24px;border-top:1px solid var(--line);font-size:14px}.branch li:first-child{border-top:0;padding-top:2px}.branch li::before{content:counter(q);position:absolute;left:0;top:10px;width:17px;height:17px;border-radius:50%;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--muted)}.branch li:first-child::before{top:3px}.branch .if{display:block}.branch .ex{display:block;margin-top:4px;font-size:13px;color:var(--muted)}.branch .ex .formula{font-size:1.05em}
+.signals{width:100%;border-collapse:collapse;font-size:14.5px}.signals th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--subtle);padding:8px 10px;border-bottom:2px solid var(--line)}.signals td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}.signals td:nth-child(2) a{font-weight:700;text-decoration:none}.signals td:nth-child(3){color:var(--muted)}.signals td:nth-child(4){white-space:nowrap}.signals .formula{font-size:1.05em}
+.section-split{border-top:1px solid var(--line)}
+.mistakes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.mistake{border:1px solid var(--line);border-radius:10px;padding:13px 14px;background:var(--soft)}.mistake>b{display:block;margin-bottom:8px}.wrong,.right{display:block;padding:6px 9px;border-radius:7px;margin:5px 0;font-size:15px}.wrong{background:var(--warn-soft)}.wrong::before{content:"✗ ";color:var(--warn);font-family:"IBM Plex Sans",sans-serif}.right{background:var(--accent-soft)}.right::before{content:"✓ ";color:var(--accent);font-family:"IBM Plex Sans",sans-serif}.mistake p{margin:8px 0 0;font-size:13.5px;color:var(--muted)}
+.practice{border:1px solid var(--line);border-radius:12px;background:var(--soft);padding:18px 19px}.practice-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);font-weight:600}.practice-poly{font-size:clamp(25px,4.2vw,34px);text-align:center;margin:14px 0 3px}.practice-ask{text-align:center;color:var(--muted);margin:0 0 15px}.options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.options button,.practice-nav button{font:inherit;cursor:pointer}.options button{font-size:14px;padding:9px 10px;border-radius:9px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}.options button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}.options button:focus-visible,.practice-nav button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.options button:disabled{cursor:default;opacity:.55}.options button.is-best{opacity:1;background:var(--accent-soft);border-color:var(--accent);font-weight:700;color:var(--ink)}.options button.is-wrong{opacity:1;background:var(--warn-soft);border-color:var(--warn);color:var(--ink)}.options button.is-works{opacity:1;border:1px dashed var(--accent);color:var(--ink)}
+.feedback{margin-top:15px;padding:13px 16px;border-radius:9px;background:var(--paper);border-left:4px solid var(--accent)}.feedback.bad{border-left-color:var(--warn)}.feedback .verdict{display:block;margin-bottom:4px;color:var(--accent)}.feedback.bad .verdict{color:var(--warn)}.feedback p{margin:0 0 6px}.feedback ol{margin:6px 0 0;padding-left:22px}.feedback li{margin:3px 0}.feedback .sol-title{margin:10px 0 0;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle)}.practice-nav{display:flex;justify-content:flex-end;margin-top:14px}.practice-nav button{font-weight:600;padding:9px 18px;border-radius:999px;border:0;background:var(--accent);color:var(--paper)}.practice-nav button:disabled{opacity:.4;cursor:default}
+@media screen and (max-width:860px){.mistakes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media screen and (max-width:760px){.golden,.branches,.mistakes{grid-template-columns:1fr}.choose-intro,.block{padding-inline:19px}.options{grid-template-columns:repeat(2,minmax(0,1fr))}.signals thead{display:none}.signals,.signals tbody,.signals tr,.signals td{display:block;width:100%}.signals tr{border:1px solid var(--line);border-radius:10px;padding:9px 13px;margin-bottom:10px;background:var(--soft)}.signals td{border:0;padding:4px 0}.signals td:nth-child(4){white-space:normal}.signals td::before{content:attr(data-label);display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--subtle)}}
+@media screen and (max-width:430px){.options{grid-template-columns:1fr}.flow-step{grid-template-columns:1fr;gap:8px}}
+@media screen and (max-width:760px){.toc{grid-template-columns:repeat(2,minmax(0,1fr))}.section-grid{grid-template-columns:1fr}.memory{border-right:0;border-bottom:1px solid var(--line)}.section-head,.memory,.worked{padding-inline:19px}}
+@media screen and (max-width:760px){.case-list{grid-template-columns:1fr}.case-review{padding-inline:19px}}
+@media screen and (max-width:430px){.wrap{width:min(100% - 28px,1040px)}.toc{grid-template-columns:1fr}.contents{padding:18px}.head{padding-top:18px}.section h2{font-size:26px}}
+.print-btn{border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:600}
+.section .block:first-of-type{border-top:0}
+.worksheet,.print-only{display:none}
+@page{size:A4;margin:13mm 14mm}
+@media print{
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"]{--bg:#fff;--paper:#fff;--soft:#f3f6f3;--ink:#111;--muted:#444;--subtle:#555;--line:#c9d2ca;--accent:#1e6b4e;--accent-soft:#e1eee5;--example:#fff;--warn:#8b5517;--warn-soft:#fbefdc;--shadow:none}
+html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:#fff;color:#111;font-size:9.6pt;line-height:1.42}
+.wrap{width:100%;max-width:none}
+header{background:none;border-bottom:1.5px solid var(--accent)}.head{padding:0 0 3mm}.crumb,.head-meta{display:none}.eyebrow{margin-bottom:1mm}h1{font-size:19pt;max-width:none}.lede{font-size:9pt;margin-top:1.5mm;max-width:none}
+main{padding:2mm 0 0}
+.section{box-shadow:none;margin-top:3.5mm;border-radius:7px}.section-head{padding:2.5mm 4mm 2mm;break-after:avoid}.section h2{font-size:14pt}.section-number{font-size:8pt}
+.block,.choose-intro{padding:3mm 4mm 3.5mm}.block .intro{font-size:8.8pt;margin:0 0 2.5mm;line-height:1.38}
+h3{margin-bottom:2mm;font-size:8pt}
+.golden{gap:3mm}.golden li{padding:2mm 3mm}.golden i{margin-bottom:1mm}.golden b{font-size:10.5pt;margin-bottom:1mm}.golden span{font-size:8.3pt;line-height:1.35}
+.flow{max-width:none}.flow-step{padding:1.6mm 3mm;gap:3mm;grid-template-columns:22px minmax(0,1fr)}.flow-n{width:21px;height:21px;font-size:10pt}.flow-step p{font-size:8.4pt;line-height:1.38}.flow-down{height:7px;margin-bottom:6px}
+.branches{gap:2.5mm}.branch{padding:2.5mm 3mm}.branch li{font-size:8.5pt;line-height:1.35;padding:1.4mm 0 1.4mm 19px}.branch .ex{font-size:8pt}.branch-title{margin-bottom:1.5mm}.branch-title .big{font-size:15pt}
+.tech{font-size:8.3pt;padding:0 6px}
+.signals{font-size:8.8pt}.signals td{padding:1.8mm 2mm}.signals th{padding:1.5mm 2mm;font-size:7.5pt}
+.section-grid{grid-template-columns:.9fr 1.1fr}.memory,.worked{padding:3mm 4mm}.memory{border-right:1px solid var(--line);border-bottom:0}
+.steps li{margin-bottom:1.8mm;padding-left:25px}.steps li::before{width:17px;height:17px;font-size:8pt}.result{padding:2mm 3mm}
+.case-review{padding:3mm 4mm}.case-list{grid-template-columns:repeat(3,1fr);gap:2.5mm}.case-list li{padding:2.5mm 3mm}.case-list p{font-size:8.6pt}
+.mistakes{grid-template-columns:repeat(3,1fr);gap:2.5mm}.mistake{padding:2.5mm 3mm}.wrong,.right{font-size:9pt;padding:1.2mm 2mm}.mistake p{font-size:8.4pt}
+.golden li,.branch,.flow-step,.mistake,.signals tr,.case-list li,.memory,.worked{break-inside:avoid}
+#practica,#pistas,#terminar,#errores{break-before:page}.print-only{display:inline}#reglas{margin-top:3mm;border:0;background:none}#reglas .section-head{display:none}#reglas .choose-intro{padding:0}.golden i{display:none}.golden b{font-size:10.5pt}.lede{font-size:8.8pt;line-height:1.38}#diagrama .section-head{padding:2mm 4mm 1.5mm}#diagrama .block{padding-top:2.5mm}.flow-down{height:5px;margin-bottom:5px}.flow-down::after{bottom:-5px;border-top-width:5px}.flow-step.loop p{font-size:8.2pt}.case-review{break-inside:avoid}
+.practice,.no-print{display:none}
+.worksheet{display:block}.worksheet ol{columns:2;column-gap:8mm;margin:0;padding-left:6mm}.worksheet li{break-inside:avoid;margin:0 0 5mm;font-size:10.5pt}.worksheet .blank{display:block;margin-top:2.5mm;border-bottom:1px solid #999;height:5mm;font-size:8.5pt;color:var(--muted)}.worksheet .key{margin-top:5mm;padding-top:2.5mm;border-top:1px dashed var(--line);font-size:8.4pt;color:var(--muted)}.worksheet .key b{color:var(--ink)}
+a{color:inherit;text-decoration:none}.tech,.signals td:nth-child(2) a{color:var(--accent)}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap head">
+  <p class="crumb"><a href="../../index.html">Apuntes</a><span>/</span><a href="../index.html">Matemática</a><span>/</span><a href="../unidad7/index.html">Unidad 7</a><span>/</span>Elegir técnica</p>
+  <p class="eyebrow">Unidad 7 · guía para decidir</p>
+  <h1>Cómo elegir la técnica de factorización</h1>
+  <p class="lede">Factorizar no es elegir <em>una</em> técnica y listo: es un ciclo. Aplicás una técnica, mirás cada factor que quedó y te preguntás de nuevo si se puede seguir. La clave está en qué ves en el polinomio: cuántos términos tiene, si hay algo que se repite, si los extremos son cuadrados o cubos.</p>
+  <div class="head-meta"><button type="button" class="pill print-btn" onclick="window.print()">Imprimir esta guía</button><a class="pill secondary" href="../unidad7/index.html">Ver la guía de la unidad →</a><a class="pill secondary" href="../unidad7-ejercicios/index.html">Ver ejercicios resueltos →</a></div>
+</div></header>
+<main class="wrap">
+  <section class="section" id="reglas"><div class="section-head"><span class="section-number">La idea</span><h2>Tres reglas para no perderte</h2></div>
+    <div class="choose-intro">
+      <ul class="golden">
+        <li><i>Regla 1</i><b>Siempre, primero, factor común</b><span>Antes de buscar cualquier patrón. Achica los números y deja a la vista lo que viene después.</span></li>
+        <li><i>Regla 2</i><b>Contá los términos de lo que quedó</b><span>Dos, tres o cuatro términos te dicen qué patrones vale la pena probar.</span></li>
+        <li><i>Regla 3</i><b>Volvé a mirar cada factor</b><span>Un factor de grado 2 o mayor puede admitir otra técnica. Terminás cuando ninguno se descompone más.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="diagrama"><div class="section-head"><span class="section-number">Paso a paso</span><h2>Diagrama de decisión</h2></div>
+    <div class="block"><p class="intro">Seguilo de arriba hacia abajo. Dentro de cada columna, hacete las preguntas <strong>en orden</strong>: la primera que responda «sí» te dice qué técnica usar. <span class="no-print">Tocá el nombre de una técnica para ir a su tema.</span></p>
+      <div class="flow">
+        <div class="flow-step"><span class="flow-n">1</span><div><strong>Ordená el polinomio</strong><p>De mayor a menor grado. Si después vas a usar Ruffini y falta alguna potencia, completala con <span class="formula">0</span>: <span class="formula">x³ − 7x + 6 = x³ + 0x² − 7x + 6</span>.</p></div></div>
+        <div class="flow-down" aria-hidden="true"></div>
+        <div class="flow-step key"><span class="flow-n">2</span><div><strong>¿Todos los términos tienen algo en común?</strong><p>Buscá el máximo divisor común de los coeficientes y la <span class="formula">x</span> con el menor exponente. Si el término independiente es <span class="formula">0</span>, seguro sale al menos una <span class="formula">x</span>. Si hay algo común → <a class="tech" href="../unidad7/index.html#factor-comun">Factor común</a>, y seguí trabajando con lo que quedó dentro del paréntesis.</p></div></div>
+        <div class="flow-down" aria-hidden="true"></div>
+        <div class="flow-step"><span class="flow-n">3</span><div><strong>Contá los términos de lo que quedó</strong><p>Elegí la columna que corresponde.</p></div></div>
+        <div class="flow-down" aria-hidden="true"></div>
+        <div class="branches">
+          <div class="branch"><p class="branch-title"><span class="big">2</span>términos</p><ol>
+            <li><span class="if">¿Es una <strong>resta</strong> de dos cuadrados?</span><a class="tech" href="../unidad7/index.html#diferencia">Diferencia de cuadrados</a><span class="ex"><span class="formula">9x² − 25 = (3x − 5)(3x + 5)</span></span></li>
+            <li><span class="if">¿Es una <strong>suma</strong> de dos cuadrados?</span><span class="tech stop">No se factoriza</span><span class="ex"><span class="formula">x² + 9</span> no tiene raíces reales.</span></li>
+            <li><span class="if">¿Otro caso, de grado 3 o más?</span><a class="tech" href="../unidad7/index.html#gauss">Gauss y Ruffini</a><span class="ex"><span class="formula">x³ − 8</span>: <span class="formula">P(2) = 0</span>.</span></li>
+          </ol></div>
+          <div class="branch"><p class="branch-title"><span class="big">3</span>términos</p><ol>
+            <li><span class="if">¿Los extremos son cuadrados positivos y el del medio es <span class="formula">±2·a·b</span>?</span><a class="tech" href="../unidad7/index.html#cuadrado">Trinomio cuadrado perfecto</a><span class="ex"><span class="formula">x² − 10x + 25 = (x − 5)²</span></span></li>
+            <li><span class="if">¿Es de grado 2?</span><a class="tech" href="../unidad7/index.html#resolvente">Fórmula resolvente</a><span class="ex">Si <span class="formula">a = 1</span>, también sirve buscar dos números por suma y producto. Si <span class="formula">Δ &lt; 0</span>, no se factoriza.</span></li>
+            <li><span class="if">¿Es de grado 3 o más?</span><a class="tech" href="../unidad7/index.html#gauss">Gauss y Ruffini</a><span class="ex"><span class="formula">x³ + 6x² − 32</span>: <span class="formula">P(2) = 0</span>.</span></li>
+          </ol></div>
+          <div class="branch"><p class="branch-title"><span class="big">4</span>términos</p><ol>
+            <li><span class="if">¿Los extremos son cubos y los centrales son <span class="formula">3a²b</span> y <span class="formula">3ab²</span>?</span><a class="tech" href="../unidad7/index.html#cubo">Cuatrinomio cubo perfecto</a><span class="ex"><span class="formula">x³ − 6x² + 12x − 8 = (x − 2)³</span></span></li>
+            <li><span class="if">¿Agrupando de a dos aparece el mismo paréntesis?</span><a class="tech" href="../unidad7/index.html#grupos">Factor común por grupos</a><span class="ex"><span class="formula">x²(x + 1) + 5(x + 1)</span></span></li>
+            <li><span class="if">¿Ninguna de las anteriores?</span><a class="tech" href="../unidad7/index.html#gauss">Gauss y Ruffini</a><span class="ex">Probá candidatos <span class="formula">p/q</span> hasta que uno dé <span class="formula">P = 0</span>.</span></li>
+          </ol></div>
+        </div>
+        <div class="flow-down" aria-hidden="true"></div>
+        <div class="flow-step loop"><span class="flow-n">↻</span><div><strong>¿Algún factor de grado 2 o más se puede seguir factorizando?</strong><p><strong>Sí</strong> → volvé al paso 2 con ese factor. <strong>No</strong> → terminaste. Ejemplo: <span class="formula">x⁴ − 16 = (x² − 4)(x² + 4)</span>. El factor <span class="formula">x² − 4</span> vuelve a ser diferencia de cuadrados; <span class="formula">x² + 4</span> no se descompone. Queda <span class="formula">(x − 2)(x + 2)(x² + 4)</span>.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pistas"><div class="section-head"><span class="section-number">Tabla de pistas</span><h2>Qué mirar en el polinomio</h2></div>
+    <div class="block"><p class="intro">La misma información que el diagrama, pero ordenada por la pista que ves. La columna «Comprobación rápida» es lo que tenés que verificar antes de aplicar la técnica.</p>
+      <table class="signals">
+        <thead><tr><th>Si ves…</th><th>Probá</th><th>Comprobación rápida</th><th>Ejemplo</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Si ves…">Un número o una <span class="formula">x</span> que está en todos los términos</td><td data-label="Probá"><a href="../unidad7/index.html#factor-comun">Factor común</a></td><td data-label="Comprobación rápida">¿El MCD de los coeficientes es mayor que 1? ¿Falta el término independiente?</td><td data-label="Ejemplo"><span class="formula">6x³ − 9x² = 3x²(2x − 3)</span></td></tr>
+          <tr><td data-label="Si ves…">Dos términos que se <strong>restan</strong></td><td data-label="Probá"><a href="../unidad7/index.html#diferencia">Diferencia de cuadrados</a></td><td data-label="Comprobación rápida">¿Los coeficientes son cuadrados (1, 4, 9, 16, 25…) y los exponentes son pares?</td><td data-label="Ejemplo"><span class="formula">9x² − 25 = (3x − 5)(3x + 5)</span></td></tr>
+          <tr><td data-label="Si ves…">Tres términos con los extremos cuadrados y positivos</td><td data-label="Probá"><a href="../unidad7/index.html#cuadrado">Trinomio cuadrado perfecto</a></td><td data-label="Comprobación rápida">¿El término del medio es exactamente <span class="formula">2 · a · b</span>, con el signo que tenga?</td><td data-label="Ejemplo"><span class="formula">x² − 10x + 25 = (x − 5)²</span></td></tr>
+          <tr><td data-label="Si ves…">Un trinomio de grado 2 que no es cuadrado perfecto</td><td data-label="Probá"><a href="../unidad7/index.html#resolvente">Fórmula resolvente</a></td><td data-label="Comprobación rápida">¿<span class="formula">Δ = b² − 4ac ≥ 0</span>? Si es negativo, no se factoriza.</td><td data-label="Ejemplo"><span class="formula">2x² + x − 6 = (2x − 3)(x + 2)</span></td></tr>
+          <tr><td data-label="Si ves…">Cuatro términos con los extremos cubos</td><td data-label="Probá"><a href="../unidad7/index.html#cubo">Cuatrinomio cubo perfecto</a></td><td data-label="Comprobación rápida">¿Los centrales son <span class="formula">3a²b</span> y <span class="formula">3ab²</span>? Si es resta, ¿los signos alternan?</td><td data-label="Ejemplo"><span class="formula">x³ − 6x² + 12x − 8 = (x − 2)³</span></td></tr>
+          <tr><td data-label="Si ves…">Cuatro términos que tienen algo común <em>de a pares</em></td><td data-label="Probá"><a href="../unidad7/index.html#grupos">Factor común por grupos</a></td><td data-label="Comprobación rápida">Al sacar factor común en cada par, ¿queda el mismo paréntesis?</td><td data-label="Ejemplo"><span class="formula">x³ + x² + 5x + 5 = (x + 1)(x² + 5)</span></td></tr>
+          <tr><td data-label="Si ves…">Grado 3 o más, sin ningún patrón</td><td data-label="Probá"><a href="../unidad7/index.html#gauss">Gauss y Ruffini</a></td><td data-label="Comprobación rápida">¿Algún candidato <span class="formula">p/q</span> da <span class="formula">P(p/q) = 0</span>? Empezá por <span class="formula">1</span> y <span class="formula">−1</span>.</td><td data-label="Ejemplo"><span class="formula">2x³ − 6x² − 12x + 16</span>: <span class="formula">P(1) = 0</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="terminar"><div class="section-head"><span class="section-number">Control final</span><h2>¿Cuándo terminaste?</h2></div>
+    <div class="section-grid">
+      <div class="memory"><h3>Condiciones y controles</h3><p>La factorización está completa cuando <strong>cada factor</strong> cumple una de estas dos condiciones:</p><ul class="small-list"><li>Es de <strong>grado 1</strong>, como <span class="formula">x − 3</span> o <span class="formula">2x − 1</span>.</li><li>Es de <strong>grado 2 sin raíces reales</strong> (<span class="formula">Δ &lt; 0</span>), como <span class="formula">x² + 9</span> o <span class="formula">x² + x + 1</span>.</li></ul><p>Antes de dar el resultado, hacé tres controles:</p><ol class="steps"><li><strong>Grados.</strong> La suma de los grados de los factores es igual al grado original.</li><li><strong>Producto.</strong> Al multiplicar los factores volvés al polinomio del enunciado.</li><li><strong>Raíces.</strong> Elegí una raíz y reemplazala en el polinomio original: tiene que dar <span class="formula">0</span>.</li></ol></div>
+      <div class="worked"><h3>Ejercicio 1A de la hoja, paso a paso</h3><p><span class="formula">P(x) = 2x³ − x² − 18x + 9</span></p><ol class="steps"><li><strong>Factor común:</strong> <span class="formula">2</span>, <span class="formula">1</span>, <span class="formula">18</span> y <span class="formula">9</span> no tienen divisor común, y el término independiente no es <span class="formula">0</span>. No hay.</li><li><strong>Contamos:</strong> cuatro términos. ¿Cubo perfecto? <span class="formula">2x³</span> no es el cubo de un monomio con coeficiente entero. No.</li><li><strong>Grupos:</strong> <span class="formula">(2x³ − x²) + (−18x + 9) = x²(2x − 1) − 9(2x − 1)</span>. Apareció el mismo paréntesis.</li><li>Lo extraemos: <span class="formula">P(x) = (2x − 1)(x² − 9)</span>.</li><li><strong>Volvemos a mirar cada factor.</strong> <span class="formula">2x − 1</span> es de grado 1: listo. <span class="formula">x² − 9</span> es una resta de cuadrados: <span class="formula">(x − 3)(x + 3)</span>.</li></ol><p class="result"><strong>Resultado:</strong> <span class="formula">P(x) = (2x − 1)(x − 3)(x + 3)</span>. Raíces: <span class="formula">1/2</span>, <span class="formula">3</span> y <span class="formula">−3</span>.</p><p class="note">Control de grados: <span class="formula">1 + 1 + 1 = 3</span>. Control de raíz: <span class="formula">P(3) = 54 − 9 − 54 + 9 = 0</span>.</p></div>
+    </div>
+
+    <div class="case-review"><h3>Cómo reconocer los otros incisos del ejercicio 1</h3><ul class="case-list"><li><b>1B · Gauss y Ruffini</b><p><span class="formula">Q(x) = x³ + 6x² − 32</span>: no hay factor común; tiene tres términos pero es de grado 3, así que no es cuadrado perfecto ni sirve la resolvente. Probá divisores de 32: <span class="formula">Q(2) = 0</span>. Ruffini deja <span class="formula">x² + 8x + 16</span>, y al volver a mirarlo aparece un cuadrado perfecto.</p><span class="formula">Q(x) = (x − 2)(x + 4)²</span></li><li><b>1C · Factor común y trinomio</b><p>Todos los términos de <span class="formula">R(x) = 3x⁴ + 3x³ − 18x²</span> contienen <span class="formula">3x²</span>. Queda <span class="formula">x² + x − 6</span>: no es cuadrado perfecto (<span class="formula">−6</span> es negativo), así que usamos la resolvente o la suma y el producto.</p><span class="formula">R(x) = 3x²(x + 3)(x − 2)</span></li><li><b>1D · Factor común y cuadrado perfecto</b><p>En <span class="formula">S(x) = 2x⁵ − 12x⁴ + 18x³</span>, sacá <span class="formula">2x³</span>. Queda <span class="formula">x² − 6x + 9</span>: <span class="formula">x²</span> y <span class="formula">9 = 3²</span> son cuadrados y el medio es <span class="formula">−2 · x · 3</span>.</p><span class="formula">S(x) = 2x³(x − 3)²</span></li></ul></div>
+  </section>
+
+  <section class="section" id="errores"><div class="section-head"><span class="section-number">Para no equivocarte</span><h2>Errores frecuentes</h2></div>
+    <div class="block">
+      <div class="mistakes">
+        <div class="mistake"><b>Saltear el factor común</b><span class="wrong formula">2x² − 8: «no es diferencia de cuadrados»</span><span class="right formula">2x² − 8 = 2(x² − 4) = 2(x − 2)(x + 2)</span><p>El patrón estaba, pero lo tapaba el <span class="formula">2</span>. Por eso la regla 1 va primero.</p></div>
+        <div class="mistake"><b>Tratar una suma como diferencia</b><span class="wrong formula">x² + 9 = (x − 3)(x + 3)</span><span class="right formula">(x − 3)(x + 3) = x² − 9</span><p>Una suma de cuadrados no tiene raíces reales: queda como está.</p></div>
+        <div class="mistake"><b>Ver un cuadrado perfecto que no es</b><span class="wrong formula">x² + 5x + 4 = (x + 2)²</span><span class="right formula">(x + 2)² = x² + 4x + 4</span><p>Los extremos son cuadrados, pero el medio no da <span class="formula">2 · x · 2</span>. Con la resolvente sale <span class="formula">(x + 1)(x + 4)</span>.</p></div>
+        <div class="mistake"><b>Dejar un factor sin terminar</b><span class="wrong formula">2x³ − x² − 18x + 9 = (2x − 1)(x² − 9)</span><span class="right formula">= (2x − 1)(x − 3)(x + 3)</span><p>Siempre hacé la regla 3: <span class="formula">x² − 9</span> todavía se descompone.</p></div>
+        <div class="mistake"><b>Perder la <span class="formula">a</span> en la resolvente</b><span class="wrong formula">2x² + x − 6 = (x − 3/2)(x + 2)</span><span class="right formula">2x² + x − 6 = 2(x − 3/2)(x + 2)</span><p>Sin el <span class="formula">2</span>, al multiplicar da <span class="formula">x² + x/2 − 3</span>: otro polinomio.</p></div>
+        <div class="mistake"><b>Equivocar el signo del factor</b><span class="wrong formula">raíz −2 → factor (x − 2)</span><span class="right formula">raíz −2 → factor x − (−2) = x + 2</span><p>El mismo cuidado en Ruffini: para dividir por <span class="formula">x + 2</span>, a la izquierda va <span class="formula">−2</span>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="practica"><div class="section-head"><span class="section-number">Práctica</span><h2>¿Por dónde empezarías?</h2></div>
+    <div class="block"><p class="intro">Para cada polinomio, elegí la técnica que conviene aplicar <strong>primero</strong>.<span class="no-print"> Después de responder vas a ver por qué y la factorización completa.</span><span class="print-only"> Escribila en la línea y después factorizá el polinomio completo. Las respuestas están al pie.</span></p>
+      <div class="practice">
+        <div class="practice-top"><span id="qCount">Polinomio 1 de 10</span><span id="qScore">Aciertos: 0</span></div>
+        <p class="practice-poly formula" id="qPoly"></p>
+        <p class="practice-ask" id="qAsk">¿Qué técnica usarías primero?</p>
+        <div class="options" id="qOptions" role="group" aria-label="Técnicas"></div>
+        <div class="feedback" id="qFeedback" aria-live="polite" hidden></div>
+        <div class="practice-nav"><button type="button" id="qNext" disabled>Siguiente →</button></div>
+      </div>
+      <div class="worksheet" id="worksheet"></div>
+      <noscript><p class="note">La práctica necesita JavaScript activado.</p></noscript>
+    </div>
+  </section>
+  <p class="endnote">Basado en la unidad 7 del <a href="../../Cuadernillo%202%C2%B0%20PHILIPS%202do%20Cuatr.pdf#page=27">cuadernillo de Matemática</a> y el ejercicio 1 de la hoja compartida. Cada técnica enlaza con su tema en la <a href="../unidad7/index.html">guía de la unidad 7</a>.</p>
+</main>
+<script>
+(function(){
+const T={comun:'Factor común',dif:'Diferencia de cuadrados',cuadrado:'Trinomio cuadrado perfecto',resolvente:'Fórmula resolvente',grupos:'Factor común por grupos',cubo:'Cubo perfecto',gauss:'Gauss y Ruffini',nada:'No se factoriza'};
+// best: técnica que conviene primero. works: también llega, pero es más largo. wrong: no aplica (con explicación).
+const Q=[
+{p:'4x² − 49',best:'dif',why:'Son dos términos que se restan: 4x² = (2x)² y 49 = 7². No hay factor común, porque 4 y 49 no comparten divisores.',works:{resolvente:'Funciona (a = 4, b = 0, c = −49), pero reconocer la diferencia de cuadrados es inmediato.',gauss:'Es grado 2: Gauss sobra, y encima la raíz 7/2 es fraccionaria.'},wrong:{comun:'4 y 49 no tienen divisores en común y el término independiente no es 0.'},sol:['4x² − 49 = (2x)² − 7²','= (2x − 7)(2x + 7)']},
+{p:'3x³ − 12x',best:'comun',why:'Los dos términos tienen 3x. Primero se saca eso; recién después aparece el patrón.',works:{gauss:'Llegarías (0 es raíz), pero sacar 3x es mucho más corto.'},wrong:{dif:'Va a aparecer, pero después: 3x³ no es un cuadrado. Primero sacá 3x.'},sol:['3x³ − 12x = 3x(x² − 4)','x² − 4 es diferencia de cuadrados','= 3x(x − 2)(x + 2)']},
+{p:'x² + 14x + 49',best:'cuadrado',why:'x² y 49 = 7² son cuadrados positivos, y el término del medio es 2 · x · 7 = 14x.',works:{resolvente:'Funciona (Δ = 196 − 196 = 0, raíz doble −7), pero el patrón es más rápido.'},wrong:{},sol:['x² + 14x + 49 = (x + 7)²','Raíz −7, doble']},
+{p:'x² − 5x − 14',best:'resolvente',why:'Es un trinomio de grado 2 sin factor común. No puede ser cuadrado perfecto porque −14 es negativo. Como a = 1, también sirve buscar dos números que multiplicados den −14 y sumados −5: −7 y 2.',works:{gauss:'Llegarías, pero en grado 2 la resolvente da las dos raíces de una vez.'},wrong:{cuadrado:'Los extremos de un cuadrado perfecto son positivos; −14 no es un cuadrado.'},sol:['a = 1, b = −5, c = −14','Δ = 25 + 56 = 81, √81 = 9','x = (5 ± 9)/2 → 7 y −2','= (x − 7)(x + 2)']},
+{p:'x³ + 3x² − 4x − 12',best:'grupos',why:'Cuatro términos: sacando factor común de a pares queda x²(x + 3) − 4(x + 3), con el mismo paréntesis.',works:{gauss:'También funciona (P(2) = 0), pero agrupar es más corto.'},wrong:{cubo:'Los extremos no son cubos: −12 no es el cubo de un entero.',comun:'1, 3, 4 y 12 no tienen un divisor común a todos.'},sol:['(x³ + 3x²) + (−4x − 12)','= x²(x + 3) − 4(x + 3)','= (x + 3)(x² − 4)','= (x + 3)(x − 2)(x + 2)']},
+{p:'x³ + 9x² + 27x + 27',best:'cubo',why:'x³ y 27 = 3³ son cubos, y los centrales encajan: 3 · x² · 3 = 9x² y 3 · x · 3² = 27x.',works:{gauss:'Funciona (−3 es raíz), pero tenés que hacer Ruffini y después factorizar el cociente.'},wrong:{grupos:'(x³ + 9x²) + (27x + 27) = x²(x + 9) + 27(x + 1): los paréntesis no coinciden.'},sol:['x³ + 9x² + 27x + 27 = (x + 3)³','Raíz −3, triple']},
+{p:'x³ − 7x + 6',best:'gauss',why:'Es de grado 3, sin factor común ni patrón. Tiene solo tres términos (falta el x²), así que no se puede agrupar.',works:{},wrong:{grupos:'Con tres términos no se arman dos pares.',cubo:'Para un cubo perfecto hacen falta cuatro términos.',resolvente:'La resolvente es solo para grado 2; este es de grado 3.'},sol:['Candidatas: ±1, ±2, ±3, ±6','P(1) = 1 − 7 + 6 = 0 → x − 1 es factor','Ruffini con 1, 0, −7, 6 (completá con 0) deja x² + x − 6','x² + x − 6 = (x + 3)(x − 2)','= (x − 1)(x − 2)(x + 3)']},
+{p:'x² + 5x + 4',best:'resolvente',why:'Parece cuadrado perfecto porque x² y 4 = 2² son cuadrados, pero el medio debería ser 2 · x · 2 = 4x, y es 5x. Como a = 1, también sirve buscar dos números: producto 4 y suma 5 → 1 y 4.',works:{gauss:'Llegarías (−1 es raíz), pero en grado 2 la resolvente es directa.'},wrong:{cuadrado:'Es la trampa: (x + 2)² = x² + 4x + 4, no x² + 5x + 4.'},sol:['Δ = 25 − 16 = 9, √9 = 3','x = (−5 ± 3)/2 → −1 y −4','= (x + 1)(x + 4)']},
+{p:'2x² − 18',best:'comun',why:'2 y 18 son pares. Sin sacar el 2, la diferencia de cuadrados no se ve: ni 2 ni 18 son cuadrados.',works:{resolvente:'Funciona (raíces ±3), pero sacar el 2 y usar diferencia de cuadrados es más rápido.'},wrong:{dif:'Primero hay que sacar el 2: 2x² y 18 no son cuadrados perfectos.'},sol:['2x² − 18 = 2(x² − 9)','= 2(x − 3)(x + 3)']},
+{p:'x² + 16',best:'nada',why:'Es una suma de cuadrados. No tiene raíces reales: x² + 16 = 0 pediría x² = −16.',works:{resolvente:'Bien pensado: da Δ = 0 − 64 < 0, que confirma que no se factoriza en los reales.'},wrong:{dif:'Es una suma, no una resta: (x − 4)(x + 4) da x² − 16.'},sol:['x² + 16 queda como está: es irreducible en los reales']}
+];
+window.PRACTICE={Q,T};
+const $=id=>document.getElementById(id);
+const opts=$('qOptions'),fb=$('qFeedback'),next=$('qNext');
+let i=0,score=0,answered=false;
+const keys=Object.keys(T);
+keys.forEach(k=>{const b=document.createElement('button');b.type='button';b.textContent=T[k];b.dataset.k=k;b.addEventListener('click',()=>pick(k));opts.appendChild(b)});
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function show(){
+  const q=Q[i];answered=false;
+  $('qCount').textContent='Polinomio '+(i+1)+' de '+Q.length;
+  $('qScore').textContent='Aciertos: '+score;
+  $('qPoly').textContent=q.p;$('qAsk').hidden=false;opts.hidden=false;
+  opts.querySelectorAll('button').forEach(b=>{b.disabled=false;b.className=''});
+  fb.hidden=true;fb.innerHTML='';next.disabled=true;
+  next.textContent=i===Q.length-1?'Ver resultado':'Siguiente →';
+}
+function pick(k){
+  if(answered)return;answered=true;
+  const q=Q[i],good=k===q.best;if(good)score++;
+  opts.querySelectorAll('button').forEach(b=>{b.disabled=true;const bk=b.dataset.k;if(bk===q.best)b.className='is-best';else if(bk===k)b.className=q.works[k]?'is-works':'is-wrong'});
+  let verdict,extra='';
+  if(good){verdict='¡Bien! '+T[k]+' es la mejor primera opción.'}
+  else if(q.works[k]){verdict='Funciona, pero hay un camino más corto: '+T[q.best]+'.';extra='<p>'+esc(q.works[k])+'</p>'}
+  else{verdict='No conviene. La mejor primera opción es '+T[q.best]+'.';extra='<p>'+esc(q.wrong[k]||'Esa técnica no encaja con la forma de este polinomio.')+'</p>'}
+  fb.className='feedback'+(good||q.works[k]?'':' bad');
+  fb.innerHTML='<strong class="verdict">'+verdict+'</strong>'+extra+'<p>'+esc(q.why)+'</p><p class="sol-title">Factorización completa</p><ol>'+q.sol.map(x=>'<li class="formula">'+esc(x)+'</li>').join('')+'</ol>';
+  fb.hidden=false;$('qScore').textContent='Aciertos: '+score;next.disabled=false;
+}
+next.addEventListener('click',()=>{
+  if(i<Q.length-1){i++;show();return}
+  if(next.dataset.done){delete next.dataset.done;i=0;score=0;show();return}
+  $('qPoly').textContent=score+' de '+Q.length;$('qAsk').hidden=true;opts.hidden=true;
+  fb.className='feedback'+(score>=7?'':' bad');
+  fb.innerHTML='<strong class="verdict">'+(score>=7?'¡Muy bien! Ya reconocés los patrones.':'Repasá el diagrama de decisión y probá de nuevo.')+'</strong><p>Acordate: primero factor común, después contá los términos y al final volvé a mirar cada factor.</p>';
+  $('qCount').textContent='Resultado';next.textContent='Empezar de nuevo';next.dataset.done='1';
+});
+show();
+})();
+
+(function(){
+const ws=document.getElementById('worksheet');if(!ws||!window.PRACTICE)return;
+const {Q,T}=window.PRACTICE;
+ws.innerHTML='<ol>'+Q.map(q=>'<li><span class="formula">'+q.p+'</span><span class="blank">Técnica:</span></li>').join('')+'</ol><p class="key"><b>Respuestas:</b> '+Q.map((q,n)=>(n+1)+') '+T[q.best]).join(' · ')+'.</p>';
+})();
+</script>
+</body>
+</html>
