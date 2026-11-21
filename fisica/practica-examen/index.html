@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Práctica de examen · trabajo, energía y potencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:wght@500;600&display=swap">
+<style>
+:root{--bg:#ecefec;--panel:#fbfcfa;--panel2:#f3f5f2;--ink:#161d19;--muted:#4e5a54;--faint:#718078;--line:#cdd5cf;--accent:#1e6b4e;--soft:#dce9e1;--alt:#3279aa;--altsoft:#e1ebf3;--heat:#bd6840;--heatsoft:#f6e6dc;--shadow:0 1px 2px #15201912,0 10px 26px -14px #15201955}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121915;--panel:#1a231e;--panel2:#202b24;--ink:#e6ede7;--muted:#a3b1a8;--faint:#87978c;--line:#2a352e;--accent:#43b992;--soft:#17332a;--alt:#79b9e4;--altsoft:#18283a;--heat:#f0a477;--heatsoft:#3a2519;--shadow:0 1px 2px #0008,0 10px 26px -14px #000d}}
+:root[data-theme="dark"]{--bg:#121915;--panel:#1a231e;--panel2:#202b24;--ink:#e6ede7;--muted:#a3b1a8;--faint:#87978c;--line:#2a352e;--accent:#43b992;--soft:#17332a;--alt:#79b9e4;--altsoft:#18283a;--heat:#f0a477;--heatsoft:#3a2519;--shadow:0 1px 2px #0008,0 10px 26px -14px #000d}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Spectral,Georgia,serif;line-height:1.18;margin:0;text-wrap:balance}
+a{color:var(--accent)}
+button{font:inherit;cursor:pointer}
+header{background:linear-gradient(var(--panel),var(--panel2));border-bottom:1px solid var(--line)}
+.head,.wrap,footer{max-width:960px;margin:auto;padding-left:22px;padding-right:22px}
+.head{padding-top:24px;padding-bottom:28px}
+.crumb{font-size:13px;margin:0 0 19px;color:var(--faint)}
+.crumb a{color:var(--muted)}
+.crumb span{margin:0 8px}
+.eyebrow{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);margin:0 0 9px}
+h1{font-size:clamp(30px,5vw,48px)}
+.sub{max-width:66ch;color:var(--muted);margin:12px 0 0}
+.wrap{padding-top:28px;padding-bottom:70px}
+.jump{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.jump a{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 12px;text-decoration:none;font-size:13px}
+.jump a:hover{background:var(--soft)}
+section{scroll-margin-top:18px;margin:0 0 46px}
+section>h2{font-size:clamp(24px,3vw,32px);margin:0 0 8px}
+.intro{color:var(--muted);max-width:72ch;margin:0 0 16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow)}
+
+/* mapa de la guía */
+.map{width:100%;border-collapse:collapse;font-size:14px}
+.map th,.map td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.map th{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);background:var(--panel2)}
+.map tr:last-child td{border-bottom:0}
+.map td:first-child{font-weight:600;white-space:nowrap}
+.map .loc{font-family:"IBM Plex Mono",monospace;font-size:13px;white-space:nowrap}
+.map .best{color:var(--accent);font-weight:600}
+.mapwrap{overflow:hidden}
+@media(max-width:620px){
+  .map thead{display:none}
+  .map,.map tbody,.map tr,.map td{display:block;width:100%}
+  .map tr{padding:10px 12px;border-bottom:1px solid var(--line)}
+  .map tr:last-child{border-bottom:0}
+  .map td{padding:0;border:0}
+  .map td+td{margin-top:3px}
+  .map .loc{white-space:normal}
+}
+
+/* chips de ubicación */
+.where{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px;padding:0;list-style:none}
+.where li{font:500 12.5px "IBM Plex Mono",monospace;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 9px;color:var(--muted)}
+.where li b{color:var(--accent);font-weight:600}
+
+/* ejercicio */
+.ex{padding:18px 20px 16px;margin-bottom:14px}
+.ex-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.ex-top h3{font-size:20px}
+.tag{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:5px}
+.tag.guia{background:var(--soft);color:var(--accent)}
+.tag.var{background:var(--altsoft);color:var(--alt)}
+.src{font:500 12.5px "IBM Plex Mono",monospace;color:var(--faint)}
+.stmt{margin:0 0 6px}
+.items{margin:4px 0 0;padding-left:0;list-style:none}
+.items li{padding:2px 0 2px 26px;position:relative}
+.items li>b:first-child{position:absolute;left:0;color:var(--accent);font-weight:600}
+.note{font-size:13.5px;color:var(--muted);margin:10px 0 0}
+details.sol{margin-top:14px;border-top:1px solid var(--line)}
+details.sol summary{cursor:pointer;list-style:none;padding:12px 0 2px;font-weight:600;font-size:14px;color:var(--accent);display:flex;gap:9px;align-items:baseline}
+details.sol summary::-webkit-details-marker{display:none}
+details.sol summary::before{content:"+";font:600 17px "IBM Plex Mono",monospace;width:12px}
+details.sol[open] summary::before{content:"−"}
+.steps{margin:10px 0 0;padding:0;list-style:none;counter-reset:st}
+.steps>li{counter-increment:st;position:relative;padding:10px 0 10px 38px;border-top:1px dashed var(--line)}
+.steps>li:first-child{border-top:0}
+.steps>li::before{content:counter(st);position:absolute;left:0;top:10px;width:24px;height:24px;border-radius:50%;background:var(--soft);color:var(--accent);font:600 12px/24px "IBM Plex Mono",monospace;text-align:center}
+.steps p{margin:0}
+.steps p+p{margin-top:5px}
+.eq{display:block;font:500 14.5px/1.55 "IBM Plex Mono",monospace;color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 10px;margin-top:6px;overflow-wrap:anywhere}
+.eq em{font-style:normal;color:var(--faint)}
+.result{background:var(--soft);border-left:3px solid var(--accent);padding:9px 12px;margin:12px 0 0;border-radius:0 6px 6px 0}
+.trap{background:var(--heatsoft);border-left:3px solid var(--heat);padding:9px 12px;margin:10px 0 0;border-radius:0 6px 6px 0;font-size:14px}
+.trap b{color:var(--heat)}
+.tip{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:0 0 18px;font-size:14.5px}
+.tip b{color:var(--accent)}
+
+figure{margin:0 0 18px;padding:14px 16px 10px}
+figure svg{display:block;width:100%;height:auto;max-width:620px;margin:auto}
+figcaption{font-size:12.5px;color:var(--faint);text-align:center;margin-top:6px}
+.sv-ink{stroke:var(--ink)}
+.sv-heat{stroke:var(--heat)}
+.sv-dash{stroke:var(--faint)}
+.sv-txt{fill:var(--muted);font:500 13px "IBM Plex Mono",monospace}
+.sv-heattxt{fill:var(--heat);font:600 12px "IBM Plex Mono",monospace}
+.sv-box{fill:var(--accent)}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:-12px 0 26px}
+.actions button{border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink);padding:7px 12px;font-size:13px;font-weight:600}
+.actions button:hover{border-color:var(--accent)}
+.actions button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+footer{padding-bottom:40px;color:var(--faint);font-size:12.5px}
+@media(max-width:470px){.head,.wrap,footer{padding-left:16px;padding-right:16px}.ex{padding:16px 14px 14px}.steps>li{padding-left:32px}}
+@media print{
+  @page{margin:15mm}
+  :root{--bg:#fff;--panel:#fff;--panel2:#fff;--soft:#fff;--altsoft:#fff;--heatsoft:#fff;--shadow:none}
+  body{background:#fff;color:#000}
+  header .sub,.jump,.actions,footer{display:none!important}
+  .ex{break-inside:avoid-page;border-color:#aaa}
+  details.sol summary::before{display:none}
+}
+</style>
+
+<header><div class="head">
+  <p class="crumb"><a href="../../index.html">Apuntes</a><span>/</span><a href="../index.html">Física</a><span>/</span>Práctica de examen</p>
+  <p class="eyebrow">Unidad 7 · trabajo, energía y potencia</p>
+  <h1>Práctica de examen</h1>
+  <p class="sub">Los tres ejercicios que tomaron en el examen, los parecidos de la guía y variantes nuevas con datos como los del examen. Probá cada uno antes de abrir la resolución. Usamos g = 9,8 m/s².</p>
+</div></header>
+
+<main class="wrap">
+<nav class="jump" aria-label="Secciones">
+  <a href="#guia">Dónde está en la guía</a>
+  <a href="#rampas">A · Rampas y rozamiento</a>
+  <a href="#miel">B · Bola en la miel</a>
+  <a href="#lanzada">C · Bola hacia arriba</a>
+</nav>
+<div class="actions">
+  <button type="button" id="toggleAll" aria-pressed="false">Mostrar todas las resoluciones</button>
+  <button type="button" id="printAll">Imprimir</button>
+</div>
+
+<!-- ============ MAPA ============ -->
+<section id="guia">
+  <h2>Dónde está en la guía</h2>
+  <p class="intro">En verde, el más parecido al del examen.</p>
+  <div class="card mapwrap">
+    <table class="map">
+      <thead><tr><th>Examen</th><th>Guía</th><th>Ejercicio</th><th>Página</th></tr></thead>
+      <tbody>
+        <tr><td>A · Rampas</td><td>Energía</td><td class="best">Ej. 19 (Cata, skate)</td><td class="loc">pág. 18</td></tr>
+        <tr><td>A · Rampas</td><td>Energía · Repaso</td><td class="best">Ej. 4 (bloque, 3 m y 9 m)</td><td class="loc">pág. 22</td></tr>
+        <tr><td>A · Rampas</td><td>Energía · Repaso</td><td>Ej. 5 (pista curva, 1 m)</td><td class="loc">pág. 23</td></tr>
+        <tr><td>A · Rampas</td><td>Energía</td><td>Ej. 22 (montaña rusa)</td><td class="loc">pág. 20</td></tr>
+        <tr><td>A · Rampas</td><td>Potencia</td><td>Ej. 4 y 5 (incisos de potencia)</td><td class="loc">pág. 6</td></tr>
+        <tr><td>B · Miel</td><td>Energía</td><td class="best">Ej. 21 (esfera en aceite)</td><td class="loc">pág. 19</td></tr>
+        <tr><td>B · Miel</td><td>Potencia</td><td class="best">Ej. 21 (mismo, con el tiempo)</td><td class="loc">pág. 7</td></tr>
+        <tr><td>C · Bola arriba</td><td>Energía</td><td class="best">Ej. 18 (bolitas de 10 g y 25 g)</td><td class="loc">pág. 18</td></tr>
+        <tr><td>C · Bola arriba</td><td>Energía</td><td>Ej. 6 (misma K, distinta masa)</td><td class="loc">pág. 12</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ A ============ -->
+<section id="rampas">
+  <h2>A · Rampa, tramo con rozamiento y otra rampa</h2>
+  <p class="intro">En el examen: baja por una rampa sin rozamiento, cruza un tramo horizontal con rozamiento y sube por otra rampa sin rozamiento. Pedían el trabajo y la altura que alcanza en la segunda rampa.</p>
+  <ul class="where">
+    <li>Energía · <b>Ej. 19</b> · pág. 18</li>
+    <li>Energía · Repaso <b>Ej. 4</b> · pág. 22</li>
+    <li>Energía · Repaso Ej. 5 · pág. 23</li>
+    <li>Energía · Ej. 22 · pág. 20</li>
+  </ul>
+
+  <figure class="card">
+    <svg viewBox="0 0 620 190" role="img" aria-label="Rampa de bajada desde la altura h1, tramo horizontal con rozamiento de largo d y rampa de subida hasta la altura h2, menor que h1">
+      <line x1="40" y1="160" x2="600" y2="160" class="sv-dash" stroke-width="1" stroke-dasharray="4 5"/>
+      <path d="M60 40 C 120 40, 150 150, 210 160" fill="none" class="sv-ink" stroke-width="3"/>
+      <line x1="210" y1="160" x2="410" y2="160" class="sv-heat" stroke-width="6"/>
+      <path d="M410 160 C 470 150, 500 80, 560 70" fill="none" class="sv-ink" stroke-width="3"/>
+      <rect x="52" y="20" width="22" height="20" rx="3" class="sv-box"/>
+      <line x1="30" y1="40" x2="30" y2="160" class="sv-dash" stroke-width="1.5"/>
+      <text x="14" y="104" class="sv-txt">h₁</text>
+      <line x1="585" y1="96" x2="585" y2="160" class="sv-dash" stroke-width="1.5"/>
+      <line x1="507" y1="96" x2="595" y2="96" class="sv-dash" stroke-width="1" stroke-dasharray="3 4"/>
+      <text x="593" y="133" class="sv-txt">h₂</text>
+      <text x="252" y="182" class="sv-heattxt">d · con rozamiento</text>
+      <text x="92" y="128" class="sv-txt">sin roz.</text>
+      <text x="458" y="128" class="sv-txt">sin roz.</text>
+    </svg>
+    <figcaption>Solo el tramo horizontal (en naranja) le saca energía. Por eso h₂ es menor que h₁.</figcaption>
+  </figure>
+
+  <div class="tip"><b>La idea en una línea:</b> energía al llegar a la 2.ª rampa = m·g·h₁ − f·d. Arriba de la 2.ª rampa está quieto, así que toda esa energía es potencial: h₂ = E / (m·g).</div>
+
+  <!-- Ej 19 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag guia">Guía</span><h3>Cata y las dos rampas de skate</h3><span class="src">Energía · Ej. 19 · pág. 18</span></div>
+    <p class="stmt">Cata parte del reposo en lo alto de una rampa de skate de 2 m de altura (rozamiento despreciable) y se desliza hasta la base. Allí se impulsa con una fuerza de 200 N durante 2 m antes de subir por otra rampa, también sin rozamiento. Su masa es de 75 kg. Calculá la altura que alcanzará en la segunda rampa.</p>
+    <p class="note">Es como el del examen, pero al revés: en el tramo del medio <strong>gana</strong> energía (se impulsa) en vez de perderla.</p>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p>Energía arriba de la primera rampa. Está quieta, así que solo hay potencial.</p><span class="eq">E₁ = m·g·h = 75 · 9,8 · 2 = 1470 J</span></li>
+        <li><p>La bajada no tiene rozamiento: llega a la base con los mismos 1470 J (ahora como cinética).</p></li>
+        <li><p>En el tramo horizontal ella hace fuerza a favor del movimiento. Ese trabajo se <strong>suma</strong>.</p><span class="eq">W = F·d = 200 · 2 = 400 J</span><span class="eq">E₂ = 1470 + 400 = 1870 J</span></li>
+        <li><p>Sube la segunda rampa sin rozamiento. Arriba de todo se frena (v = 0), así que toda la energía es potencial.</p><span class="eq">m·g·h₂ = 1870  →  h₂ = 1870 / (75 · 9,8) = 1870 / 735</span></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> h₂ ≈ 2,54 m (más alto que la primera rampa, porque ganó 400 J).</p>
+    </details>
+  </article>
+
+  <!-- Repaso 4 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag guia">Guía</span><h3>Bloque con tramo rugoso</h3><span class="src">Energía · Repaso Ej. 4 · pág. 22</span></div>
+    <p class="stmt">Un bloque de 2 kg comienza a deslizar desde el reposo desde una altura de 3 m por una superficie sin rozamiento. Después recorre 9 m horizontales con rozamiento y sale con una velocidad de 7,2 km/h.</p>
+    <ul class="items">
+      <li><b>a)</b> Indicá su velocidad al llegar al inicio de la parte horizontal.</li>
+      <li><b>b)</b> Calculá la fuerza de rozamiento.</li>
+    </ul>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p><strong>a)</strong> Bajada sin rozamiento: toda la potencial pasa a cinética. La masa se cancela.</p><span class="eq">m·g·h = ½·m·v²  →  v = √(2·g·h) = √(2 · 9,8 · 3) = √58,8 ≈ 7,67 m/s</span></li>
+        <li><p><strong>b)</strong> Energía al entrar al tramo rugoso:</p><span class="eq">E_entra = m·g·h = 2 · 9,8 · 3 = 58,8 J</span></li>
+        <li><p>Pasá la velocidad de salida a m/s y calculá la energía al salir:</p><span class="eq">7,2 km/h ÷ 3,6 = 2 m/s</span><span class="eq">E_sale = ½ · 2 · 2² = 4 J</span></li>
+        <li><p>Lo que se perdió es el trabajo del rozamiento (negativo, porque frena):</p><span class="eq">W_roz = E_sale − E_entra = 4 − 58,8 = −54,8 J</span></li>
+        <li><p>Como W_roz = −f·d:</p><span class="eq">f = 54,8 / 9 ≈ 6,09 N</span></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> a) v ≈ 7,67 m/s · b) W_roz = −54,8 J, f ≈ 6,09 N</p>
+      <p class="trap"><b>Ojo:</b> si no pasás 7,2 km/h a m/s, la energía de salida da 51,84 J y todo lo demás sale mal.</p>
+    </details>
+  </article>
+
+  <!-- Variante A1 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag var">Variante</span><h3>El mismo bloque, con segunda rampa</h3><span class="src">sale del Repaso Ej. 4</span></div>
+    <p class="stmt">Al ejercicio anterior le agregamos una rampa sin rozamiento al final de los 9 m: el bloque de 2 kg baja desde 3 m sin rozamiento, cruza 9 m con rozamiento (sale a 7,2 km/h) y sube por la segunda rampa.</p>
+    <ul class="items">
+      <li><b>a)</b> ¿Cuánto trabajo hizo el rozamiento?</li>
+      <li><b>b)</b> ¿Hasta qué altura sube por la segunda rampa?</li>
+    </ul>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p><strong>a)</strong> Es lo mismo que el inciso b) del Repaso 4:</p><span class="eq">W_roz = 4 − 58,8 = −54,8 J</span></li>
+        <li><p><strong>b)</strong> Llega al pie de la segunda rampa con 4 J. Sube sin rozamiento hasta frenarse, y ahí toda la energía es potencial:</p><span class="eq">m·g·h₂ = 4  →  h₂ = 4 / (2 · 9,8) ≈ 0,204 m</span></li>
+        <li><p>Control: arrancó a 3 m y llega a 20 cm. Perdió casi toda la energía (54,8 J de 58,8 J) en el tramo rugoso.</p></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> a) W_roz = −54,8 J · b) h₂ ≈ 0,20 m = 20 cm</p>
+    </details>
+  </article>
+
+  <!-- Variante A2 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag var">Variante</span><h3>Con coeficiente de rozamiento</h3><span class="src">tipo examen</span></div>
+    <p class="stmt">Un bloque de 4 kg se suelta desde una altura de 1,5 m en una rampa sin rozamiento. Abajo hay un tramo horizontal de 2,5 m con coeficiente de rozamiento μ = 0,25, y después otra rampa sin rozamiento.</p>
+    <ul class="items">
+      <li><b>a)</b> Calculá el trabajo del rozamiento en el tramo horizontal.</li>
+      <li><b>b)</b> ¿Hasta qué altura sube por la segunda rampa?</li>
+      <li><b>c)</b> El bloque va y viene entre las rampas. ¿Dónde se detiene definitivamente?</li>
+    </ul>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p>Energía inicial (quieto, arriba):</p><span class="eq">E₀ = m·g·h₁ = 4 · 9,8 · 1,5 = 58,8 J</span></li>
+        <li><p><strong>a)</strong> En el tramo horizontal la normal es igual al peso, así que la fuerza de rozamiento es:</p><span class="eq">f = μ·m·g = 0,25 · 4 · 9,8 = 9,8 N</span><span class="eq">W_roz = −f·d = −9,8 · 2,5 = −24,5 J</span></li>
+        <li><p><strong>b)</strong> Energía al llegar a la segunda rampa:</p><span class="eq">E = 58,8 − 24,5 = 34,3 J</span><span class="eq">h₂ = E / (m·g) = 34,3 / (4 · 9,8) = 34,3 / 39,2 = 0,875 m</span></li>
+        <li><p>Atajo para controlar: como f = μ·m·g, la masa se cancela y queda h₂ = h₁ − μ·d.</p><span class="eq">h₂ = 1,5 − 0,25 · 2,5 = 0,875 m ✓</span></li>
+        <li><p><strong>c)</strong> Se detiene cuando el rozamiento se comió toda la energía. Las rampas no le sacan energía, así que alcanza con contar los metros de tramo rugoso:</p><span class="eq">distancia total con roce = E₀ / f = 58,8 / 9,8 = 6 m</span></li>
+        <li><p>Cada cruce son 2,5 m: 6 m = 2,5 (ida) + 2,5 (vuelta) + 1 m. En el tercer cruce va otra vez desde la primera rampa hacia la segunda y frena después de recorrer 1 m.</p></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> a) W_roz = −24,5 J · b) h₂ = 0,875 m · c) se detiene a 1 m del pie de la primera rampa.</p>
+      <p class="trap"><b>Ojo:</b> el rozamiento solo actúa en el tramo horizontal. En las rampas sin rozamiento la energía no cambia.</p>
+    </details>
+  </article>
+</section>
+
+<!-- ============ B ============ -->
+<section id="miel">
+  <h2>B · Bola que cae en la miel</h2>
+  <p class="intro">En el examen: una bola cae verticalmente, se sumerge en una jarra de miel y tarda 0,1 s en llegar al fondo. La miel hace lo mismo que el aceite de la guía: frena la bola y su energía se pierde como calor.</p>
+  <ul class="where">
+    <li>Energía · <b>Ej. 21</b> · pág. 19</li>
+    <li>Potencia · <b>Ej. 21</b> · pág. 7</li>
+  </ul>
+  <div class="tip"><b>¿Para qué sirve el 0,1 s?</b> Solo para la potencia media: P = energía perdida ÷ tiempo. Que sea tan poco tiempo es razonable, porque la bola entra rápido y recorre pocos centímetros dentro de la miel.</div>
+
+  <!-- Ej 21 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag guia">Guía</span><h3>Esfera de acero en aceite</h3><span class="src">Energía · Ej. 21 · pág. 19 + Potencia · Ej. 21 · pág. 7</span></div>
+    <p class="stmt">Una esfera de acero de 200 g se suelta desde el reposo y cae libremente por el aire 1,5 m hasta la superficie de un tacho lleno de aceite. Después se hunde 0,5 m más dentro del aceite hasta tocar el fondo, donde su rapidez es de 3 m/s.</p>
+    <ul class="items">
+      <li><b>a)</b> Despreciando el aire, calculá la rapidez con la que entra al aceite.</li>
+      <li><b>b)</b> Calculá el trabajo de la viscosidad del aceite y el cambio de energía interna (esfera + aceite).</li>
+      <li><b>c)</b> Si tarda 0,2 s en atravesar el aceite, calculá la potencia media disipada y qué proporción de la energía inicial se disipó.</li>
+    </ul>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p>Pasá la masa a kg: 200 g = 0,2 kg.</p></li>
+        <li><p><strong>a)</strong> En el aire no hay pérdidas: caída libre de 1,5 m.</p><span class="eq">v = √(2·g·h) = √(2 · 9,8 · 1,5) = √29,4 ≈ 5,42 m/s</span></li>
+        <li><p><strong>b)</strong> Tomá el <strong>fondo del tacho</strong> como altura cero. Entonces la altura inicial es 1,5 + 0,5 = 2 m.</p><span class="eq">E_inicial = m·g·h = 0,2 · 9,8 · 2 = 3,92 J</span></li>
+        <li><p>En el fondo está a altura 0, así que solo tiene cinética:</p><span class="eq">E_final = ½ · 0,2 · 3² = 0,9 J</span></li>
+        <li><p>Lo que falta es el trabajo de la viscosidad (negativo), y la energía interna aumenta en esa misma cantidad:</p><span class="eq">W_visc = E_final − E_inicial = 0,9 − 3,92 = −3,02 J</span><span class="eq">ΔE_interna = +3,02 J</span></li>
+        <li><p><strong>c)</strong> Potencia media disipada: energía perdida dividida por el tiempo dentro del aceite.</p><span class="eq">P = 3,02 / 0,2 = 15,1 W</span><span class="eq">proporción = 3,02 / 3,92 ≈ 0,77  →  77 %</span></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> a) 5,42 m/s · b) W_visc = −3,02 J, ΔE_int = +3,02 J · c) 15,1 W, se disipó el 77 %</p>
+      <p class="trap"><b>Ojo:</b> no te olvides de los 0,5 m dentro del aceite. Mientras se hunde también baja, y eso suma 0,98 J de potencial que el aceite también se lleva.</p>
+    </details>
+  </article>
+
+  <!-- Variante B1 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag var">Variante</span><h3>Bola en la jarra de miel</h3><span class="src">tipo examen</span></div>
+    <p class="stmt">Una bola de 100 g se suelta desde el reposo a 0,8 m por encima de la superficie de una jarra de miel. Se hunde 0,2 m hasta el fondo, adonde llega con una rapidez de 0,5 m/s. Tarda 0,1 s en atravesar la miel.</p>
+    <ul class="items">
+      <li><b>a)</b> ¿Con qué rapidez entra a la miel?</li>
+      <li><b>b)</b> ¿Cuánto trabajo hizo la miel sobre la bola? ¿Cuánto aumentó la energía interna?</li>
+      <li><b>c)</b> ¿Cuál es la potencia media disipada en la miel?</li>
+      <li><b>d)</b> ¿Qué fuerza media hizo la miel?</li>
+    </ul>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p>100 g = 0,1 kg. Cero de alturas en el fondo de la jarra: la altura inicial es 0,8 + 0,2 = 1 m.</p></li>
+        <li><p><strong>a)</strong> Caída libre de 0,8 m:</p><span class="eq">v = √(2 · 9,8 · 0,8) = √15,68 ≈ 3,96 m/s</span></li>
+        <li><p><strong>b)</strong> Energía al principio y al llegar al fondo:</p><span class="eq">E_inicial = 0,1 · 9,8 · 1 = 0,98 J</span><span class="eq">E_final = ½ · 0,1 · 0,5² = 0,0125 J</span><span class="eq">W_miel = 0,0125 − 0,98 = −0,9675 J ≈ −0,97 J</span><p>La energía interna (bola + miel) aumenta +0,97 J.</p></li>
+        <li><p><strong>c)</strong> Potencia media disipada:</p><span class="eq">P = 0,9675 / 0,1 ≈ 9,7 W</span></li>
+        <li><p><strong>d)</strong> Como W = −F·d, con d = 0,2 m (lo que recorre dentro de la miel):</p><span class="eq">F = 0,9675 / 0,2 ≈ 4,8 N</span></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> a) 3,96 m/s · b) W_miel ≈ −0,97 J, ΔE_int ≈ +0,97 J · c) ≈ 9,7 W · d) ≈ 4,8 N</p>
+      <p class="trap"><b>Ojo:</b> si mirás solo la energía al entrar (½·m·v² = 0,784 J), te faltan los 0,196 J de los 0,2 m que baja dentro de la miel.</p>
+    </details>
+  </article>
+</section>
+
+<!-- ============ C ============ -->
+<section id="lanzada">
+  <h2>C · Bola lanzada hacia arriba</h2>
+  <p class="intro">En el examen: se lanza una bola de 20 g verticalmente hacia arriba y hay que calcular la altura máxima. Después, con la misma energía mecánica, una pelota de 50 g: ¿hasta qué altura llega?</p>
+  <ul class="where">
+    <li>Energía · <b>Ej. 18</b> · pág. 18</li>
+    <li>Energía · Ej. 6 · pág. 12</li>
+  </ul>
+  <div class="tip"><b>La idea en una línea:</b> en la altura máxima la bola está quieta, así que E = m·g·h. Con la misma E, si la masa es 2,5 veces mayor, la altura es 2,5 veces menor. En el examen y en la guía las masas cambian en la misma proporción: 20 → 50 g y 10 → 25 g.</div>
+
+  <!-- Ej 18 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag guia">Guía</span><h3>Dos bolitas, la misma energía</h3><span class="src">Energía · Ej. 18 · pág. 18</span></div>
+    <p class="stmt">Un dispositivo lanza verticalmente hacia arriba una bolita de 10 g, que alcanza una altura de 22 m.</p>
+    <ul class="items">
+      <li><b>a)</b> ¿Cuánta energía mecánica le transfirió el dispositivo a la bolita?</li>
+      <li><b>b)</b> Si le transfiere la misma energía a una bolita de 25 g, ¿a qué altura llegará?</li>
+      <li><b>c)</b> ¿Qué efectos físicos se despreciaron?</li>
+    </ul>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p>Gramos a kg: 10 g = 0,01 kg y 25 g = 0,025 kg.</p></li>
+        <li><p><strong>a)</strong> Arriba de todo la bolita está quieta: toda su energía es potencial.</p><span class="eq">E = m·g·h = 0,01 · 9,8 · 22 = 2,156 J</span></li>
+        <li><p><strong>b)</strong> La misma energía, otra masa. Despejá h:</p><span class="eq">h = E / (m·g) = 2,156 / (0,025 · 9,8) = 2,156 / 0,245 = 8,8 m</span></li>
+        <li><p>Control: 25 g es 2,5 veces 10 g, entonces la altura es 2,5 veces menor: 22 / 2,5 = 8,8 m ✓</p></li>
+        <li><p><strong>c)</strong> La resistencia del aire, que le sacaría energía durante la subida.</p></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> a) E ≈ 2,16 J · b) h = 8,8 m · c) la resistencia del aire</p>
+    </details>
+  </article>
+
+  <!-- Variante C1 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag var">Variante</span><h3>Bola de 20 g lanzada a 15 m/s</h3><span class="src">tipo examen · te dan la velocidad</span></div>
+    <p class="stmt">Se lanza verticalmente hacia arriba una bola de 20 g con una velocidad de 15 m/s. Despreciá el aire.</p>
+    <ul class="items">
+      <li><b>a)</b> ¿Cuál es su energía mecánica?</li>
+      <li><b>b)</b> ¿Qué altura máxima alcanza?</li>
+      <li><b>c)</b> Si la misma energía mecánica se le da a una pelota de 50 g, ¿qué altura máxima alcanza?</li>
+      <li><b>d)</b> ¿Con qué velocidad sale la pelota de 50 g?</li>
+    </ul>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p>20 g = 0,02 kg y 50 g = 0,05 kg. Altura cero en el punto de lanzamiento.</p></li>
+        <li><p><strong>a)</strong> Al salir está a altura 0, así que toda la energía es cinética:</p><span class="eq">E = ½·m·v² = ½ · 0,02 · 15² = 0,01 · 225 = 2,25 J</span></li>
+        <li><p><strong>b)</strong> Arriba de todo v = 0, así que toda la energía es potencial:</p><span class="eq">m·g·h = 2,25  →  h = 2,25 / (0,02 · 9,8) = 2,25 / 0,196 ≈ 11,48 m</span><p>Control con la fórmula sin masa: h = v² / (2·g) = 225 / 19,6 ≈ 11,48 m ✓</p></li>
+        <li><p><strong>c)</strong> La misma E = 2,25 J con la pelota de 50 g:</p><span class="eq">h = 2,25 / (0,05 · 9,8) = 2,25 / 0,49 ≈ 4,59 m</span><p>Control: 11,48 / 2,5 ≈ 4,59 m ✓</p></li>
+        <li><p><strong>d)</strong> Despejá v de E = ½·m·v²:</p><span class="eq">v = √(2·E / m) = √(2 · 2,25 / 0,05) = √90 ≈ 9,49 m/s</span></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> a) 2,25 J · b) ≈ 11,48 m · c) ≈ 4,59 m · d) ≈ 9,49 m/s</p>
+      <p class="trap"><b>Ojo:</b> en c) no uses h = v²/(2g) con 15 m/s: la pelota de 50 g recibe la misma <strong>energía</strong>, no la misma velocidad. Sale más lenta.</p>
+    </details>
+  </article>
+
+  <!-- Variante C2 -->
+  <article class="ex card">
+    <div class="ex-top"><span class="tag var">Variante</span><h3>Bola de 20 g que llega a 12 m</h3><span class="src">tipo examen · te dan la altura</span></div>
+    <p class="stmt">Una bola de 20 g lanzada verticalmente hacia arriba llega a 12 m de altura. Despreciá el aire.</p>
+    <ul class="items">
+      <li><b>a)</b> ¿Con qué velocidad fue lanzada y cuánta energía mecánica tiene?</li>
+      <li><b>b)</b> Con esa misma energía, ¿hasta qué altura llega una pelota de 50 g?</li>
+    </ul>
+    <details class="sol"><summary>Ver resolución paso a paso</summary>
+      <ol class="steps">
+        <li><p><strong>a)</strong> Energía en el punto más alto:</p><span class="eq">E = m·g·h = 0,02 · 9,8 · 12 = 2,352 J</span><p>Toda esa energía era cinética al salir:</p><span class="eq">v = √(2·g·h) = √(2 · 9,8 · 12) = √235,2 ≈ 15,3 m/s</span></li>
+        <li><p><strong>b)</strong> La misma energía con 0,05 kg:</p><span class="eq">h = 2,352 / (0,05 · 9,8) = 2,352 / 0,49 = 4,8 m</span><p>Control: 12 / 2,5 = 4,8 m ✓</p></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> a) v ≈ 15,3 m/s, E ≈ 2,35 J · b) h = 4,8 m</p>
+    </details>
+  </article>
+</section>
+</main>
+
+<footer>Enunciados de la guía de energía (Cardoso) y de la guía de potencia. Variantes armadas a partir de lo que se recuerda del examen. g = 9,8 m/s².</footer>
+
+<script>
+const sols=[...document.querySelectorAll('details.sol')],btn=document.getElementById('toggleAll');
+function setAll(open){sols.forEach(d=>{d.open=open});btn.textContent=open?'Ocultar todas las resoluciones':'Mostrar todas las resoluciones';btn.setAttribute('aria-pressed',String(open))}
+btn.addEventListener('click',()=>setAll(btn.getAttribute('aria-pressed')!=='true'));
+document.getElementById('printAll').addEventListener('click',()=>{setAll(true);window.print()});
+window.addEventListener('beforeprint',()=>setAll(true));
+</script>
+</html>
