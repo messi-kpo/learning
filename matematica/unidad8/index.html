@@ -90,22 +90,7 @@ h4{font:600 17px/1.3 Spectral,Georgia,serif;margin:22px 0 10px}
 .small-list{padding-left:21px;margin:9px 0}.small-list li{margin:4px 0}
 .mistake{margin:12px 0!important;padding:11px 13px;border-radius:9px;background:var(--warn-soft);border-left:4px solid var(--warn);font-size:15px}
 .mistake strong:first-child{color:var(--warn)}
-.trap{margin:12px 0!important;padding:11px 13px;border-radius:9px;border:1px dashed var(--line);background:var(--paper);font-size:15px}
-.trap strong:first-child{color:var(--warn)}
 
-/* tabla del denominador común */
-.dentable{border-collapse:separate;border-spacing:0;margin:12px 0;font-size:14.5px;min-width:100%}
-.dentable th,.dentable td{padding:7px 10px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
-.dentable thead th{font-weight:600;color:var(--muted);font-size:13px}
-.dentable tbody th{text-align:left;font-family:Georgia,serif;font-weight:400}
-.dentable td.ok{color:var(--accent);font-weight:700}
-.dentable td.miss{font-weight:700}
-.dentable td.miss.t1,.dentable td.need.t1{background:var(--c1-soft);color:var(--c1)}
-.dentable td.miss.t2,.dentable td.need.t2{background:var(--c2-soft);color:var(--c2)}
-.dentable td.miss.t3,.dentable td.need.t3{background:var(--c3-soft);color:var(--c3)}
-.dentable td.need{font-family:Georgia,serif;font-weight:600}
-.dentable tfoot th,.dentable tfoot td{border-bottom:0;border-top:2px solid var(--ink);font-family:Georgia,serif;font-weight:600}
-.dentable tfoot th{text-align:left;font-family:"IBM Plex Sans",sans-serif;font-size:13px}
 .scroll{overflow-x:auto;max-width:100%}
 
 /* diagrama de flechas */
@@ -253,18 +238,7 @@ h4{font:600 17px/1.3 Spectral,Georgia,serif;margin:22px 0 10px}
   </div></section>
 
   <!-- 02 -->
-  <section class="section" id="simplificar"><div class="section-head"><span class="section-number">Tema 02 · página 42</span><h2>Simplificar</h2></div><div class="section-grid">
-    <div class="memory"><h3>Ayuda memoria</h3>
-      <p>Igual que <span class="m">6/9 = (2·3)/(3·3) = 2/3</span>: se tacha un <strong>factor</strong> que aparece arriba y abajo.</p>
-      <ol class="small-list">
-        <li>Factorizá numerador y denominador.</li>
-        <li>Anotá las restricciones (con el denominador entero).</li>
-        <li>Tachá los factores iguales.</li>
-      </ol>
-      <div class="trap"><strong>Error típico:</strong> tachar <em>sumandos</em>. Solo se tacha lo que está multiplicando a todo lo demás.
-        <div class="eq" style="font-size:1em"><span class="frac"><span>x + 6</span><span>6</span></span> ≠ x</div>
-        Probá con <span class="m">x = 6</span>: queda <span class="m">12/6 = 2</span>, no <span class="m">6</span>.</div>
-    </div>
+  <section class="section" id="simplificar"><div class="section-head"><span class="section-number">Tema 02 · página 42</span><h2>Simplificar</h2></div><div>
     <div class="worked"><h3>Ejemplo resuelto</h3>
       <p>Simplificar la expresión del tema 01.</p>
       <ol class="steps">
@@ -354,15 +328,7 @@ h4{font:600 17px/1.3 Spectral,Georgia,serif;margin:22px 0 10px}
       <h3>Ejemplo 1 · dos fracciones</h3>
       <div class="eq"><span class="frac"><span>x</span><span>x − 2</span></span> + <span class="frac"><span>3x − 1</span><span>x² − 2x</span></span></div>
       <p><strong>Paso 1.</strong> El primer denominador ya está factorizado. El segundo: <span class="m">x² − 2x = x(x − 2)</span>.</p>
-      <p><strong>Paso 2.</strong> En la tabla marcamos qué factores tiene cada denominador. Los casilleros vacíos son justamente <em>lo que le falta</em> a cada uno.</p>
-      <div class="scroll"><table class="dentable">
-        <thead><tr><th></th><th>x</th><th>(x − 2)</th><th>Le falta</th></tr></thead>
-        <tbody>
-          <tr><th>x − 2</th><td class="miss t1">falta</td><td class="ok">✓</td><td class="need t1">x</td></tr>
-          <tr><th>x(x − 2)</th><td class="ok">✓</td><td class="ok">✓</td><td>nada</td></tr>
-        </tbody>
-        <tfoot><tr><th>Denominador común</th><td>x</td><td>(x − 2)</td><td>= x(x − 2)</td></tr></tfoot>
-      </table></div>
+      <p><strong>Paso 2.</strong> Aparecen dos factores distintos, <span class="m">x</span> y <span class="m">(x − 2)</span>, así que el denominador común es <span class="m">x(x − 2)</span>.</p>
       <p><strong>Pasos 3 y 4.</strong> Seguí las flechas de arriba hacia abajo:</p>
       <p class="swipe">Deslizá el diagrama hacia los costados para verlo completo →</p>
       <div class="flow-scroll"><div class="flow two" role="img" aria-label="Diagrama: a x sobre x menos 2 se le multiplica arriba y abajo por x; la segunda fracción queda igual; los numeradores x al cuadrado y 3x menos 1 bajan sobre el denominador común x por x menos 2.">
@@ -393,17 +359,8 @@ h4{font:600 17px/1.3 Spectral,Georgia,serif;margin:22px 0 10px}
       <h4>Ejemplo 2 · tres fracciones y una resta</h4>
       <div class="eq"><span class="frac"><span>1</span><span>2x − 2</span></span> + <span class="frac"><span>2</span><span>x² − 1</span></span> − <span class="frac"><span>x</span><span>x + 1</span></span></div>
       <p><strong>Paso 1.</strong> <span class="m">2x − 2 = 2(x − 1)</span> (factor común) y <span class="m">x² − 1 = (x + 1)(x − 1)</span> (diferencia de cuadrados). <span class="m">x + 1</span> ya está.</p>
-      <p><strong>Paso 2.</strong> Aparecen tres factores distintos: <span class="m">2</span>, <span class="m">(x − 1)</span> y <span class="m">(x + 1)</span>.</p>
-      <div class="scroll"><table class="dentable">
-        <thead><tr><th></th><th>2</th><th>(x − 1)</th><th>(x + 1)</th><th>Le falta</th></tr></thead>
-        <tbody>
-          <tr><th>2(x − 1)</th><td class="ok">✓</td><td class="ok">✓</td><td class="miss t1">falta</td><td class="need t1">(x + 1)</td></tr>
-          <tr><th>(x + 1)(x − 1)</th><td class="miss t2">falta</td><td class="ok">✓</td><td class="ok">✓</td><td class="need t2">2</td></tr>
-          <tr><th>x + 1</th><td class="miss t3">falta</td><td class="miss t3">falta</td><td class="ok">✓</td><td class="need t3">2(x − 1)</td></tr>
-        </tbody>
-        <tfoot><tr><th>Denominador común</th><td>2</td><td>(x − 1)</td><td>(x + 1)</td><td>= 2(x − 1)(x + 1)</td></tr></tfoot>
-      </table></div>
-      <p><strong>Pasos 3 y 4.</strong></p>
+      <p><strong>Paso 2.</strong> Aparecen tres factores distintos: <span class="m">2</span>, <span class="m">(x − 1)</span> y <span class="m">(x + 1)</span>, así que el denominador común es <span class="m">2(x − 1)(x + 1)</span>.</p>
+      <p><strong>Pasos 3 y 4.</strong> Seguí las flechas de arriba hacia abajo:</p>
       <p class="swipe">Deslizá el diagrama hacia los costados para verlo completo →</p>
       <div class="flow-scroll"><div class="flow" role="img" aria-label="Diagrama: a la primera fracción se le multiplica por x más 1, a la segunda por 2 y a la tercera por 2 por x menos 1. Los numeradores bajan: x más 1, más 4, menos el paréntesis 2x al cuadrado menos 2x, sobre 2 por x menos 1 por x más 1.">
         <div class="k1 r1 card-f"><span class="frac"><span>1</span><span>2(x − 1)</span></span></div>

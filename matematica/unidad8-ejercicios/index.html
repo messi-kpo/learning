@@ -86,21 +86,7 @@ h3{font:700 12px/1.3 "IBM Plex Sans",sans-serif;text-transform:uppercase;letter-
 .x1,.x2,.x3{text-decoration:line-through;text-decoration-thickness:2px;border-radius:4px;padding:0 2px}
 .x1{color:var(--c1);background:var(--c1-soft)}.x2{color:var(--c2);background:var(--c2-soft)}.x3{color:var(--c3);background:var(--c3-soft)}
 
-/* tabla del denominador común */
 .scroll{overflow-x:auto;max-width:100%}
-.dentable{border-collapse:separate;border-spacing:0;margin:10px 0;font-size:14px;min-width:100%}
-.dentable th,.dentable td{padding:6px 10px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
-.dentable thead th{font-weight:600;color:var(--muted);font-size:13px;font-family:Georgia,serif}
-.dentable thead th:last-child{font-family:"IBM Plex Sans",sans-serif}
-.dentable tbody th{text-align:left;font-family:Georgia,serif;font-weight:400}
-.dentable td.ok{color:var(--accent);font-weight:700}
-.dentable td.miss{font-weight:700}
-.dentable td.t1{background:var(--c1-soft);color:var(--c1)}
-.dentable td.t2{background:var(--c2-soft);color:var(--c2)}
-.dentable td.t3{background:var(--c3-soft);color:var(--c3)}
-.dentable td.need{font-family:Georgia,serif;font-weight:600}
-.dentable tfoot th,.dentable tfoot td{border-bottom:0;border-top:2px solid var(--ink);font-family:Georgia,serif;font-weight:600}
-.dentable tfoot th{text-align:left;font-family:"IBM Plex Sans",sans-serif;font-size:13px}
 
 /* diagrama de flechas */
 .flow-scroll{overflow-x:auto;max-width:100%;margin:12px 0 4px;padding-bottom:4px}
@@ -317,7 +303,7 @@ details.more summary{cursor:pointer;font-weight:600;color:var(--accent);font-siz
     <div class="method"><h3>Método · inciso a</h3>
       <div class="eq"><span class="frac"><span>2x</span><span>3x + 3</span></span> + <span class="frac"><span>4</span><span>x + 1</span></span> − <span class="frac"><span>5x + 1</span><span>x² − 1</span></span></div>
       <p><strong>1. Factorizamos los denominadores:</strong> <span class="m">3x + 3 = 3(x + 1)</span>; <span class="m">x + 1</span> ya está; <span class="m">x² − 1 = (x + 1)(x − 1)</span>.</p>
-      <p><strong>2. Tabla del denominador común.</strong> Los casilleros en color son lo que le falta a cada fracción:</p>
+      <p><strong>2 a 4.</strong> Armamos el denominador común con cada factor distinto una sola vez, le agregamos a cada fracción <strong>lo que le falta</strong> y juntamos los numeradores:</p>
       <div data-flow="a"></div>
       <p><strong>5. Operamos el numerador</strong> (el menos cambia los dos signos de <span class="m">3(5x + 1) = 15x + 3</span>):</p>
       <div class="eq">2x² − 2x + 12x − 12 − 15x − 3 = 2x² − 5x − 15</div>
@@ -485,30 +471,30 @@ details.more summary{cursor:pointer;font-weight:600;color:var(--accent);font-siz
 (function(){
   /* ---------- diagramas de suma y resta (ejercicio 7) ---------- */
   const FLOWS = {
-    a: {factors:['3','(x + 1)','(x − 1)'], den:'3(x + 1)(x − 1)', terms:[
-      {num:'2x', den:'3(x + 1)', has:[1,1,0], falta:'(x − 1)', piece:'2x(x − 1)'},
-      {op:'+', num:'4', den:'(x + 1)', has:[0,1,0], falta:'3(x − 1)', piece:'12(x − 1)'},
-      {op:'−', num:'5x + 1', den:'(x + 1)(x − 1)', has:[0,1,1], falta:'3', piece:'3(5x + 1)'}]},
-    b: {factors:['x³','(x + 2)'], den:'x³(x + 2)', terms:[
-      {num:'−3', den:'x', has:['solo x',0], falta:'x²(x + 2)', piece:'−3x²(x + 2)'},
-      {op:'−', num:'x + 1', den:'x³', has:[1,0], falta:'(x + 2)', piece:'(x + 1)(x + 2)'},
-      {op:'+', num:'2', den:'(x + 2)', has:[0,1], falta:'x³', piece:'2x³'}]},
-    c: {factors:['3','x','(x + 1)'], den:'3x(x + 1)', minus:'baja con el − adelante', terms:[
-      {num:'3x', den:'x(x + 1)', has:[0,1,1], falta:'3', piece:'9x'},
-      {op:'+', num:'x − 1', den:'(x + 1)', has:[0,0,1], falta:'3x', piece:'3x(x − 1)'},
-      {op:'−', num:'2x', den:'3(x + 1)', has:[1,0,1], falta:'x', piece:'2x²'}]},
-    d: {factors:['(x − 5)','(x + 5)'], den:'(x − 5)(x + 5)', terms:[
-      {num:'2x + 1', den:'1', has:[0,0], falta:'(x − 5)(x + 5)', piece:'(2x + 1)(x² − 25)'},
-      {op:'+', num:'2', den:'(x + 5)', has:[0,1], falta:'(x − 5)', piece:'2(x − 5)'},
-      {op:'−', num:'x + 3', den:'(x − 5)(x + 5)', has:[1,1], falta:'', piece:'(x + 3)'}]},
-    e: {factors:['3','(x + 2)','(x − 5)'], den:'3(x + 2)(x − 5)', terms:[
-      {num:'2x', den:'(x + 2)', has:[0,1,0], falta:'3(x − 5)', piece:'6x(x − 5)'},
-      {op:'+', num:'3x + 1', den:'3(x + 2)', has:[1,1,0], falta:'(x − 5)', piece:'(3x + 1)(x − 5)'},
-      {op:'−', num:'2', den:'(x − 5)', has:[0,0,1], falta:'3(x + 2)', piece:'6(x + 2)'}]},
-    f: {factors:['(x − 3)','(x + 2)'], den:'(x − 3)(x + 2)', terms:[
-      {num:'2x', den:'(x − 3)', has:[1,0], falta:'(x + 2)', piece:'2x(x + 2)'},
-      {op:'−', num:'5x + 1', den:'(x + 2)', has:[0,1], falta:'(x − 3)', piece:'(5x + 1)(x − 3)'},
-      {op:'+', num:'2', den:'1', has:[0,0], falta:'(x − 3)(x + 2)', piece:'2(x − 3)(x + 2)'}]}
+    a: {den:'3(x + 1)(x − 1)', terms:[
+      {num:'2x', den:'3(x + 1)', falta:'(x − 1)', piece:'2x(x − 1)'},
+      {op:'+', num:'4', den:'(x + 1)', falta:'3(x − 1)', piece:'12(x − 1)'},
+      {op:'−', num:'5x + 1', den:'(x + 1)(x − 1)', falta:'3', piece:'3(5x + 1)'}]},
+    b: {den:'x³(x + 2)', terms:[
+      {num:'−3', den:'x', falta:'x²(x + 2)', piece:'−3x²(x + 2)'},
+      {op:'−', num:'x + 1', den:'x³', falta:'(x + 2)', piece:'(x + 1)(x + 2)'},
+      {op:'+', num:'2', den:'(x + 2)', falta:'x³', piece:'2x³'}]},
+    c: {den:'3x(x + 1)', minus:'baja con el − adelante', terms:[
+      {num:'3x', den:'x(x + 1)', falta:'3', piece:'9x'},
+      {op:'+', num:'x − 1', den:'(x + 1)', falta:'3x', piece:'3x(x − 1)'},
+      {op:'−', num:'2x', den:'3(x + 1)', falta:'x', piece:'2x²'}]},
+    d: {den:'(x − 5)(x + 5)', terms:[
+      {num:'2x + 1', den:'1', falta:'(x − 5)(x + 5)', piece:'(2x + 1)(x² − 25)'},
+      {op:'+', num:'2', den:'(x + 5)', falta:'(x − 5)', piece:'2(x − 5)'},
+      {op:'−', num:'x + 3', den:'(x − 5)(x + 5)', falta:'', piece:'(x + 3)'}]},
+    e: {den:'3(x + 2)(x − 5)', terms:[
+      {num:'2x', den:'(x + 2)', falta:'3(x − 5)', piece:'6x(x − 5)'},
+      {op:'+', num:'3x + 1', den:'3(x + 2)', falta:'(x − 5)', piece:'(3x + 1)(x − 5)'},
+      {op:'−', num:'2', den:'(x − 5)', falta:'3(x + 2)', piece:'6(x + 2)'}]},
+    f: {den:'(x − 3)(x + 2)', terms:[
+      {num:'2x', den:'(x − 3)', falta:'(x + 2)', piece:'2x(x + 2)'},
+      {op:'−', num:'5x + 1', den:'(x + 2)', falta:'(x − 3)', piece:'(5x + 1)(x − 3)'},
+      {op:'+', num:'2', den:'1', falta:'(x − 3)(x + 2)', piece:'2(x − 3)(x + 2)'}]}
   };
   const fr = (n, d) => '<span class="frac"><span>' + n + '</span><span>' + d + '</span></span>';
   const grp = s => /\s/.test(s) && !/^\(.*\)$/.test(s) ? '(' + s + ')' : s;
@@ -516,26 +502,7 @@ details.more summary{cursor:pointer;font-weight:600;color:var(--accent);font-siz
 
   function buildFlow(spec){
     const n = spec.terms.length;
-    // tabla
-    let t = '<div class="scroll"><table class="dentable"><thead><tr><th></th>';
-    spec.factors.forEach(f => t += '<th>' + f + '</th>');
-    t += '<th>Le falta</th></tr></thead><tbody>';
-    spec.terms.forEach((term, i) => {
-      const c = 't' + (i % 3 + 1);
-      t += '<tr><th>' + (term.den === '1' ? '1 (entero)' : term.den) + '</th>';
-      term.has.forEach(h => {
-        if (h === 1) t += '<td class="ok">✓</td>';
-        else if (h === 0) t += '<td class="miss ' + c + '">falta</td>';
-        else t += '<td class="miss ' + c + '">' + h + '</td>';
-      });
-      t += term.falta ? '<td class="need ' + c + '">' + term.falta + '</td>' : '<td>nada</td>';
-      t += '</tr>';
-    });
-    t += '</tbody><tfoot><tr><th>Denominador común</th>';
-    spec.factors.forEach(f => t += '<td>' + f + '</td>');
-    t += '<td>= ' + spec.den + '</td></tr></tfoot></table></div>';
-
-    // flechas
+    const t = '<p class="note" style="margin:8px 0 0">Denominador común: <span class="m">' + spec.den + '</span>. ';
     const cols = [];
     for (let i = 0; i < n; i++){ if (i) cols.push('auto'); cols.push('1fr'); }
     let g = '';
@@ -563,7 +530,7 @@ details.more summary{cursor:pointer;font-weight:600;color:var(--accent);font-siz
     });
     g += at('1 / -1', 6, 'bar', spec.den);
     const minW = n * 190;
-    return t + '<p class="note" style="margin:8px 0 0">Seguí las flechas: cada fracción se completa con lo que le falta, y después los numeradores bajan sobre el denominador común.</p><p class="swipe">Deslizá el diagrama hacia los costados para verlo completo →</p>' +
+    return t + 'Seguí las flechas: cada fracción se completa con lo que le falta, y después los numeradores bajan sobre el denominador común.</p><p class="swipe">Deslizá el diagrama hacia los costados para verlo completo →</p>' +
       '<div class="flow-scroll"><div class="flow" role="img" aria-label="Diagrama de flechas: a cada fracción se le multiplica arriba y abajo por lo que le falta, y los numeradores bajan sobre el denominador común ' + spec.den + '." style="grid-template-columns:' + cols.join(' ') + ';min-width:' + minW + 'px">' + g + '</div></div>';
   }
   document.querySelectorAll('[data-flow]').forEach(el => { el.innerHTML = buildFlow(FLOWS[el.dataset.flow]); });
