@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>El coeficiente principal en Ruffini · Unidad 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Spectral:wght@500;600;700&display=swap">
+<style>
+:root{--bg:#ecefec;--paper:#fbfcfa;--soft:#f2f5f1;--ink:#18221c;--muted:#536158;--line:#cdd7ce;--accent:#1e6b4e;--accent-soft:#dcebe1;--warn:#8b5517;--warn-soft:#fff0d8;--shadow:0 10px 28px -20px #23372a55}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111a14;--paper:#1b271e;--soft:#223026;--ink:#ecf3ec;--muted:#b0c0b2;--line:#344638;--accent:#76dbac;--accent-soft:#1f4130;--warn:#f1bb79;--warn-soft:#42301d;--shadow:0 10px 28px -20px #000}}
+:root[data-theme="dark"]{--bg:#111a14;--paper:#1b271e;--soft:#223026;--ink:#ecf3ec;--muted:#b0c0b2;--line:#344638;--accent:#76dbac;--accent-soft:#1f4130;--warn:#f1bb79;--warn-soft:#42301d;--shadow:0 10px 28px -20px #000}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:var(--accent)}a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}.wrap{width:min(900px,100% - 40px);margin-inline:auto}
+header{background:linear-gradient(160deg,var(--paper),var(--soft));border-bottom:1px solid var(--line)}.head{padding:26px 0 36px}.crumb{font-size:13px;color:var(--muted);margin:0 0 28px}.crumb a{text-decoration:none;color:var(--muted);border-bottom:1px solid var(--line)}.crumb span{margin:0 8px}.eyebrow{margin:0 0 8px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-size:12px;font-weight:700}h1,h2,h3{font-family:Spectral,Georgia,serif;line-height:1.15;margin:0}h1{font-size:clamp(34px,5vw,52px);max-width:19ch;letter-spacing:-.025em}.lede{max-width:68ch;color:var(--muted);margin:16px 0 0;font-size:17px}
+main{padding:28px 0 64px}.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:25px;margin-bottom:16px;scroll-margin-top:20px}.card h2{font-size:clamp(25px,3vw,31px);margin-bottom:12px}.card h3{font:700 13px/1.4 "IBM Plex Sans",sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:9px}.card p{margin:0 0 12px}.card p:last-child{margin-bottom:0}.math{font-family:Georgia,"Times New Roman",serif;font-size:1.12em;font-weight:600}.equation{display:block;padding:13px 16px;margin:15px 0;border:1px solid var(--line);border-radius:9px;background:var(--soft);font:600 clamp(18px,3vw,23px)/1.5 Georgia,serif;overflow-wrap:anywhere}.note{color:var(--muted);font-size:14px}.highlight{background:var(--accent-soft);border-left:4px solid var(--accent);padding:13px 16px;border-radius:7px;margin-top:14px}.warning{background:var(--warn-soft);border-left:4px solid var(--warn);padding:13px 16px;border-radius:7px;margin-top:14px}.warning strong{color:var(--warn)}.steps{padding-left:23px;margin:0 0 14px}.steps li{padding-left:4px;margin:0 0 9px}.ruffini-wrap{max-width:100%;overflow-x:auto;margin:12px 0 15px}.ruffini{border-collapse:collapse;font:600 20px/1.4 Georgia,serif;text-align:center;font-variant-numeric:tabular-nums}.ruffini th,.ruffini td{min-width:64px;padding:7px 14px}.ruffini th:first-child,.ruffini td:first-child{border-right:2px solid var(--accent);color:var(--accent)}.ruffini tr:last-child{border-top:2px solid var(--accent)}.ruffini tr:last-child td:last-child{color:var(--accent)}.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.two .card{margin:0}.footer{color:var(--muted);font-size:14px;padding:0 0 40px}
+@media(max-width:620px){.wrap{width:min(100% - 28px,900px)}.head{padding-top:18px}.card{padding:19px}.two{grid-template-columns:1fr}.ruffini th,.ruffini td{min-width:50px;padding:6px 8px}.ruffini{font-size:18px}}
+@media print{body{background:#fff;color:#111}.wrap{width:100%;max-width:none}.head{padding:5mm 0}main{padding:4mm 0}.card{break-inside:avoid;box-shadow:none;margin-bottom:4mm}.crumb{display:none}a{color:inherit}}
+</style>
+</head>
+<body>
+<header><div class="wrap head">
+  <p class="crumb"><a href="../../index.html">Apuntes</a><span>/</span><a href="../index.html">Matemática</a><span>/</span><a href="../unidad7/index.html">Unidad 7</a><span>/</span>Coeficiente principal</p>
+  <p class="eyebrow">Unidad 7 · factorización</p>
+  <h1>¿Dónde queda el 2 cuando hacemos Ruffini?</h1>
+  <p class="lede">En la resolución de la evaluación, la profesora recuerda «no olvidar el coeficiente principal». Si mantenés la igualdad en cada paso, Ruffini lo conserva. La advertencia importa cuando escribís factores a partir de las raíces.</p>
+</div></header>
+<main class="wrap">
+  <section class="card" id="partida"><h2>El polinomio de la resolución</h2>
+    <p>Después de dividir <span class="math">S(x) = 2x³ + x² − 13x + 6</span> por <span class="math">x − 2</span>, el cociente es <span class="math">2x² + 5x − 3</span> y el resto es cero. Por eso:</p>
+    <span class="equation">S(x) = (x − 2)(2x² + 5x − 3)</span>
+    <p>Ahora hacemos Ruffini con la parte que empieza en <span class="math">2x²</span>. Una de sus raíces es <span class="math">1/2</span>, así que dividimos por <span class="math">x − 1/2</span>.</p>
+  </section>
+  <section class="card" id="ruffini"><h2>Ruffini con la raíz 1/2</h2>
+    <p>Colocamos los coeficientes <span class="math">2, 5, −3</span>. Bajamos el <span class="math">2</span>, multiplicamos por <span class="math">1/2</span> y sumamos en cada columna.</p>
+    <div class="ruffini-wrap"><table class="ruffini" aria-label="Ruffini de 2x cuadrado más 5x menos 3 con raíz un medio"><tbody>
+      <tr><th scope="row">1/2</th><th>2</th><th>5</th><th>−3</th></tr>
+      <tr><td></td><td></td><td>1</td><td>3</td></tr>
+      <tr><td></td><td>2</td><td>6</td><td>0</td></tr>
+    </tbody></table></div>
+    <ol class="steps"><li>El resto es <span class="math">0</span>, así que <span class="math">x − 1/2</span> es factor.</li><li>Los otros números de la última fila son <span class="math">2, 6</span>: el cociente es <span class="math">2x + 6</span>.</li><li>Al sacar factor común, <span class="math">2x + 6 = 2(x + 3)</span>.</li></ol>
+    <span class="equation">2x² + 5x − 3 = (x − 1/2)(2x + 6) = 2(x − 1/2)(x + 3)</span>
+    <p class="highlight"><strong>El 2 nunca desapareció:</strong> quedó como primer coeficiente del cociente <span class="math">2x + 6</span> y después salió como factor común.</p>
+  </section>
+  <div class="two">
+    <section class="card" id="otra-raiz"><h2>Si elegís la raíz −3</h2>
+      <p>La misma cuadrática también se puede dividir por <span class="math">x + 3</span>. En Ruffini ponés <span class="math">−3</span>:</p>
+      <div class="ruffini-wrap"><table class="ruffini" aria-label="Ruffini de 2x cuadrado más 5x menos 3 con raíz menos tres"><tbody>
+        <tr><th scope="row">−3</th><th>2</th><th>5</th><th>−3</th></tr>
+        <tr><td></td><td></td><td>−6</td><td>3</td></tr>
+        <tr><td></td><td>2</td><td>−1</td><td>0</td></tr>
+      </tbody></table></div>
+      <p>El cociente es <span class="math">2x − 1</span>, entonces:</p>
+      <span class="equation">2x² + 5x − 3 = (x + 3)(2x − 1)</span>
+      <p class="note">Acá el 2 queda dentro de <span class="math">2x − 1</span>.</p>
+    </section>
+    <section class="card" id="advertencia"><h2>Por qué lo advierte la profesora</h2>
+      <p>Conocer las raíces <span class="math">2, −3, 1/2</span> solo indica qué factores se anulan. El producto de factores escritos como <span class="math">x − r</span> empieza con <span class="math">x³</span>, mientras que <span class="math">S(x)</span> empieza con <span class="math">2x³</span>.</p>
+      <p class="warning"><strong>Faltaría el 2</strong> si escribieras solo <span class="math">(x − 2)(x + 3)(x − 1/2)</span>.</p>
+      <p>Por eso, al pasar de las raíces a la forma factorizada, escribimos <span class="math">a(x − r₁)(x − r₂)(x − r₃)</span> y determinamos <span class="math">a</span> con el polinomio original. En este caso, <span class="math">a = 2</span>.</p>
+    </section>
+  </div>
+  <section class="card" id="resultado"><h2>Las dos formas correctas</h2>
+    <span class="equation">S(x) = 2(x − 2)(x + 3)(x − 1/2)</span>
+    <span class="equation">S(x) = (x − 2)(x + 3)(2x − 1)</span>
+    <p>Son iguales porque <span class="math">2(x − 1/2) = 2x − 1</span>. Una comprobación rápida es multiplicar los términos de mayor grado: en ambos casos sale <span class="math">2x³</span>, como en el polinomio inicial.</p>
+  </section>
+</main>
+<footer class="wrap footer">Seguí con la <a href="../unidad7/index.html">guía de Unidad 7</a> o repasá la <a href="../unidad6-ruffini/index.html">regla de Ruffini</a>.</footer>
+</body>
+</html>
