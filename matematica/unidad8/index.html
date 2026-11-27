@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Unidad 8 · Expresiones fraccionarias y función homográfica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Spectral:wght@500;600;700&display=swap">
+<style>
+:root{
+  --bg:#ecefec;--paper:#fbfcfa;--soft:#f2f5f1;--ink:#18221c;--muted:#536158;--subtle:#6f7c72;--line:#cdd7ce;
+  --accent:#1e6b4e;--accent-soft:#dcebe1;--example:#f5f8f4;--shadow:0 10px 28px -20px #23372a55;
+  --c1:#1f5fbf;--c1-soft:#e1ebfa;--c2:#9a5800;--c2-soft:#f8ebd6;--c3:#7a3fb0;--c3-soft:#efe5f8;
+  --warn:#a8322a;--warn-soft:#f9e3e0;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111a14;--paper:#1b271e;--soft:#223026;--ink:#ecf3ec;--muted:#b0c0b2;--subtle:#94a597;--line:#344638;
+  --accent:#76dbac;--accent-soft:#1f4130;--example:#1e2d23;--shadow:0 10px 28px -20px #000;
+  --c1:#8cb8ff;--c1-soft:#1d2d47;--c2:#f0b462;--c2-soft:#3a2c17;--c3:#cfa6f5;--c3-soft:#30243f;
+  --warn:#ff9d92;--warn-soft:#3f201d;
+}}
+:root[data-theme="dark"]{
+  --bg:#111a14;--paper:#1b271e;--soft:#223026;--ink:#ecf3ec;--muted:#b0c0b2;--subtle:#94a597;--line:#344638;
+  --accent:#76dbac;--accent-soft:#1f4130;--example:#1e2d23;--shadow:0 10px 28px -20px #000;
+  --c1:#8cb8ff;--c1-soft:#1d2d47;--c2:#f0b462;--c2-soft:#3a2c17;--c3:#cfa6f5;--c3-soft:#30243f;
+  --warn:#ff9d92;--warn-soft:#3f201d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+.wrap{width:min(1040px,100% - 40px);margin-inline:auto}
+
+header{background:linear-gradient(160deg,var(--paper),var(--soft));border-bottom:1px solid var(--line)}
+.head{padding:26px 0 38px}
+.crumb{font-size:13px;color:var(--subtle);margin:0 0 27px}.crumb a{text-decoration:none;color:var(--muted);border-bottom:1px solid var(--line)}.crumb span{margin:0 8px}
+.eyebrow{margin:0 0 8px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-size:12px;font-weight:700}
+h1,h2,h3{font-family:Spectral,Georgia,serif;line-height:1.12;margin:0}
+h1{font-size:clamp(32px,5vw,52px);max-width:20ch;letter-spacing:-.025em;text-wrap:balance}
+.lede{max-width:65ch;color:var(--muted);margin:16px 0 0;font-size:17px}
+.head-meta{display:flex;gap:9px;flex-wrap:wrap;margin-top:21px}
+.pill{display:inline-flex;align-items:center;border-radius:999px;padding:5px 11px;background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:600;text-decoration:none}
+.pill.secondary{background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+
+main{padding:30px 0 72px}
+.contents{border:1px solid var(--line);background:var(--paper);border-radius:16px;padding:21px 24px 23px;box-shadow:var(--shadow)}
+.contents h2{font:700 13px/1.3 "IBM Plex Sans",sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--subtle)}
+.toc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px 13px;margin:15px 0 0;padding:0;list-style:none}
+.toc a{display:block;padding:7px 9px;border-radius:7px;text-decoration:none;color:var(--ink);font-size:14px}
+.toc a:hover,.toc a:focus-visible{background:var(--accent-soft);color:var(--accent)}
+.toc b{color:var(--accent);margin-right:6px}.toc .bad b{color:var(--warn)}
+
+.section{scroll-margin-top:18px;margin-top:24px;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.section-head{padding:22px 25px 18px;border-bottom:1px solid var(--line)}
+.section-number{font-size:12px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.section h2{font-size:29px;margin:3px 0 0}
+.section-grid{display:grid;grid-template-columns:minmax(250px,.86fr) minmax(0,1.14fr)}
+.memory,.worked,.full{padding:23px 25px 27px}
+.memory{background:var(--soft);border-right:1px solid var(--line)}
+.memory.side{border-right:0;border-left:1px solid var(--line)}
+.worked{background:var(--example);min-width:0}
+.full{border-top:1px solid var(--line);background:var(--example)}
+.full.plain{background:var(--paper)}
+h3{font:700 12px/1.3 "IBM Plex Sans",sans-serif;text-transform:uppercase;letter-spacing:.11em;color:var(--accent);margin:0 0 14px}
+h4{font:600 17px/1.3 Spectral,Georgia,serif;margin:22px 0 10px}
+.memory p,.worked p,.full p{margin:0 0 11px}
+.memory p:last-child,.worked p:last-child,.full p:last-child{margin-bottom:0}
+
+/* fórmulas */
+.m{font-family:Georgia,"Times New Roman",serif;font-size:1.08em;white-space:nowrap}
+.formula-box{border:1px solid var(--line);border-radius:9px;background:var(--paper);padding:11px 13px;margin:12px 0;font-family:Georgia,"Times New Roman",serif;font-size:1.08em;line-height:1.7}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .4em;margin:12px 0;font-family:Georgia,"Times New Roman",serif;font-size:1.12em;line-height:1.3;max-width:100%;overflow-x:auto;padding:2px 0}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .12em;line-height:1.3;font-family:Georgia,"Times New Roman",serif}
+.frac>span{padding:1px .25em;white-space:nowrap}
+.frac>span+span{border-top:1.5px solid currentColor}
+.f1,.f2,.f3{border-radius:4px;padding:0 2px;font-weight:600}
+.f1{color:var(--c1);background:var(--c1-soft)}.f2{color:var(--c2);background:var(--c2-soft)}.f3{color:var(--c3);background:var(--c3-soft)}
+.x1,.x2,.x3{text-decoration:line-through;text-decoration-thickness:2px;border-radius:4px;padding:0 2px}
+.x1{color:var(--c1);background:var(--c1-soft)}.x2{color:var(--c2);background:var(--c2-soft)}.x3{color:var(--c3);background:var(--c3-soft)}
+
+.steps{list-style:none;counter-reset:step;margin:0;padding:0}
+.steps>li{counter-increment:step;position:relative;padding-left:31px;margin:0 0 14px}
+.steps>li::before{content:counter(step);position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:12px;font-weight:700}
+.steps>li:last-child{margin-bottom:0}
+.result{margin-top:16px!important;padding:11px 13px;border-radius:9px;background:var(--accent-soft);color:var(--ink)}
+.result strong{color:var(--accent)}
+.note{font-size:14px;color:var(--muted)}
+.small-list{padding-left:21px;margin:9px 0}.small-list li{margin:4px 0}
+.mistake{margin:12px 0!important;padding:11px 13px;border-radius:9px;background:var(--warn-soft);border-left:4px solid var(--warn);font-size:15px}
+.mistake strong:first-child{color:var(--warn)}
+.trap{margin:12px 0!important;padding:11px 13px;border-radius:9px;border:1px dashed var(--line);background:var(--paper);font-size:15px}
+.trap strong:first-child{color:var(--warn)}
+
+/* tabla del denominador común */
+.dentable{border-collapse:separate;border-spacing:0;margin:12px 0;font-size:14.5px;min-width:100%}
+.dentable th,.dentable td{padding:7px 10px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+.dentable thead th{font-weight:600;color:var(--muted);font-size:13px}
+.dentable tbody th{text-align:left;font-family:Georgia,serif;font-weight:400}
+.dentable td.ok{color:var(--accent);font-weight:700}
+.dentable td.miss{font-weight:700}
+.dentable td.miss.t1,.dentable td.need.t1{background:var(--c1-soft);color:var(--c1)}
+.dentable td.miss.t2,.dentable td.need.t2{background:var(--c2-soft);color:var(--c2)}
+.dentable td.miss.t3,.dentable td.need.t3{background:var(--c3-soft);color:var(--c3)}
+.dentable td.need{font-family:Georgia,serif;font-weight:600}
+.dentable tfoot th,.dentable tfoot td{border-bottom:0;border-top:2px solid var(--ink);font-family:Georgia,serif;font-weight:600}
+.dentable tfoot th{text-align:left;font-family:"IBM Plex Sans",sans-serif;font-size:13px}
+.scroll{overflow-x:auto;max-width:100%}
+
+/* diagrama de flechas */
+.flow-scroll{overflow-x:auto;max-width:100%;margin:14px 0 6px;padding-bottom:4px}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;column-gap:6px;align-items:center;justify-items:center;min-width:600px;font-family:Georgia,"Times New Roman",serif;font-size:17px}
+.flow.two{grid-template-columns:1fr auto 1fr;min-width:420px}
+.k1{grid-column:1}.o1{grid-column:2}.k2{grid-column:3}.o2{grid-column:4}.k3{grid-column:5}
+.r1{grid-row:1}.r2{grid-row:2}.r3{grid-row:3}.r4{grid-row:4}.r5{grid-row:5}.r6{grid-row:6}
+.op{font-size:22px;font-weight:600;padding:0 4px;position:relative}
+.card-f{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.arrow{display:flex;gap:9px;align-items:stretch;min-height:70px;padding:6px 0 4px;color:var(--muted)}
+.arrow i{position:relative;flex:none;width:2.5px;background:currentColor;margin:0 0 9px;border-radius:2px}
+.arrow i::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);border-left:6.5px solid transparent;border-right:6.5px solid transparent;border-top:10px solid currentColor}
+.arrow span{align-self:center;font:500 12.5px/1.35 "IBM Plex Sans",sans-serif;max-width:17ch}
+.arrow b{font-family:Georgia,serif;font-size:14px}
+.arrow.t1{color:var(--c1)}.arrow.t2{color:var(--c2)}.arrow.t3{color:var(--c3)}.arrow.tw{color:var(--warn)}
+.joinbox{grid-column:1/-1;grid-row:5/7;justify-self:stretch;align-self:stretch;background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px}
+.piece{position:relative;padding:12px 4px 6px;white-space:nowrap}
+.bar{grid-column:1/-1;justify-self:stretch;position:relative;text-align:center;border-top:2px solid var(--ink);margin:0 22px 12px;padding:5px 0 0}
+.flow-cap{font-size:13px;color:var(--subtle);margin-top:4px!important}
+.swipe{display:none;font-size:12.5px;color:var(--subtle);margin:0!important}
+
+/* números de la tabla de acercamiento */
+.near{border-collapse:collapse;margin:10px 0;font-size:14.5px;font-variant-numeric:tabular-nums}
+.near th,.near td{padding:4px 12px;border-bottom:1px solid var(--line);text-align:center}
+.near th{color:var(--muted);font-weight:600;font-size:13px}
+
+/* gráficos */
+.graph{display:block;width:100%;height:auto;background:var(--paper);border:1px solid var(--line);border-radius:10px;margin-top:12px}
+.g-grid{stroke:var(--line);stroke-width:1}
+.g-axis{stroke:var(--muted);stroke-width:1.4}
+.g-tick{fill:var(--subtle);font:11px "IBM Plex Sans",sans-serif}
+.g-curve{stroke:var(--accent);stroke-width:2.6;fill:none;stroke-linejoin:round}
+.g-av{stroke:var(--c1);stroke-width:1.8;stroke-dasharray:7 5}
+.g-ah{stroke:var(--c2);stroke-width:1.8;stroke-dasharray:7 5}
+.g-av-l,.g-ah-l{font:600 12.5px "IBM Plex Sans",sans-serif;paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round}
+.g-av-l{fill:var(--c1)}.g-ah-l{fill:var(--c2)}
+.g-pt{fill:var(--ink);stroke:var(--paper);stroke-width:2}
+.g-hole{fill:var(--paper);stroke:var(--accent);stroke-width:2.2}
+.g-pt-l{fill:var(--ink);font:600 12.5px "IBM Plex Sans",sans-serif;paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round}
+
+/* explorador */
+.explorer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px;align-items:start}
+.coefs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:6px 0 12px}
+.coefs label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);font-weight:600}
+.coefs input{margin-top:3px;font:500 16px Georgia,serif;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
+.coefs input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.presets{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px}
+.presets button{font:600 12.5px "IBM Plex Sans",sans-serif;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.presets button:hover,.presets button:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+.preview{font-size:1.15em;margin:4px 0 12px}
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:0;font-size:14.5px}
+.facts dt{font-weight:600;color:var(--muted)}
+.facts dd{margin:0;overflow-wrap:anywhere}
+.facts .calc{display:block;color:var(--subtle);font-size:13px}
+.alert{padding:10px 12px;border-radius:9px;background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn);font-size:14.5px;margin:0 0 12px}
+.alert[hidden]{display:none}
+
+/* errores */
+.errs{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.errs li{border:1px solid var(--line);border-radius:11px;padding:14px 16px;background:var(--paper)}
+.errs .tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-right:8px}
+.tag.e{background:var(--warn-soft);color:var(--warn)}
+.tag.o{background:var(--c2-soft);color:var(--c2)}
+.tag.d{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
+.errs .where{font-size:13px;color:var(--subtle)}
+.errs p{margin:8px 0 0}
+.errs .says,.errs .fix{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:8px;margin-top:6px;font-size:15px}
+.errs .says b{color:var(--warn)}.errs .fix b{color:var(--accent)}
+
+.endnote{font-size:13px;color:var(--subtle);margin:25px 3px 0}
+
+@media(max-width:860px){.explorer{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .toc{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .section-grid{grid-template-columns:1fr}
+  .memory{border-right:0;border-bottom:1px solid var(--line)}
+  .memory.side{border-left:0;border-bottom:0;border-top:1px solid var(--line)}
+  .section-head,.memory,.worked,.full{padding-inline:19px}
+  .swipe{display:block}
+  .m{white-space:normal}
+}
+@media(max-width:430px){
+  .wrap{width:min(100% - 28px,1040px)}
+  .toc{grid-template-columns:1fr}
+  .contents{padding:18px}
+  .head{padding-top:18px}
+  .section h2{font-size:25px}
+  .coefs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .errs .says,.errs .fix{grid-template-columns:1fr;gap:0}
+}
+@media print{
+  body{background:#fff;color:#111;font-size:11pt}
+  .wrap{width:100%;max-width:none}
+  header,.contents,.section{box-shadow:none}
+  .crumb,#explorador{display:none}
+  .section{break-inside:avoid;margin-top:5mm}
+  .flow-scroll,.scroll{overflow:visible}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap head">
+  <p class="crumb"><a href="../../index.html">Apuntes</a><span>/</span><a href="../index.html">Matemática</a><span>/</span>Unidad 8</p>
+  <p class="eyebrow">Guía teórica · 2.º año</p>
+  <h1>Expresiones algebraicas fraccionarias y función homográfica</h1>
+  <p class="lede">Las mismas reglas que usás con fracciones de números, aplicadas a fracciones con polinomios. Casi todo se reduce a una idea: <strong>factorizar primero</strong>. Después, la función homográfica: dominio, imagen, asíntotas y gráfico.</p>
+  <div class="head-meta"><span class="pill">Cuadernillo: páginas 42 a 45</span><span class="pill secondary">8 temas</span><a class="pill secondary" href="../unidad8-ejercicios/index.html">Ver el TP resuelto →</a><a class="pill warn" href="#errores">8 errores y omisiones del cuadernillo →</a></div>
+</div></header>
+
+<main class="wrap">
+  <nav class="contents" aria-label="Temas de la guía"><h2>Ir a un tema</h2><ol class="toc">
+    <li><a href="#eaf"><b>01</b>Qué es una EAF</a></li>
+    <li><a href="#simplificar"><b>02</b>Simplificar</a></li>
+    <li><a href="#multiplicar"><b>03</b>Multiplicar</a></li>
+    <li><a href="#dividir"><b>04</b>Dividir</a></li>
+    <li><a href="#sumar"><b>05</b>Sumar y restar</a></li>
+    <li><a href="#inversa"><b>06</b>Proporcionalidad inversa</a></li>
+    <li><a href="#homografica"><b>07</b>Función homográfica</a></li>
+    <li><a href="#graficar"><b>08</b>Cómo graficarla</a></li>
+    <li><a href="#explorador"><b>→</b>Probá con tus números</a></li>
+    <li class="bad"><a href="#errores"><b>!</b>Errores del cuadernillo</a></li>
+  </ol></nav>
+
+  <!-- 01 -->
+  <section class="section" id="eaf"><div class="section-head"><span class="section-number">Tema 01 · página 42</span><h2>Qué es una expresión algebraica fraccionaria</h2></div><div class="section-grid">
+    <div class="memory"><h3>Ayuda memoria</h3>
+      <p>Una <strong>EAF</strong> es un cociente de dos polinomios, con un denominador que tiene <span class="m">x</span>:</p>
+      <div class="eq"><span class="frac"><span>P(x)</span><span>Q(x)</span></span></div>
+      <p>Como no se puede dividir por cero, hay valores de <span class="m">x</span> <strong>prohibidos</strong>: los que hacen <span class="m">Q(x) = 0</span>. Se llaman <strong>restricciones</strong>.</p>
+      <p><strong>Cómo encontrarlas:</strong> factorizá el denominador e igualá cada factor a cero.</p>
+      <p class="note">Las restricciones se buscan en el denominador <em>original</em>, antes de simplificar nada. En el tema 02 vas a ver por qué.</p>
+    </div>
+    <div class="worked"><h3>Ejemplo resuelto</h3>
+      <p>¿Qué valores no puede tomar <span class="m">x</span> en esta expresión?</p>
+      <div class="eq"><span class="frac"><span>x² + x</span><span>x³ − 2x² − 3x</span></span></div>
+      <ol class="steps">
+        <li>Factor común <span class="m">x</span> en el denominador: <span class="m">x³ − 2x² − 3x = x(x² − 2x − 3)</span>.</li>
+        <li>Dos números que multiplicados den <span class="m">−3</span> y sumados den <span class="m">−2</span>: <span class="m">−3</span> y <span class="m">1</span>. Entonces <span class="m">x² − 2x − 3 = (x − 3)(x + 1)</span>.</li>
+        <li>Denominador factorizado: <span class="m">x(x − 3)(x + 1)</span>. Cada factor igualado a cero da <span class="m">x = 0</span>, <span class="m">x = 3</span>, <span class="m">x = −1</span>.</li>
+      </ol>
+      <p class="result"><strong>Restricciones:</strong> <span class="m">x ≠ 0</span>, <span class="m">x ≠ 3</span>, <span class="m">x ≠ −1</span>. Dicho de otro modo, <span class="m">x ∈ ℝ − {−1; 0; 3}</span>.</p>
+    </div>
+  </div></section>
+
+  <!-- 02 -->
+  <section class="section" id="simplificar"><div class="section-head"><span class="section-number">Tema 02 · página 42</span><h2>Simplificar</h2></div><div class="section-grid">
+    <div class="memory"><h3>Ayuda memoria</h3>
+      <p>Igual que <span class="m">6/9 = (2·3)/(3·3) = 2/3</span>: se tacha un <strong>factor</strong> que aparece arriba y abajo.</p>
+      <ol class="small-list">
+        <li>Factorizá numerador y denominador.</li>
+        <li>Anotá las restricciones (con el denominador entero).</li>
+        <li>Tachá los factores iguales.</li>
+      </ol>
+      <div class="trap"><strong>Error típico:</strong> tachar <em>sumandos</em>. Solo se tacha lo que está multiplicando a todo lo demás.
+        <div class="eq" style="font-size:1em"><span class="frac"><span>x + 6</span><span>6</span></span> ≠ x</div>
+        Probá con <span class="m">x = 6</span>: queda <span class="m">12/6 = 2</span>, no <span class="m">6</span>.</div>
+    </div>
+    <div class="worked"><h3>Ejemplo resuelto</h3>
+      <p>Simplificar la expresión del tema 01.</p>
+      <ol class="steps">
+        <li>Factorizamos arriba (<span class="m">x² + x = x(x + 1)</span>) y usamos el denominador que ya teníamos:
+          <div class="eq"><span class="frac"><span>x² + x</span><span>x³ − 2x² − 3x</span></span> = <span class="frac"><span><span class="f1">x</span> · <span class="f2">(x + 1)</span></span><span><span class="f1">x</span> · <span class="f2">(x + 1)</span> · (x − 3)</span></span></div></li>
+        <li>Tachamos los pares de factores iguales (cada color con su pareja):
+          <div class="eq"><span class="frac"><span><span class="x1">x</span> · <span class="x2">(x + 1)</span></span><span><span class="x1">x</span> · <span class="x2">(x + 1)</span> · (x − 3)</span></span> = <span class="frac"><span>1</span><span>x − 3</span></span></div>
+          <p class="note">Arriba queda <span class="m">1</span>, no <span class="m">0</span>: al tachar todo, lo que queda es un factor <span class="m">1</span>.</p></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> <span class="frac"><span>1</span><span>x − 3</span></span> con <span class="m">x ≠ 0</span>, <span class="m">x ≠ −1</span>, <span class="m">x ≠ 3</span>.</p>
+      <p class="note">El resultado, mirado solo, parece aceptar <span class="m">x = 0</span> y <span class="m">x = −1</span>. Pero la expresión original no los acepta: por eso las restricciones se anotan <strong>antes</strong> de tachar y se arrastran hasta el final.</p>
+    </div>
+  </div></section>
+
+  <!-- 03 -->
+  <section class="section" id="multiplicar"><div class="section-head"><span class="section-number">Tema 03 · página 42</span><h2>Multiplicar</h2></div><div class="section-grid">
+    <div class="memory"><h3>Ayuda memoria</h3>
+      <div class="eq"><span class="frac"><span>A</span><span>B</span></span> · <span class="frac"><span>C</span><span>D</span></span> = <span class="frac"><span>A · C</span><span>B · D</span></span></div>
+      <ol class="small-list">
+        <li>Factorizá <strong>todos</strong> los numeradores y denominadores.</li>
+        <li>Anotá las restricciones de cada denominador.</li>
+        <li>Juntá todo en una sola fracción y tachá factores iguales arriba y abajo, aunque vengan de fracciones distintas.</li>
+        <li>Lo que queda, multiplicalo.</li>
+      </ol>
+      <p class="note">Conviene tachar <em>antes</em> de multiplicar: así nunca tenés que desarrollar polinomios grandes.</p>
+    </div>
+    <div class="worked"><h3>Ejemplo del cuadernillo</h3>
+      <div class="eq"><span class="frac"><span>2x − 3</span><span>x + 5</span></span> · <span class="frac"><span>x² − 25</span><span>6x − 9</span></span></div>
+      <ol class="steps">
+        <li>Factorizamos lo que se puede: <span class="m">x² − 25 = (x + 5)(x − 5)</span> (diferencia de cuadrados) y <span class="m">6x − 9 = 3(2x − 3)</span> (factor común).</li>
+        <li>Restricciones: <span class="m">x + 5 ≠ 0 ⇒ x ≠ −5</span> y <span class="m">2x − 3 ≠ 0 ⇒ x ≠ 3/2</span>.</li>
+        <li>Una sola fracción, y tachamos los pares:
+          <div class="eq"><span class="frac"><span><span class="x1">(2x − 3)</span> · <span class="x2">(x + 5)</span> · (x − 5)</span><span><span class="x2">(x + 5)</span> · 3 · <span class="x1">(2x − 3)</span></span></span> = <span class="frac"><span>x − 5</span><span>3</span></span></div></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> <span class="frac"><span>x − 5</span><span>3</span></span> con <span class="m">x ≠ −5</span> y <span class="m">x ≠ 3/2</span>.</p>
+    </div>
+  </div></section>
+
+  <!-- 04 -->
+  <section class="section" id="dividir"><div class="section-head"><span class="section-number">Tema 04 · páginas 42 y 43</span><h2>Dividir</h2></div><div class="section-grid">
+    <div class="memory"><h3>Ayuda memoria</h3>
+      <p>Se multiplica por la <strong>inversa</strong> de la segunda fracción, y después es una multiplicación como la del tema 03.</p>
+      <div class="eq"><span class="frac"><span>A</span><span>B</span></span> : <span class="frac"><span>C</span><span>D</span></span> = <span class="frac"><span>A</span><span>B</span></span> · <span class="frac"><span>D</span><span>C</span></span></div>
+      <p><strong>Ojo con las restricciones:</strong> además de <span class="m">B</span> y <span class="m">D</span>, ahora también <span class="m">C</span> no puede ser cero, porque al dar vuelta la fracción pasa a ser un denominador.</p>
+    </div>
+    <div class="worked"><h3>Ejemplo del cuadernillo</h3>
+      <div class="eq"><span class="frac"><span>x² + x − 6</span><span>x² − 1</span></span> : <span class="frac"><span>x² + 5x + 6</span><span>x² + x − 2</span></span></div>
+      <ol class="steps">
+        <li>Damos vuelta la segunda y factorizamos los cuatro polinomios:
+          <div class="eq"><span class="frac"><span>(x − 2)(x + 3)</span><span>(x + 1)(x − 1)</span></span> · <span class="frac"><span>(x + 2)(x − 1)</span><span>(x + 2)(x + 3)</span></span></div></li>
+        <li>Restricciones, mirando los tres polinomios que pueden quedar abajo:
+          <ul class="small-list"><li><span class="m">x² − 1 = (x + 1)(x − 1)</span> ⇒ <span class="m">x ≠ −1</span>, <span class="m">x ≠ 1</span></li><li><span class="m">x² + x − 2 = (x + 2)(x − 1)</span> ⇒ <span class="m">x ≠ −2</span>, <span class="m">x ≠ 1</span></li><li><span class="m">x² + 5x + 6 = (x + 2)(x + 3)</span> ⇒ <span class="m">x ≠ −2</span>, <span class="m">x ≠ −3</span></li></ul></li>
+        <li>Tachamos los pares:
+          <div class="eq"><span class="frac"><span>(x − 2)<span class="x1">(x + 3)</span> · <span class="x2">(x + 2)</span><span class="x3">(x − 1)</span></span><span>(x + 1)<span class="x3">(x − 1)</span> · <span class="x2">(x + 2)</span><span class="x1">(x + 3)</span></span></span> = <span class="frac"><span>x − 2</span><span>x + 1</span></span></div></li>
+      </ol>
+      <p class="result"><strong>Resultado:</strong> <span class="frac"><span>x − 2</span><span>x + 1</span></span> con <span class="m">x ∉ {−3; −2; −1; 1}</span>.</p>
+      <p class="note">El cuadernillo llega al mismo resultado, pero no anota restricciones (ver <a href="#errores">errores</a>).</p>
+    </div>
+  </div></section>
+
+  <!-- 05 -->
+  <section class="section" id="sumar"><div class="section-head"><span class="section-number">Tema 05 · página 43</span><h2>Sumar y restar</h2></div>
+    <div class="section-grid">
+      <div class="memory"><h3>La idea, primero con números</h3>
+        <div class="eq"><span class="frac"><span>1</span><span>6</span></span> + <span class="frac"><span>1</span><span>4</span></span></div>
+        <ol class="small-list">
+          <li>Factorizás los denominadores: <span class="m">6 = 2 · 3</span> y <span class="m">4 = 2²</span>.</li>
+          <li>Denominador común: cada factor una vez, con su mayor exponente: <span class="m">2² · 3 = 12</span>.</li>
+          <li>A cada fracción le preguntás <strong>¿qué le falta para llegar a 12?</strong> A <span class="m">1/6</span> le falta un <span class="m">2</span>; a <span class="m">1/4</span>, un <span class="m">3</span>.</li>
+          <li>Multiplicás arriba y abajo por lo que falta: <span class="m">2/12 + 3/12 = 5/12</span>.</li>
+        </ol>
+        <p>Con EAF es <strong>exactamente</strong> lo mismo. Solo cambia qué son los «factores»: ahora son cosas como <span class="m">2</span>, <span class="m">x</span>, <span class="m">(x − 1)</span>, <span class="m">(x + 1)</span>.</p>
+      </div>
+      <div class="worked"><h3>El método en cinco pasos</h3>
+        <ol class="steps">
+          <li><strong>Factorizá solo los denominadores.</strong> Los numeradores, por ahora, no se tocan.</li>
+          <li><strong>Armá el denominador común:</strong> poné cada factor distinto <em>una sola vez</em>, con el mayor exponente con que aparezca. Si un denominador tiene <span class="m">(x − 1)²</span> y otro <span class="m">(x − 1)</span>, va <span class="m">(x − 1)²</span>.</li>
+          <li><strong>Buscá lo que le falta a cada fracción</strong> y multiplicá su numerador y su denominador por eso. Ahora todas tienen el mismo denominador.</li>
+          <li><strong>Juntá los numeradores</strong> sobre el denominador común. Si delante hay un <span class="m">−</span>, el numerador baja <em>entre paréntesis</em>: el menos le cambia el signo a todos sus términos.</li>
+          <li><strong>Operá el numerador, factorizalo y fijate si se puede simplificar</strong> con algún factor del denominador.</li>
+        </ol>
+        <p class="note">Las flechas de los ejemplos siguen exactamente los pasos 3 y 4. Los colores te dicen qué factor se agregó a cada fracción.</p>
+      </div>
+    </div>
+
+    <div class="full plain">
+      <h3>Ejemplo 1 · dos fracciones</h3>
+      <div class="eq"><span class="frac"><span>x</span><span>x − 2</span></span> + <span class="frac"><span>3x − 1</span><span>x² − 2x</span></span></div>
+      <p><strong>Paso 1.</strong> El primer denominador ya está factorizado. El segundo: <span class="m">x² − 2x = x(x − 2)</span>.</p>
+      <p><strong>Paso 2.</strong> En la tabla marcamos qué factores tiene cada denominador. Los casilleros vacíos son justamente <em>lo que le falta</em> a cada uno.</p>
+      <div class="scroll"><table class="dentable">
+        <thead><tr><th></th><th>x</th><th>(x − 2)</th><th>Le falta</th></tr></thead>
+        <tbody>
+          <tr><th>x − 2</th><td class="miss t1">falta</td><td class="ok">✓</td><td class="need t1">x</td></tr>
+          <tr><th>x(x − 2)</th><td class="ok">✓</td><td class="ok">✓</td><td>nada</td></tr>
+        </tbody>
+        <tfoot><tr><th>Denominador común</th><td>x</td><td>(x − 2)</td><td>= x(x − 2)</td></tr></tfoot>
+      </table></div>
+      <p><strong>Pasos 3 y 4.</strong> Seguí las flechas de arriba hacia abajo:</p>
+      <p class="swipe">Deslizá el diagrama hacia los costados para verlo completo →</p>
+      <div class="flow-scroll"><div class="flow two" role="img" aria-label="Diagrama: a x sobre x menos 2 se le multiplica arriba y abajo por x; la segunda fracción queda igual; los numeradores x al cuadrado y 3x menos 1 bajan sobre el denominador común x por x menos 2.">
+        <div class="k1 r1 card-f"><span class="frac"><span>x</span><span>x − 2</span></span></div>
+        <div class="o1 r1 op">+</div>
+        <div class="k2 r1 card-f"><span class="frac"><span>3x − 1</span><span>x(x − 2)</span></span></div>
+
+        <div class="k1 r2 arrow t1"><i></i><span>le falta <b>x</b><br>× x arriba y abajo</span></div>
+        <div class="k2 r2 arrow"><i></i><span>no le falta nada:<br>queda igual</span></div>
+
+        <div class="k1 r3 card-f"><span class="frac"><span>x · <span class="f1">x</span></span><span><span class="f1">x</span>(x − 2)</span></span></div>
+        <div class="o1 r3 op">+</div>
+        <div class="k2 r3 card-f"><span class="frac"><span>3x − 1</span><span>x(x − 2)</span></span></div>
+
+        <div class="k1 r4 arrow"><i></i><span>baja el numerador</span></div>
+        <div class="k2 r4 arrow"><i></i><span>baja el numerador</span></div>
+
+        <div class="joinbox"></div>
+        <div class="k1 r5 piece">x²</div>
+        <div class="o1 r5 op">+</div>
+        <div class="k2 r5 piece">3x − 1</div>
+        <div class="r6 bar">x(x − 2)</div>
+      </div></div>
+      <p class="flow-cap">Arriba: las fracciones como vienen. Al medio: todas con el mismo denominador. Abajo, en verde: una sola fracción.</p>
+      <p><strong>Paso 5.</strong> El numerador <span class="m">x² + 3x − 1</span> no tiene raíces racionales (con Gauss, ni <span class="m">1</span> ni <span class="m">−1</span> lo anulan), así que no se simplifica con nada.</p>
+      <p class="result"><strong>Resultado:</strong> <span class="frac"><span>x² + 3x − 1</span><span>x(x − 2)</span></span> con <span class="m">x ≠ 0</span> y <span class="m">x ≠ 2</span>.</p>
+
+      <h4>Ejemplo 2 · tres fracciones y una resta</h4>
+      <div class="eq"><span class="frac"><span>1</span><span>2x − 2</span></span> + <span class="frac"><span>2</span><span>x² − 1</span></span> − <span class="frac"><span>x</span><span>x + 1</span></span></div>
+      <p><strong>Paso 1.</strong> <span class="m">2x − 2 = 2(x − 1)</span> (factor común) y <span class="m">x² − 1 = (x + 1)(x − 1)</span> (diferencia de cuadrados). <span class="m">x + 1</span> ya está.</p>
+      <p><strong>Paso 2.</strong> Aparecen tres factores distintos: <span class="m">2</span>, <span class="m">(x − 1)</span> y <span class="m">(x + 1)</span>.</p>
+      <div class="scroll"><table class="dentable">
+        <thead><tr><th></th><th>2</th><th>(x − 1)</th><th>(x + 1)</th><th>Le falta</th></tr></thead>
+        <tbody>
+          <tr><th>2(x − 1)</th><td class="ok">✓</td><td class="ok">✓</td><td class="miss t1">falta</td><td class="need t1">(x + 1)</td></tr>
+          <tr><th>(x + 1)(x − 1)</th><td class="miss t2">falta</td><td class="ok">✓</td><td class="ok">✓</td><td class="need t2">2</td></tr>
+          <tr><th>x + 1</th><td class="miss t3">falta</td><td class="miss t3">falta</td><td class="ok">✓</td><td class="need t3">2(x − 1)</td></tr>
+        </tbody>
+        <tfoot><tr><th>Denominador común</th><td>2</td><td>(x − 1)</td><td>(x + 1)</td><td>= 2(x − 1)(x + 1)</td></tr></tfoot>
+      </table></div>
+      <p><strong>Pasos 3 y 4.</strong></p>
+      <p class="swipe">Deslizá el diagrama hacia los costados para verlo completo →</p>
+      <div class="flow-scroll"><div class="flow" role="img" aria-label="Diagrama: a la primera fracción se le multiplica por x más 1, a la segunda por 2 y a la tercera por 2 por x menos 1. Los numeradores bajan: x más 1, más 4, menos el paréntesis 2x al cuadrado menos 2x, sobre 2 por x menos 1 por x más 1.">
+        <div class="k1 r1 card-f"><span class="frac"><span>1</span><span>2(x − 1)</span></span></div>
+        <div class="o1 r1 op">+</div>
+        <div class="k2 r1 card-f"><span class="frac"><span>2</span><span>(x + 1)(x − 1)</span></span></div>
+        <div class="o2 r1 op">−</div>
+        <div class="k3 r1 card-f"><span class="frac"><span>x</span><span>x + 1</span></span></div>
+
+        <div class="k1 r2 arrow t1"><i></i><span>le falta <b>(x + 1)</b><br>× (x + 1) arriba y abajo</span></div>
+        <div class="k2 r2 arrow t2"><i></i><span>le falta <b>2</b><br>× 2 arriba y abajo</span></div>
+        <div class="k3 r2 arrow t3"><i></i><span>le falta <b>2(x − 1)</b><br>× 2(x − 1) arriba y abajo</span></div>
+
+        <div class="k1 r3 card-f"><span class="frac"><span>1 · <span class="f1">(x + 1)</span></span><span>2(x − 1)<span class="f1">(x + 1)</span></span></span></div>
+        <div class="o1 r3 op">+</div>
+        <div class="k2 r3 card-f"><span class="frac"><span>2 · <span class="f2">2</span></span><span><span class="f2">2</span>(x − 1)(x + 1)</span></span></div>
+        <div class="o2 r3 op">−</div>
+        <div class="k3 r3 card-f"><span class="frac"><span>x · <span class="f3">2(x − 1)</span></span><span><span class="f3">2(x − 1)</span>(x + 1)</span></span></div>
+
+        <div class="k1 r4 arrow"><i></i><span>baja el numerador</span></div>
+        <div class="k2 r4 arrow"><i></i><span>baja el numerador</span></div>
+        <div class="k3 r4 arrow tw"><i></i><span>baja <b>entre paréntesis</b>: el − afecta a todo</span></div>
+
+        <div class="joinbox"></div>
+        <div class="k1 r5 piece">(x + 1)</div>
+        <div class="o1 r5 op">+</div>
+        <div class="k2 r5 piece">4</div>
+        <div class="o2 r5 op">−</div>
+        <div class="k3 r5 piece">(2x² − 2x)</div>
+        <div class="r6 bar">2(x − 1)(x + 1)</div>
+      </div></div>
+      <p class="flow-cap">Fijate que en la fila del medio los tres denominadores quedaron iguales: es la señal de que el paso 3 está bien.</p>
+      <p><strong>Paso 5.</strong> Operamos el numerador. El menos cambia los dos signos del paréntesis:</p>
+      <div class="eq">x + 1 + 4 <span class="f3">− 2x² + 2x</span> = −2x² + 3x + 5</div>
+      <p>Ahora lo factorizamos. Sacamos el signo afuera: <span class="m">−(2x² − 3x − 5)</span>. Con la resolvente, <span class="m">x = (3 ± 7)/4</span>, o sea <span class="m">5/2</span> y <span class="m">−1</span>. Entonces <span class="m">2x² − 3x − 5 = (2x − 5)(x + 1)</span>, y aparece un factor que también está abajo:</p>
+      <div class="eq"><span class="frac"><span>−(2x − 5)<span class="x1">(x + 1)</span></span><span>2(x − 1)<span class="x1">(x + 1)</span></span></span> = <span class="frac"><span>−(2x − 5)</span><span>2(x − 1)</span></span> = <span class="frac"><span>5 − 2x</span><span>2x − 2</span></span></div>
+      <p class="result"><strong>Resultado:</strong> <span class="frac"><span>5 − 2x</span><span>2x − 2</span></span> con <span class="m">x ≠ 1</span> y <span class="m">x ≠ −1</span>.</p>
+      <p class="mistake"><strong>El cuadernillo se queda en <span class="m">(−2x² + 3x + 5) / (2(x − 1)(x + 1))</span>.</strong> No está mal, pero no está terminado: el numerador se factoriza y se simplifica con <span class="m">(x + 1)</span>. Control con <span class="m">x = 0</span>: la suma original da <span class="m">−1/2 − 2 − 0 = −5/2</span>, y el resultado da <span class="m">5/(−2) = −5/2</span>. ✓</p>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="section" id="inversa"><div class="section-head"><span class="section-number">Tema 06 · páginas 43 y 44</span><h2>Función de proporcionalidad inversa</h2></div><div class="section-grid">
+    <div class="memory"><h3>Ayuda memoria</h3>
+      <div class="eq">f(x) = <span class="frac"><span>k</span><span>x</span></span><span style="font-size:.85em;margin-left:.6em">⇔</span><span style="margin-left:.4em">x · y = k</span></div>
+      <p>Dos magnitudes son <strong>inversamente proporcionales</strong> si al multiplicar una por 2, la otra se divide por 2. El producto <span class="m">x · y</span> siempre da lo mismo: la constante <span class="m">k</span>.</p>
+      <ul class="small-list">
+        <li>Dominio: <span class="m">ℝ − {0}</span>. Imagen: <span class="m">ℝ − {0}</span>.</li>
+        <li>El gráfico es una <strong>hipérbola</strong>, con asíntotas en los ejes: <span class="m">x = 0</span> e <span class="m">y = 0</span>.</li>
+        <li>Si <span class="m">k &gt; 0</span>, las ramas están en los cuadrantes I y III. Si <span class="m">k &lt; 0</span>, en el II y el IV.</li>
+      </ul>
+      <p class="note">Es el caso más simple de función homográfica: <span class="m">a = 0</span>, <span class="m">b = k</span>, <span class="m">c = 1</span>, <span class="m">d = 0</span>.</p>
+    </div>
+    <div class="worked"><h3>Ejemplo del cuadernillo</h3>
+      <p>Un barril de <span class="m">24</span> litros de aceite se reparte en botellas. <span class="m">x</span>: litros por botella; <span class="m">y</span>: cantidad de botellas.</p>
+      <div class="scroll"><table class="near"><thead><tr><th>x (litros)</th><th>y (botellas)</th><th>x · y</th></tr></thead><tbody>
+        <tr><td>0,5</td><td>48</td><td>24</td></tr><tr><td>1</td><td>24</td><td>24</td></tr><tr><td>1,5</td><td>16</td><td>24</td></tr><tr><td>3</td><td>8</td><td>24</td></tr>
+      </tbody></table></div>
+      <p>El producto siempre es <span class="m">24</span>, así que <span class="m">k = 24</span> y <span class="m">y = 24/x</span>.</p>
+      <p class="note"><strong>Dominio en el problema:</strong> como función, <span class="m">24/x</span> acepta cualquier <span class="m">x ≠ 0</span>. Pero en el problema del barril no existen botellas de capacidad negativa, así que solo tiene sentido <span class="m">x &gt; 0</span>: la rama del tercer cuadrante no representa ninguna situación real.</p>
+    </div>
+  </div></section>
+
+  <!-- 07 -->
+  <section class="section" id="homografica"><div class="section-head"><span class="section-number">Tema 07 · página 44</span><h2>Función homográfica</h2></div><div class="section-grid">
+    <div class="memory"><h3>Ayuda memoria</h3>
+      <div class="eq">f(x) = <span class="frac"><span>ax + b</span><span>cx + d</span></span></div>
+      <p>con dos condiciones:</p>
+      <ul class="small-list">
+        <li><span class="m">c ≠ 0</span>: si no, no hay <span class="m">x</span> abajo y es una recta.</li>
+        <li><span class="m">a·d − b·c ≠ 0</span>: si no, el numerador es múltiplo del denominador y todo se simplifica. Por ejemplo, <span class="m">(2x + 4)/(x + 2) = 2</span>: una recta horizontal con un agujero, no una hipérbola.</li>
+      </ul>
+      <div class="formula-box">
+        Dom f = ℝ − {−d/c} &nbsp;→&nbsp; A.V.: x = −d/c<br>
+        Im f = ℝ − {a/c} &nbsp;&nbsp;→&nbsp; A.H.: y = a/c
+      </div>
+      <p><strong>Para recordar:</strong> la asíntota <strong>vertical</strong> sale del <em>denominador</em> (el valor que lo anula). La <strong>horizontal</strong> sale de los <em>coeficientes de x</em>: el de arriba sobre el de abajo.</p>
+    </div>
+    <div class="worked"><h3>Por qué salen así</h3>
+      <p>Con <span class="m">f(x) = (3x − 1)/(x − 2)</span>:</p>
+      <p><strong>Cerca de <span class="m">x = 2</span></strong> el denominador es casi cero, y dividir por algo muy chico da un número enorme:</p>
+      <div class="scroll"><table class="near"><thead><tr><th>x</th><th>1,9</th><th>1,99</th><th>2</th><th>2,01</th><th>2,1</th></tr></thead><tbody>
+        <tr><th>f(x)</th><td>−47</td><td>−497</td><td>no existe</td><td>503</td><td>53</td></tr>
+      </tbody></table></div>
+      <p>La curva se dispara hacia arriba de un lado y hacia abajo del otro: eso es la <strong>asíntota vertical</strong> <span class="m">x = 2</span>.</p>
+      <p><strong>Con <span class="m">x</span> muy grande</strong>, el <span class="m">−1</span> y el <span class="m">−2</span> casi no pesan, y queda más o menos <span class="m">3x/x = 3</span>:</p>
+      <div class="scroll"><table class="near"><thead><tr><th>x</th><th>10</th><th>100</th><th>1000</th><th>−100</th></tr></thead><tbody>
+        <tr><th>f(x)</th><td>3,625</td><td>3,051</td><td>3,005</td><td>2,951</td></tr>
+      </tbody></table></div>
+      <p>Se acerca a <span class="m">3</span>: la <strong>asíntota horizontal</strong> es <span class="m">y = 3 = a/c</span>.</p>
+      <p><strong>¿Y nunca vale exactamente 3?</strong> Probemos: <span class="m">(3x − 1)/(x − 2) = 3 ⇒ 3x − 1 = 3x − 6 ⇒ −1 = −6</span>. Es absurdo, así que el <span class="m">3</span> no está en la imagen.</p>
+    </div>
+  </div></section>
+
+  <!-- 08 -->
+  <section class="section" id="graficar"><div class="section-head"><span class="section-number">Tema 08 · páginas 44 y 45</span><h2>Cómo graficar una función homográfica</h2></div><div class="section-grid">
+    <div class="worked"><h3>Ejemplo del cuadernillo, corregido</h3>
+      <div class="eq">f(x) = <span class="frac"><span>3x − 1</span><span>x − 2</span></span></div>
+      <p>Anotá los coeficientes <strong>con su signo</strong>: <span class="m">a = 3</span>, <span class="m">b = −1</span>, <span class="m">c = 1</span>, <span class="m">d = −2</span>.</p>
+      <ol class="steps">
+        <li><strong>Dominio.</strong> <span class="m">−d/c = −(−2)/1 = 2</span>, entonces <span class="m">Dom f = ℝ − {2}</span>.
+          <p class="mistake"><strong>Error en la página 45:</strong> el cuadernillo hace la misma cuenta y concluye <span class="m">ℝ − {−2}</span>. Pero <span class="m">−(−2) = +2</span>. Fijate que el propio cuadernillo después pone la asíntota en <span class="m">x = 2</span>.</p></li>
+        <li><strong>Imagen.</strong> <span class="m">a/c = 3/1 = 3</span>, entonces <span class="m">Im f = ℝ − {3}</span>.</li>
+        <li><strong>Asíntotas.</strong> A.V.: <span class="m">x = 2</span>. A.H.: <span class="m">y = 3</span>. Dibujalas punteadas primero: son el «esqueleto» del gráfico.</li>
+        <li><strong>Corte con el eje y</strong> (ordenada al origen): reemplazás <span class="m">x = 0</span>. <span class="m">f(0) = b/d = −1/−2 = 1/2</span>. Punto <span class="m">(0; 1/2)</span>.
+          <p class="mistake"><strong>Error en la página 45:</strong> el cuadernillo dice que <span class="m">(0; 1/2)</span> es intersección con el eje <em>x</em>. Es con el eje <strong>y</strong>: el punto tiene <span class="m">x = 0</span>.</p>
+          <p class="note">Si <span class="m">d = 0</span> no hay corte con el eje y: <span class="m">x = 0</span> es justo la asíntota vertical.</p></li>
+        <li><strong>Corte con el eje x</strong> (raíz): una fracción vale cero cuando su <em>numerador</em> vale cero. <span class="m">3x − 1 = 0 ⇒ x = 1/3</span>. Punto <span class="m">(1/3; 0)</span>.
+          <p class="note">Si <span class="m">a = 0</span> no hay raíz: el numerador es un número fijo distinto de cero.</p></li>
+        <li><strong>Ubicá las dos ramas.</strong> Con los puntos de los pasos 4 y 5 ya sabés por dónde pasa la rama izquierda. Para la derecha, probá un valor: <span class="m">f(3) = 8/1 = 8</span>. Cada rama se pega a las dos asíntotas sin tocarlas.</li>
+      </ol>
+    </div>
+    <div class="memory side"><h3>El gráfico</h3>
+      <svg class="graph" id="g-example" viewBox="0 0 520 400" role="img" aria-label="Gráfico de f(x) = (3x − 1)/(x − 2), con asíntota vertical x = 2, asíntota horizontal y = 3 y puntos (0; 1/2) y (1/3; 0)."></svg>
+      <h4>Lo que te va a pedir el TP</h4>
+      <ul class="small-list">
+        <li><strong>Ceros:</strong> <span class="m">C₀ = {1/3}</span></li>
+        <li><strong>Positividad:</strong> <span class="m">C⁺ = (−∞; 1/3) ∪ (2; +∞)</span></li>
+        <li><strong>Negatividad:</strong> <span class="m">C⁻ = (1/3; 2)</span></li>
+      </ul>
+      <p class="note">El signo solo puede cambiar en la raíz o en la asíntota vertical. Probá un número en cada tramo: <span class="m">f(0) = 1/2 &gt; 0</span>, <span class="m">f(1) = −2 &lt; 0</span>, <span class="m">f(3) = 8 &gt; 0</span>.</p>
+      <p><strong>Crecimiento:</strong> mirá el signo de <span class="m">a·d − b·c</span>. Acá da <span class="m">3·(−2) − (−1)·1 = −5</span>, negativo, así que la función es <strong>decreciente</strong> en <span class="m">(−∞; 2)</span> y en <span class="m">(2; +∞)</span>. Si diera positivo, sería creciente en los dos tramos.</p>
+      <p class="note">Se escriben como dos intervalos separados porque la función no está definida en <span class="m">x = 2</span>. Si la miraras como un solo tramo no sería decreciente: <span class="m">1 &lt; 3</span> y sin embargo <span class="m">f(1) = −2</span> es menor que <span class="m">f(3) = 8</span>.</p>
+    </div>
+  </div></section>
+
+  <!-- explorador -->
+  <section class="section" id="explorador"><div class="section-head"><span class="section-number">Para practicar</span><h2>Probá con tus números</h2></div>
+    <div class="full plain"><div class="explorer">
+      <div>
+        <p>Escribí los cuatro coeficientes de <span class="m">f(x) = (ax + b)/(cx + d)</span>. Aceptan enteros, decimales y fracciones como <span class="m">1/2</span>. Usalo para <strong>controlar</strong> lo que hiciste a mano en el TP.</p>
+        <div class="coefs">
+          <label>a<input id="ca" value="3" inputmode="decimal" autocomplete="off"></label>
+          <label>b<input id="cb" value="-1" inputmode="decimal" autocomplete="off"></label>
+          <label>c<input id="cc" value="1" inputmode="decimal" autocomplete="off"></label>
+          <label>d<input id="cd" value="-2" inputmode="decimal" autocomplete="off"></label>
+        </div>
+        <div class="presets" aria-label="Ejemplos">
+          <button type="button" data-v="3,-1,1,-2">Ejemplo del cuadernillo</button>
+          <button type="button" data-v="0,24,1,0">Proporcionalidad: 24/x</button>
+          <button type="button" data-v="1,0,1,2">Creciente: x/(x + 2)</button>
+          <button type="button" data-v="2,4,1,2">Caso trampa: (2x + 4)/(x + 2)</button>
+        </div>
+        <div class="preview eq" id="preview" aria-live="polite"></div>
+        <p class="alert" id="alert" hidden></p>
+        <dl class="facts" id="facts"></dl>
+      </div>
+      <svg class="graph" id="g-live" viewBox="0 0 520 400" role="img" aria-label="Gráfico de la función con los coeficientes elegidos."></svg>
+    </div></div>
+  </section>
+
+  <!-- errores -->
+  <section class="section" id="errores"><div class="section-head"><span class="section-number">Revisión del cuadernillo · páginas 42 a 45</span><h2>Errores y omisiones del cuadernillo</h2></div>
+    <div class="full plain">
+      <p>Dos son errores que te pueden hacer perder puntos si los copiás. Las demás son cosas que faltan o están a medio terminar.</p>
+      <ol class="errs">
+        <li><span class="tag e">Error</span><span class="where">Página 45 · paso 1 del ejemplo</span>
+          <div class="says"><b>Dice</b><span><span class="m">D<sub>f</sub> = ℝ − {−(−2)/1} ⇒ D<sub>f</sub> = ℝ − {−2}</span></span></div>
+          <div class="fix"><b>Debería decir</b><span><span class="m">ℝ − {2}</span>, porque <span class="m">−(−2)/1 = 2</span>. Contradice su propia asíntota <span class="m">x = 2</span> y el gráfico. <a href="#graficar">Ver el paso a paso.</a></span></div></li>
+        <li><span class="tag e">Error</span><span class="where">Página 45 · paso 3 del ejemplo</span>
+          <div class="says"><b>Dice</b><span><span class="m">(0; 1/2)</span> es punto de intersección con el eje x</span></div>
+          <div class="fix"><b>Debería decir</b><span>con el eje <strong>y</strong>. Un punto con <span class="m">x = 0</span> está sobre el eje y.</span></div></li>
+        <li><span class="tag o">Omisión</span><span class="where">Página 43 · suma y resta, ejemplo 2</span>
+          <div class="says"><b>Dice</b><span>el resultado es <span class="m">(−2x² + 3x + 5) / (2(x − 1)(x + 1))</span></span></div>
+          <div class="fix"><b>Falta</b><span>simplificar: <span class="m">−2x² + 3x + 5 = −(2x − 5)(x + 1)</span>, y se va el <span class="m">(x + 1)</span>. Queda <span class="m">(5 − 2x)/(2x − 2)</span>. <a href="#sumar">Ver el diagrama.</a></span></div></li>
+        <li><span class="tag o">Omisión</span><span class="where">Página 44 · definición de función homográfica</span>
+          <div class="says"><b>Dice</b><span>alcanza con <span class="m">c ≠ 0</span></span></div>
+          <div class="fix"><b>Falta</b><span>pedir <span class="m">a·d − b·c ≠ 0</span>. Si no, por ejemplo <span class="m">(2x + 4)/(x + 2)</span> vale siempre <span class="m">2</span>: es una recta con un agujero, sin asíntotas, y su imagen es <span class="m">{2}</span>, no <span class="m">ℝ − {2}</span>. Probalo en el <a href="#explorador">explorador</a> con «Caso trampa».</span></div></li>
+        <li><span class="tag o">Omisión</span><span class="where">Página 44 · pasos 3 y 4 de «Representación gráfica»</span>
+          <div class="says"><b>Dice</b><span><span class="m">f(0) = b/d</span> y <span class="m">x = −b/a</span>, sin condiciones</span></div>
+          <div class="fix"><b>Falta</b><span>aclarar que lo primero exige <span class="m">d ≠ 0</span> y lo segundo, <span class="m">a ≠ 0</span>. En el ejercicio 9a del TP, <span class="m">(3x + 2)/x</span> tiene <span class="m">d = 0</span>: no corta al eje y.</span></div></li>
+        <li><span class="tag o">Omisión</span><span class="where">Páginas 42 y 43 · multiplicación y división</span>
+          <div class="says"><b>Dice</b><span>solo el resultado simplificado</span></div>
+          <div class="fix"><b>Falta</b><span>anotar las restricciones, como hace en la página 42 al simplificar. En la división, además, el numerador del divisor tampoco puede ser cero (<span class="m">x ≠ −2</span>, <span class="m">x ≠ −3</span>). <a href="#dividir">Ver el ejemplo.</a></span></div></li>
+        <li><span class="tag d">Detalle</span><span class="where">Página 44 · problema del barril</span>
+          <div class="says"><b>Dice</b><span>el dominio es <span class="m">ℝ − {0}</span> y muestra las dos ramas</span></div>
+          <div class="fix"><b>Mejor</b><span>como función abstracta está bien, pero en el problema solo tiene sentido <span class="m">x &gt; 0</span>.</span></div></li>
+        <li><span class="tag d">Detalle</span><span class="where">Páginas 43 a 45 · tipeo y formato</span>
+          <div class="fix"><b>Detalles</b><span><span class="m">Im = ℝ − {3/1}</span> queda sin simplificar (es <span class="m">ℝ − {3}</span>); «Poe lo tanto» por «Por lo tanto»; «r − {0}» por <span class="m">ℝ − {0}</span>; y el texto «Ejemplo 2» de la página 43 está encimado sobre la fórmula.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <p class="endnote">Basado en la unidad 8 del cuadernillo de Matemática de 2.º año, páginas 42 a 45. El trabajo práctico (páginas 46 a 49) está resuelto en una página aparte: <a href="../unidad8-ejercicios/index.html">abrir el TP resuelto</a>.</p>
+</main>
+
+<script>
+(function(){
+  const NS = 'http://www.w3.org/2000/svg';
+  const minus = s => String(s).replace(/-/g, '−');
+
+  function frac(v){
+    if (!isFinite(v)) return '';
+    if (Math.abs(v) < 1e-12) return '0';
+    const sg = v < 0 ? '−' : '', x = Math.abs(v);
+    for (let q = 1; q <= 60; q++){
+      const p = Math.round(x * q);
+      if (Math.abs(p / q - x) < 1e-9) return sg + (q === 1 ? p : p + '/' + q);
+    }
+    return sg + (+x.toFixed(3)).toString().replace('.', ',');
+  }
+  const paren = v => v < 0 ? '(' + frac(v) + ')' : frac(v);
+
+  function lin(m, n){ // m·x + n
+    const parts = [];
+    if (Math.abs(m) > 1e-12){
+      const am = Math.abs(m);
+      parts.push((m < 0 ? '−' : '') + (Math.abs(am - 1) < 1e-12 ? '' : frac(am)) + 'x');
+    }
+    if (Math.abs(n) > 1e-12 || !parts.length){
+      if (parts.length) parts.push((n < 0 ? ' − ' : ' + ') + frac(Math.abs(n)));
+      else parts.push(frac(n));
+    }
+    return parts.join('');
+  }
+
+  function parseNum(s){
+    s = String(s).trim().replace(/−/g, '-').replace(/,/g, '.').replace(/\s+/g, '');
+    if (!s) return NaN;
+    if (s.includes('/')){
+      const [p, q] = s.split('/');
+      const a = Number(p), b = Number(q);
+      return (isFinite(a) && isFinite(b) && b !== 0) ? a / b : NaN;
+    }
+    return Number(s);
+  }
+
+  function el(tag, attrs, parent, text){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+
+  function niceStep(span){
+    if (span <= 16) return 1;
+    if (span <= 32) return 2;
+    if (span <= 80) return 5;
+    return 10;
+  }
+
+  function draw(svg, a, b, c, d){
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const W = 520, H = 400;
+    const det = a * d - b * c;
+    const homog = c !== 0 && det !== 0;
+    const p = c !== 0 ? -d / c : null;          // A.V.
+    const q = c !== 0 ? a / c : null;           // A.H.
+    const y0 = d !== 0 ? b / d : null;          // corte eje y
+    const r = (homog && a !== 0) ? -b / a : null; // raíz
+    const f = x => (a * x + b) / (c * x + d);
+
+    const cap = v => v != null && isFinite(v) && Math.abs(v) < 60;
+    const xs = [0], ys = [0];
+    if (cap(p)) xs.push(p); if (cap(r)) xs.push(r);
+    if (cap(q)) ys.push(q); if (cap(y0)) ys.push(y0);
+    if (c === 0 && d !== 0){ ys.push(b / d); }
+    let xmin = Math.floor(Math.min(...xs) - 4), xmax = Math.ceil(Math.max(...xs) + 4);
+    let ymin = Math.floor(Math.min(...ys) - 4), ymax = Math.ceil(Math.max(...ys) + 4);
+    // proporción parecida al lienzo
+    const ratio = W / H;
+    const sx0 = xmax - xmin, sy0 = ymax - ymin;
+    if (sx0 / sy0 < ratio){ const extra = Math.ceil((sy0 * ratio - sx0) / 2); xmin -= extra; xmax += extra; }
+    else { const extra = Math.ceil((sx0 / ratio - sy0) / 2); ymin -= extra; ymax += extra; }
+
+    const X = x => (x - xmin) / (xmax - xmin) * W;
+    const Y = y => H - (y - ymin) / (ymax - ymin) * H;
+
+    const clipId = svg.id + '-clip';
+    const defs = el('defs', {}, svg);
+    const cp = el('clipPath', {id: clipId}, defs);
+    el('rect', {x: 0, y: 0, width: W, height: H}, cp);
+
+    const step = niceStep(Math.max(xmax - xmin, ymax - ymin));
+    const grid = el('g', {}, svg);
+    for (let x = Math.ceil(xmin / step) * step; x <= xmax; x += step) el('line', {class: 'g-grid', x1: X(x), x2: X(x), y1: 0, y2: H}, grid);
+    for (let y = Math.ceil(ymin / step) * step; y <= ymax; y += step) el('line', {class: 'g-grid', y1: Y(y), y2: Y(y), x1: 0, x2: W}, grid);
+    const ax = el('g', {}, svg);
+    if (0 >= ymin && 0 <= ymax) el('line', {class: 'g-axis', x1: 0, x2: W, y1: Y(0), y2: Y(0)}, ax);
+    if (0 >= xmin && 0 <= xmax) el('line', {class: 'g-axis', y1: 0, y2: H, x1: X(0), x2: X(0)}, ax);
+    const tstep = step * 2;
+    const ty = Math.min(Math.max(Y(0) + 14, 14), H - 4), tx = Math.min(Math.max(X(0) - 5, 18), W - 4);
+    for (let x = Math.ceil(xmin / tstep) * tstep; x <= xmax; x += tstep) if (x !== 0 && X(x) > 14 && X(x) < W - 22) el('text', {class: 'g-tick', x: X(x), y: ty, 'text-anchor': 'middle'}, ax, minus(x));
+    for (let y = Math.ceil(ymin / tstep) * tstep; y <= ymax; y += tstep) if (y !== 0 && Y(y) > 22 && Y(y) < H - 10) el('text', {class: 'g-tick', x: tx, y: Y(y) + 4, 'text-anchor': 'end'}, ax, minus(y));
+    el('text', {class: 'g-tick', x: W - 6, y: ty, 'text-anchor': 'end'}, ax, 'x');
+    el('text', {class: 'g-tick', x: X(0) + 6, y: 13}, ax, 'y');
+
+    const plot = el('g', {'clip-path': 'url(#' + clipId + ')'}, svg);
+    const yLo = ymin - (ymax - ymin), yHi = ymax + (ymax - ymin);
+    function branch(from, to){
+      const N = 500; let dpath = '', pen = false;
+      for (let i = 0; i <= N; i++){
+        const x = from + (to - from) * i / N, y = f(x);
+        if (!isFinite(y) || y < yLo || y > yHi){ pen = false; continue; }
+        dpath += (pen ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(y).toFixed(1);
+        pen = true;
+      }
+      if (dpath) el('path', {class: 'g-curve', d: dpath}, plot);
+    }
+    const pts = [];
+    if (c === 0 && d === 0) return;
+    if (c === 0){ branch(xmin, xmax); }
+    else if (det === 0){
+      el('line', {class: 'g-curve', x1: 0, x2: W, y1: Y(q), y2: Y(q)}, plot);
+      el('circle', {class: 'g-hole', cx: X(p), cy: Y(q), r: 5}, svg);
+    } else {
+      const eps = (xmax - xmin) * 1e-4;
+      branch(xmin, p - eps); branch(p + eps, xmax);
+      el('line', {class: 'g-av', x1: X(p), x2: X(p), y1: 0, y2: H}, svg);
+      el('line', {class: 'g-ah', x1: 0, x2: W, y1: Y(q), y2: Y(q)}, svg);
+      const avRight = X(p) < W - 70;
+      el('text', {class: 'g-av-l', x: X(p) + (avRight ? 8 : -8), y: 16, 'text-anchor': avRight ? 'start' : 'end'}, svg, 'x = ' + frac(p));
+      el('text', {class: 'g-ah-l', x: 8, y: Y(q) - 6}, svg, 'y = ' + frac(q));
+      if (y0 != null) pts.push([0, y0]);
+      if (r != null && Math.abs(r) > 1e-12) pts.push([r, 0]);
+      else if (r != null && y0 == null) pts.push([0, 0]);
+    }
+    for (const [px, py] of pts){
+      if (px < xmin || px > xmax || py < ymin || py > ymax) continue;
+      el('circle', {class: 'g-pt', cx: X(px), cy: Y(py), r: 5}, svg);
+      const right = X(px) < W - 90;
+      el('text', {class: 'g-pt-l', x: X(px) + (right ? 8 : -8), y: Y(py) + (py === 0 ? 18 : -8), 'text-anchor': right ? 'start' : 'end'}, svg, '(' + frac(px) + '; ' + frac(py) + ')');
+    }
+  }
+
+  // gráfico fijo del tema 08
+  draw(document.getElementById('g-example'), 3, -1, 1, -2);
+
+  // explorador
+  const ids = ['ca', 'cb', 'cc', 'cd'];
+  const inputs = ids.map(id => document.getElementById(id));
+  const facts = document.getElementById('facts');
+  const alertBox = document.getElementById('alert');
+  const preview = document.getElementById('preview');
+  const live = document.getElementById('g-live');
+
+  function fact(term, value, calc){
+    const dt = document.createElement('dt'); dt.textContent = term;
+    const dd = document.createElement('dd'); dd.textContent = value;
+    if (calc){ const s = document.createElement('span'); s.className = 'calc'; s.textContent = calc; dd.appendChild(s); }
+    facts.append(dt, dd);
+  }
+  const show = msg => { alertBox.textContent = msg; alertBox.hidden = !msg; };
+  const iv = (lo, hi) => '(' + (lo === -Infinity ? '−∞' : frac(lo)) + '; ' + (hi === Infinity ? '+∞' : frac(hi)) + ')';
+
+  function update(){
+    const [a, b, c, d] = inputs.map(i => parseNum(i.value));
+    facts.textContent = ''; preview.textContent = '';
+    if ([a, b, c, d].some(v => !isFinite(v))){ show('Revisá los coeficientes: tienen que ser números, por ejemplo 3, −1, 0,5 o 1/2.'); return; }
+    preview.innerHTML = 'f(x) = <span class="frac"><span>' + lin(a, b) + '</span><span>' + lin(c, d) + '</span></span>';
+    if (c === 0 && d === 0){ show('Con c = 0 y d = 0 el denominador vale siempre 0: la expresión no existe.'); while (live.firstChild) live.removeChild(live.firstChild); return; }
+    draw(live, a, b, c, d);
+    if (c === 0){
+      show('Con c = 0 no hay x en el denominador: es la recta y = ' + lin(a / d, b / d) + '. No es homográfica.');
+      return;
+    }
+    const det = a * d - b * c, p = -d / c, q = a / c;
+    if (det === 0){
+      show('a·d − b·c = ' + frac(a) + '·' + paren(d) + ' − ' + paren(b) + '·' + paren(c) + ' = 0. El numerador es múltiplo del denominador y todo se simplifica: f(x) = ' + frac(q) + ' con un agujero en x = ' + frac(p) + '. No es homográfica: no tiene asíntotas.');
+      fact('Dominio', 'ℝ − {' + frac(p) + '}');
+      fact('Imagen', '{' + frac(q) + '}', 'un solo valor: es una recta horizontal');
+      return;
+    }
+    show('');
+    fact('Dominio', 'ℝ − {' + frac(p) + '}', '−d/c = −' + paren(d) + '/' + paren(c) + ' = ' + frac(p));
+    fact('Imagen', 'ℝ − {' + frac(q) + '}', 'a/c = ' + frac(a) + '/' + paren(c) + ' = ' + frac(q));
+    fact('Asíntotas', 'A.V.: x = ' + frac(p) + ' · A.H.: y = ' + frac(q));
+    if (d !== 0) fact('Corte eje y', '(0; ' + frac(b / d) + ')', 'f(0) = b/d = ' + frac(b) + '/' + paren(d));
+    else fact('Corte eje y', 'no tiene', 'd = 0: el eje y es la asíntota vertical');
+    let r = null;
+    if (a !== 0){ r = -b / a; fact('Raíz (eje x)', '(' + frac(r) + '; 0)', 'ax + b = 0 ⇒ x = −b/a = ' + frac(r)); }
+    else fact('Raíz (eje x)', 'no tiene', 'a = 0: el numerador vale siempre ' + frac(b));
+    // signos
+    const f = x => (a * x + b) / (c * x + d);
+    const cuts = [p].concat(r != null ? [r] : []).sort((u, v) => u - v);
+    const bounds = [-Infinity].concat(cuts, [Infinity]);
+    const pos = [], neg = [];
+    for (let i = 0; i < bounds.length - 1; i++){
+      const lo = bounds[i], hi = bounds[i + 1];
+      const t = lo === -Infinity ? hi - 1 : hi === Infinity ? lo + 1 : (lo + hi) / 2;
+      (f(t) > 0 ? pos : neg).push(iv(lo, hi));
+    }
+    if (r != null) fact('Ceros', 'C₀ = {' + frac(r) + '}');
+    fact('Positividad', pos.length ? 'C⁺ = ' + pos.join(' ∪ ') : 'C⁺ = ∅');
+    fact('Negatividad', neg.length ? 'C⁻ = ' + neg.join(' ∪ ') : 'C⁻ = ∅');
+    fact('Crecimiento', (det > 0 ? 'creciente' : 'decreciente') + ' en ' + iv(-Infinity, p) + ' y en ' + iv(p, Infinity),
+      'a·d − b·c = ' + frac(a) + '·' + paren(d) + ' − ' + paren(b) + '·' + paren(c) + ' = ' + frac(det) + (det > 0 ? ' > 0' : ' < 0'));
+  }
+
+  inputs.forEach(i => i.addEventListener('input', update));
+  document.querySelectorAll('.presets button').forEach(btn => btn.addEventListener('click', () => {
+    btn.dataset.v.split(',').forEach((v, i) => { inputs[i].value = v; });
+    update();
+  }));
+  update();
+})();
+</script>
+</body>
+</html>
